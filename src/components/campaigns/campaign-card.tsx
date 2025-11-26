@@ -28,45 +28,60 @@ export function CampaignCard({
     onToggleStatus,
     onDelete,
 }: CampaignCardProps) {
+    const isActive = status === "active"
+
     return (
-        <Card>
-            <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-                <div className="space-y-1">
-                    <CardTitle className="text-base font-semibold">{title}</CardTitle>
-                    <div className="flex items-center gap-2">
-                        <Badge variant="outline">{platform}</Badge>
+        <Card className="hover-lift animate-fade-in border-gray-200 hover:border-indigo-300 transition-all duration-300">
+            <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-3 bg-gradient-to-br from-gray-50 to-white">
+                <div className="space-y-2 flex-1">
+                    <CardTitle className="text-base font-semibold text-gray-900 line-clamp-1">
+                        {title}
+                    </CardTitle>
+                    <div className="flex items-center gap-2 flex-wrap">
+                        <Badge variant="outline" className="border-gray-300 text-gray-700 font-medium">
+                            {platform}
+                        </Badge>
                         <Badge
-                            variant={status === "active" ? "default" : "secondary"}
-                            className={status === "active" ? "bg-emerald-500 hover:bg-emerald-600" : ""}
+                            className={`${isActive
+                                    ? "bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 border-0 shadow-sm"
+                                    : "bg-gray-200 text-gray-700 border-0"
+                                } font-medium`}
                         >
-                            {status === "active" ? "Ativo" : "Pausado"}
+                            {isActive ? "● Ativo" : "○ Pausado"}
                         </Badge>
                     </div>
                 </div>
             </CardHeader>
             <CardContent className="py-4">
                 <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                        <p className="text-muted-foreground">Cliques</p>
-                        <p className="font-medium">{clicks}</p>
+                    <div className="space-y-1">
+                        <p className="text-gray-500 text-xs font-medium">Cliques</p>
+                        <p className="font-bold text-lg text-gray-900">{clicks.toLocaleString()}</p>
                     </div>
-                    <div>
-                        <p className="text-muted-foreground">Conversões</p>
-                        <p className="font-medium">{conversions}</p>
+                    <div className="space-y-1">
+                        <p className="text-gray-500 text-xs font-medium">Conversões</p>
+                        <p className="font-bold text-lg text-indigo-600">{conversions}</p>
                     </div>
-                    <div>
-                        <p className="text-muted-foreground">Gasto</p>
-                        <p className="font-medium">{spent}</p>
+                    <div className="space-y-1">
+                        <p className="text-gray-500 text-xs font-medium">Gasto</p>
+                        <p className="font-semibold text-gray-700">{spent}</p>
                     </div>
-                    <div>
-                        <p className="text-muted-foreground">Receita</p>
-                        <p className="font-medium text-emerald-600">{revenue}</p>
+                    <div className="space-y-1">
+                        <p className="text-gray-500 text-xs font-medium">Receita</p>
+                        <p className="font-bold text-lg bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                            {revenue}
+                        </p>
                     </div>
                 </div>
             </CardContent>
-            <CardFooter className="flex justify-between border-t p-4 bg-muted/20">
+            <CardFooter className="flex justify-between border-t border-gray-100 p-4 bg-gray-50/50">
                 {onDelete && (
-                    <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-destructive" onClick={onDelete}>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-gray-500 hover:text-red-600 hover:bg-red-50 transition-all"
+                        onClick={onDelete}
+                    >
                         <Trash2 className="w-4 h-4 mr-2" />
                         Excluir
                     </Button>
@@ -75,9 +90,12 @@ export function CampaignCard({
                     variant="outline"
                     size="sm"
                     onClick={onToggleStatus}
-                    className={status === "active" ? "text-yellow-600 hover:text-yellow-700" : "text-emerald-600 hover:text-emerald-700"}
+                    className={`ml-auto ${isActive
+                            ? "text-amber-600 hover:text-amber-700 hover:bg-amber-50 border-amber-200"
+                            : "text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 border-emerald-200"
+                        } transition-all font-medium`}
                 >
-                    {status === "active" ? (
+                    {isActive ? (
                         <>
                             <PauseCircle className="w-4 h-4 mr-2" />
                             Pausar
