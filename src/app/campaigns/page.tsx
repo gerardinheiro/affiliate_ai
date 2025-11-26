@@ -1,56 +1,129 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import DashboardLayout from "@/components/layout/dashboard-layout"
 import { CampaignCard } from "@/components/campaigns/campaign-card"
 import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
-import Link from "next/link"
+import { Plus, Loader2 } from "lucide-react"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
-// Mock data
-const initialCampaigns = [
-    {
-        id: 1,
-        title: "Fone Bluetooth - Google Search",
-        platform: "Google Ads",
-        status: "active" as const,
-        clicks: 1240,
-        conversions: 45,
-        spent: "R$ 350,00",
-        revenue: "R$ 1.250,00",
-    },
-    {
-        id: 2,
-        title: "Curso Marketing - Instagram Stories",
-        platform: "Meta Ads",
-        status: "paused" as const,
-        clicks: 850,
-        conversions: 12,
-        spent: "R$ 200,00",
-        revenue: "R$ 450,00",
-    },
-    {
-        id: 3,
-        title: "Ebook Receitas - Pinterest",
-        platform: "Pinterest Ads",
-        status: "active" as const,
-        clicks: 3200,
-        conversions: 89,
-        spent: "R$ 150,00",
-        revenue: "R$ 890,00",
-    },
-]
+type Campaign = {
+    id: string
+    title: string
+    platform: string
+    status: "active" | "paused"
+    clicks: number
+    conversions: number
+    spent: number
+    revenue: number
+}
 
 export default function CampaignsPage() {
-    const [campaigns, setCampaigns] = useState(initialCampaigns)
+    const [campaigns, setCampaigns] = useState<Campaign[]>([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [newCampaign, setNewCampaign] = useState({
+        title: "",
+        platform: "Google Ads",
+    })
 
-    const toggleStatus = (id: number) => {
-        setCampaigns(campaigns.map(c => {
-            if (c.id === id) {
-                return { ...c, status: c.status === "active" ? "paused" : "active" }
+    useEffect(() => {
+        fetchCampaigns()
+    }, [])
+
+    const fetchCampaigns = async () => {
+        try {
+            const res = await fetch("/api/campaigns")
+            if (res.ok) {
+                const data = await res.json()
+                setCampaigns(data)
             }
-            return c
-        }))
+        } catch (error) {
+            console.error("Error fetching campaigns:", error)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    const handleCreateCampaign = async () => {
+        if (!newCampaign.title) return
+
+        try {
+            const res = await fetch("/api/campaigns", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newCampaign),
+            })
+
+            if (res.ok) {
+                const campaign = await res.json()
+                setCampaigns([campaign, ...campaigns])
+                setNewCampaign({ title: "", platform: "Google Ads" })
+                setIsDialogOpen(false)
+            }
+        } catch (error) {
+            alert("Erro ao criar campanha.")
+        }
+    }
+
+    const toggleStatus = async (id: string, currentStatus: string) => {
+        const newStatus = currentStatus === "active" ? "paused" : "active"
+
+        try {
+            const res = await fetch("/api/campaigns", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id, status: newStatus }),
+            })
+
+            if (res.ok) {
+                setCampaigns(campaigns.map(c =>
+                    c.id === id ? { ...c, status: newStatus as "active" | "paused" } : c
+                ))
+            }
+        } catch (error) {
+            alert("Erro ao atualizar status.")
+        }
+    }
+
+    const handleDeleteCampaign = async (id: string) => {
+        if (!confirm("Tem certeza que deseja excluir esta campanha?")) return
+
+        try {
+            const res = await fetch(`/api/campaigns?id=${id}`, { method: "DELETE" })
+            if (res.ok) {
+                setCampaigns(campaigns.filter(c => c.id !== id))
+            }
+        } catch (error) {
+            alert("Erro ao excluir campanha.")
+        }
+    }
+
+    if (isLoading) {
+        return (
+            <DashboardLayout>
+                <div className="flex items-center justify-center h-96">
+                    <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+                </div>
+            </DashboardLayout>
+        )
     }
 
     return (
@@ -63,23 +136,84 @@ export default function CampaignsPage() {
                             Acompanhe o desempenho dos seus anúncios em tempo real.
                         </p>
                     </div>
-                    <Link href="/products">
-                        <Button>
-                            <Plus className="w-4 h-4 mr-2" />
-                            Nova Campanha
-                        </Button>
-                    </Link>
+                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                        <DialogTrigger asChild>
+                            <Button>
+                                <Plus className="w-4 h-4 mr-2" />
+                                Nova Campanha
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Criar Nova Campanha</DialogTitle>
+                                <DialogDescription>
+                                    Crie uma nova campanha para promover seus produtos.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="title">Nome da Campanha</Label>
+                                    <Input
+                                        id="title"
+                                        placeholder="Ex: Fone Bluetooth - Google Ads"
+                                        value={newCampaign.title}
+                                        onChange={(e) => setNewCampaign({ ...newCampaign, title: e.target.value })}
+                                    />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="platform">Plataforma</Label>
+                                    <Select
+                                        value={newCampaign.platform}
+                                        onValueChange={(value) => setNewCampaign({ ...newCampaign, platform: value })}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Google Ads">Google Ads</SelectItem>
+                                            <SelectItem value="Meta Ads">Meta Ads</SelectItem>
+                                            <SelectItem value="Pinterest Ads">Pinterest Ads</SelectItem>
+                                            <SelectItem value="TikTok Ads">TikTok Ads</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+                            <DialogFooter>
+                                <Button onClick={handleCreateCampaign} disabled={!newCampaign.title}>
+                                    Criar Campanha
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                 </div>
 
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    {campaigns.map((campaign) => (
-                        <CampaignCard
-                            key={campaign.id}
-                            {...campaign}
-                            onToggleStatus={() => toggleStatus(campaign.id)}
-                        />
-                    ))}
-                </div>
+                {campaigns.length === 0 ? (
+                    <div className="text-center py-12">
+                        <p className="text-muted-foreground mb-4">Nenhuma campanha criada ainda.</p>
+                        <Button onClick={() => setIsDialogOpen(true)}>
+                            <Plus className="w-4 h-4 mr-2" />
+                            Criar Primeira Campanha
+                        </Button>
+                    </div>
+                ) : (
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        {campaigns.map((campaign) => (
+                            <CampaignCard
+                                key={campaign.id}
+                                id={campaign.id}
+                                title={campaign.title}
+                                platform={campaign.platform}
+                                status={campaign.status}
+                                clicks={campaign.clicks}
+                                conversions={campaign.conversions}
+                                spent={`R$ ${campaign.spent.toFixed(2)}`}
+                                revenue={`R$ ${campaign.revenue.toFixed(2)}`}
+                                onToggleStatus={() => toggleStatus(campaign.id, campaign.status)}
+                                onDelete={() => handleDeleteCampaign(campaign.id)}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </DashboardLayout>
     )

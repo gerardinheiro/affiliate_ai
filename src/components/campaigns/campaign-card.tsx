@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { BarChart3, PauseCircle, PlayCircle, Trash2 } from "lucide-react"
 
 interface CampaignCardProps {
+    id: string
     title: string
     platform: string
     status: "active" | "paused" | "ended"
@@ -12,9 +13,11 @@ interface CampaignCardProps {
     spent: string
     revenue: string
     onToggleStatus: () => void
+    onDelete?: () => void
 }
 
 export function CampaignCard({
+    id,
     title,
     platform,
     status,
@@ -23,6 +26,7 @@ export function CampaignCard({
     spent,
     revenue,
     onToggleStatus,
+    onDelete,
 }: CampaignCardProps) {
     return (
         <Card>
@@ -61,10 +65,12 @@ export function CampaignCard({
                 </div>
             </CardContent>
             <CardFooter className="flex justify-between border-t p-4 bg-muted/20">
-                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-destructive">
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    Excluir
-                </Button>
+                {onDelete && (
+                    <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-destructive" onClick={onDelete}>
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Excluir
+                    </Button>
+                )}
                 <Button
                     variant="outline"
                     size="sm"

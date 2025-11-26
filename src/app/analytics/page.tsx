@@ -1,39 +1,62 @@
-"use client"
-
 import DashboardLayout from "@/components/layout/dashboard-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
     LineChart,
     Line,
     XAxis,
     YAxis,
-    CartesianGrid,
     Tooltip,
     ResponsiveContainer,
     BarChart,
     Bar,
 } from "recharts"
-import { ArrowUpRight, ArrowDownRight, DollarSign, MousePointer, ShoppingBag } from "lucide-react"
+import { ArrowUpRight, DollarSign, MousePointer, ShoppingBag } from "lucide-react"
+import { db } from "@/lib/db"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
+import { redirect } from "next/navigation"
 
-// Mock Data
-const revenueData = [
-    { name: "Jan", total: 1500 },
-    { name: "Fev", total: 2300 },
-    { name: "Mar", total: 3200 },
-    { name: "Abr", total: 2800 },
-    { name: "Mai", total: 4500 },
-    { name: "Jun", total: 5200 },
-]
+async function getAnalytics(userId: string) {
+    const campaigns = await db.campaign.findMany({
+        where: { userId },
+    })
 
-const channelData = [
-    { name: "Google Ads", value: 45 },
-    { name: "Instagram", value: 30 },
-    { name: "TikTok", value: 15 },
-    { name: "Pinterest", value: 10 },
-]
+    const totalRevenue = campaigns.reduce((sum, c) => sum + c.revenue, 0)
+    const totalClicks = campaigns.reduce((sum, c) => sum + c.clicks, 0)
+    const totalConversions = campaigns.reduce((sum, c) => sum + c.conversions, 0)
+    const totalSpent = campaigns.reduce((sum, c) => sum + c.spent, 0)
+    const roi = totalSpent > 0 ? ((totalRevenue - totalSpent) / totalSpent) * 100 : 0
 
-export default function AnalyticsPage() {
+    // Group by platform for channel data
+    const channelData = campaigns.reduce((acc: any[], campaign) => {
+        const existing = acc.find(item => item.name === campaign.platform)
+        if (existing) {
+            existing.value += campaign.clicks
+        } else {
+            acc.push({ name: campaign.platform, value: campaign.clicks })
+        }
+        return acc
+    }, [])
+
+    return {
+        totalRevenue,
+        totalClicks,
+        totalConversions,
+        roi,
+        channelData,
+    }
+}
+
+export default async function AnalyticsPage() {
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user) {
+        redirect("/login")
+    }
+
+    const userId = (session.user as any).id
+    const analytics = await getAnalytics(userId)
+
     return (
         <DashboardLayout>
             <div className="flex flex-col gap-8">
@@ -51,10 +74,9 @@ export default function AnalyticsPage() {
                             <DollarSign className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">R$ 19.500,00</div>
-                            <p className="text-xs text-muted-foreground flex items-center mt-1">
-                                <ArrowUpRight className="h-4 w-4 text-emerald-500 mr-1" />
-                                +20.1% em relação ao mês passado
+                            <div className="text-2xl font-bold">R$ {analytics.totalRevenue.toFixed(2)}</div>
+                            <p className="text-xs text-muted-foreground mt-1">
+                                {analytics.totalRevenue > 0 ? "Baseado nas suas campanhas" : "Crie campanhas para ver dados"}
                             </p>
                         </CardContent>
                     </Card>
@@ -64,10 +86,9 @@ export default function AnalyticsPage() {
                             <MousePointer className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">+12.234</div>
-                            <p className="text-xs text-muted-foreground flex items-center mt-1">
-                                <ArrowUpRight className="h-4 w-4 text-emerald-500 mr-1" />
-                                +15% em relação ao mês passado
+                            <div className="text-2xl font-bold">+{analytics.totalClicks}</div>
+                            <p className="text-xs text-muted-foreground mt-1">
+                                Total de cliques nas campanhas
                             </p>
                         </CardContent>
                     </Card>
@@ -77,10 +98,9 @@ export default function AnalyticsPage() {
                             <ShoppingBag className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">573</div>
-                            <p className="text-xs text-muted-foreground flex items-center mt-1">
-                                <ArrowDownRight className="h-4 w-4 text-red-500 mr-1" />
-                                -4% em relação ao mês passado
+                            <div className="text-2xl font-bold">{analytics.totalConversions}</div>
+                            <p className="text-xs text-muted-foreground mt-1">
+                                Total de vendas realizadas
                             </p>
                         </CardContent>
                     </Card>
@@ -90,10 +110,10 @@ export default function AnalyticsPage() {
                             <DollarSign className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">340%</div>
+                            <div className="text-2xl font-bold">{analytics.roi.toFixed(0)}%</div>
                             <p className="text-xs text-muted-foreground flex items-center mt-1">
-                                <ArrowUpRight className="h-4 w-4 text-emerald-500 mr-1" />
-                                +12% em relação ao mês passado
+                                {analytics.roi > 0 && <ArrowUpRight className="h-4 w-4 text-emerald-500 mr-1" />}
+                                Retorno sobre investimento
                             </p>
                         </CardContent>
                     </Card>
@@ -105,32 +125,9 @@ export default function AnalyticsPage() {
                             <CardTitle>Receita nos últimos 6 meses</CardTitle>
                         </CardHeader>
                         <CardContent className="pl-2">
-                            <ResponsiveContainer width="100%" height={350}>
-                                <LineChart data={revenueData}>
-                                    <XAxis
-                                        dataKey="name"
-                                        stroke="#888888"
-                                        fontSize={12}
-                                        tickLine={false}
-                                        axisLine={false}
-                                    />
-                                    <YAxis
-                                        stroke="#888888"
-                                        fontSize={12}
-                                        tickLine={false}
-                                        axisLine={false}
-                                        tickFormatter={(value) => `R$${value}`}
-                                    />
-                                    <Tooltip />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="total"
-                                        stroke="#8884d8"
-                                        strokeWidth={2}
-                                        activeDot={{ r: 8 }}
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
+                            <div className="h-[350px] flex items-center justify-center text-muted-foreground">
+                                Gráfico de Receita (Em Breve)
+                            </div>
                         </CardContent>
                     </Card>
                     <Card className="col-span-3">
@@ -138,25 +135,31 @@ export default function AnalyticsPage() {
                             <CardTitle>Canais de Aquisição</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <ResponsiveContainer width="100%" height={350}>
-                                <BarChart data={channelData}>
-                                    <XAxis
-                                        dataKey="name"
-                                        stroke="#888888"
-                                        fontSize={12}
-                                        tickLine={false}
-                                        axisLine={false}
-                                    />
-                                    <YAxis
-                                        stroke="#888888"
-                                        fontSize={12}
-                                        tickLine={false}
-                                        axisLine={false}
-                                    />
-                                    <Tooltip cursor={{ fill: 'transparent' }} />
-                                    <Bar dataKey="value" fill="#adfa1d" radius={[4, 4, 0, 0]} className="fill-primary" />
-                                </BarChart>
-                            </ResponsiveContainer>
+                            {analytics.channelData.length > 0 ? (
+                                <ResponsiveContainer width="100%" height={350}>
+                                    <BarChart data={analytics.channelData}>
+                                        <XAxis
+                                            dataKey="name"
+                                            stroke="#888888"
+                                            fontSize={12}
+                                            tickLine={false}
+                                            axisLine={false}
+                                        />
+                                        <YAxis
+                                            stroke="#888888"
+                                            fontSize={12}
+                                            tickLine={false}
+                                            axisLine={false}
+                                        />
+                                        <Tooltip cursor={{ fill: 'transparent' }} />
+                                        <Bar dataKey="value" fill="#adfa1d" radius={[4, 4, 0, 0]} />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            ) : (
+                                <div className="h-[350px] flex items-center justify-center text-muted-foreground">
+                                    Nenhum dado disponível
+                                </div>
+                            )}
                         </CardContent>
                     </Card>
                 </div>
