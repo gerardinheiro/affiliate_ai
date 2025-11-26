@@ -32,8 +32,10 @@ export function AdCanvas({ onUpdate }: AdCanvasProps) {
         setIsGenerating(true)
         try {
             const newImageUrl = await generateImageAction(headline)
-            setImage(newImageUrl)
-            onUpdate({ headline, description, cta, image: newImageUrl })
+            if (newImageUrl) {
+                setImage(newImageUrl)
+                onUpdate({ headline, description, cta, image: newImageUrl })
+            }
         } catch (error) {
             console.error(error)
             alert("Erro ao gerar imagem.")
