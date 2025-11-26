@@ -100,6 +100,7 @@ export default async function Home() {
             <CardContent className="pl-2">
               <div className="h-[200px] flex items-center justify-center text-muted-foreground">
                 Gráfico de Vendas (Em Breve)
+              </div>
             </CardContent>
           </Card>
           <Card className="col-span-3">
