@@ -1,3 +1,6 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import DashboardLayout from "@/components/layout/dashboard-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
@@ -10,52 +13,57 @@ import {
     BarChart,
     Bar,
 } from "recharts"
-import { ArrowUpRight, DollarSign, MousePointer, ShoppingBag } from "lucide-react"
-import { db } from "@/lib/db"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
-import { redirect } from "next/navigation"
+import { ArrowUpRight, DollarSign, MousePointer, ShoppingBag, Loader2 } from "lucide-react"
 
-async function getAnalytics(userId: string) {
-    const campaigns = await db.campaign.findMany({
-        where: { userId },
-    })
-
-    const totalRevenue = campaigns.reduce((sum, c) => sum + c.revenue, 0)
-    const totalClicks = campaigns.reduce((sum, c) => sum + c.clicks, 0)
-    const totalConversions = campaigns.reduce((sum, c) => sum + c.conversions, 0)
-    const totalSpent = campaigns.reduce((sum, c) => sum + c.spent, 0)
-    const roi = totalSpent > 0 ? ((totalRevenue - totalSpent) / totalSpent) * 100 : 0
-
-    // Group by platform for channel data
-    const channelData = campaigns.reduce((acc: any[], campaign) => {
-        const existing = acc.find(item => item.name === campaign.platform)
-        if (existing) {
-            existing.value += campaign.clicks
-        } else {
-            acc.push({ name: campaign.platform, value: campaign.clicks })
-        }
-        return acc
-    }, [])
-
-    return {
-        totalRevenue,
-        totalClicks,
-        totalConversions,
-        roi,
-        channelData,
-    }
+type Analytics = {
+    totalRevenue: number
+    totalClicks: number
+    totalConversions: number
+    roi: number
+    channelData: { name: string; value: number }[]
 }
 
-export default async function AnalyticsPage() {
-    const session = await getServerSession(authOptions)
+export default function AnalyticsPage() {
+    const [analytics, setAnalytics] = useState<Analytics | null>(null)
+    const [isLoading, setIsLoading] = useState(true)
 
-    if (!session?.user) {
-        redirect("/login")
+    useEffect(() => {
+        fetchAnalytics()
+    }, [])
+
+    const fetchAnalytics = async () => {
+        try {
+            const res = await fetch("/api/analytics")
+            if (res.ok) {
+                const data = await res.json()
+                setAnalytics(data)
+            }
+        } catch (error) {
+            console.error("Error fetching analytics:", error)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
-    const userId = (session.user as any).id
-    const analytics = await getAnalytics(userId)
+    if (isLoading) {
+        return (
+            <DashboardLayout>
+                <div className="flex items-center justify-center h-96">
+                    <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+                </div>
+            </DashboardLayout>
+        )
+    }
+
+    if (!analytics) {
+        return (
+            <DashboardLayout>
+                <div className="flex items-center justify-center h-96">
+                    <p className="text-muted-foreground">Erro ao carregar analytics</p>
+                </div>
+            </DashboardLayout>
+        )
+    }
 
     return (
         <DashboardLayout>
