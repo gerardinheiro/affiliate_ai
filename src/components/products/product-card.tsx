@@ -1,9 +1,10 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Sparkles, Copy } from "lucide-react"
+import { ExternalLink, Sparkles, Trash2 } from "lucide-react"
 
 interface ProductCardProps {
+    id: string
     title: string
     price: string
     commission: string
@@ -11,9 +12,11 @@ interface ProductCardProps {
     imageUrl?: string
     onGenerateCopy: () => void
     onViewLink: () => void
+    onDelete?: () => void
 }
 
 export function ProductCard({
+    id,
     title,
     price,
     commission,
@@ -21,6 +24,7 @@ export function ProductCard({
     imageUrl,
     onGenerateCopy,
     onViewLink,
+    onDelete,
 }: ProductCardProps) {
     return (
         <Card className="overflow-hidden flex flex-col justify-between">
@@ -52,6 +56,11 @@ export function ProductCard({
                     <Sparkles className="w-4 h-4 mr-2" />
                     Gerar Copy
                 </Button>
+                {onDelete && (
+                    <Button variant="destructive" size="icon" onClick={onDelete}>
+                        <Trash2 className="w-4 h-4" />
+                    </Button>
+                )}
             </CardFooter>
         </Card>
     )

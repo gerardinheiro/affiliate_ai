@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import DashboardLayout from "@/components/layout/dashboard-layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -18,52 +18,83 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 
-// Mock data
-const initialProducts = [
-    {
-        id: 1,
-        title: "Curso de Marketing Digital 2.0",
-        price: "R$ 497,00",
-        commission: "R$ 250,00",
-        platform: "Hotmart",
-        imageUrl: "https://placehold.co/600x400/png?text=Curso+Marketing",
-    },
-    {
-        id: 2,
-        title: "Fone de Ouvido Bluetooth Pro",
-        price: "R$ 129,90",
-        commission: "R$ 15,00",
-        platform: "Amazon",
-        imageUrl: "https://placehold.co/600x400/png?text=Fone+Bluetooth",
-    },
-]
+type Product = {
+    id: string
+    title: string
+    price: string
+    commission: string
+    platform: string
+    imageUrl: string | null
+    affiliateLink: string | null
+}
 
 export default function ProductsPage() {
-    const [products, setProducts] = useState(initialProducts)
+    const [products, setProducts] = useState<Product[]>([])
+    const [isLoading, setIsLoading] = useState(true)
     const [isGenerating, setIsGenerating] = useState(false)
     const [newProductUrl, setNewProductUrl] = useState("")
     const [isAdding, setIsAdding] = useState(false)
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+    useEffect(() => {
+        fetchProducts()
+    }, [])
+
+    const fetchProducts = async () => {
+        try {
+            const res = await fetch("/api/products")
+            if (res.ok) {
+                const data = await res.json()
+                setProducts(data)
+            }
+        } catch (error) {
+            console.error("Error fetching products:", error)
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     const handleAddProduct = async () => {
         setIsAdding(true)
         try {
             const scrapedData = await scrapeProductAction(newProductUrl)
 
-            const newProduct = {
-                id: products.length + 1,
-                title: scrapedData.title,
-                price: scrapedData.price,
-                commission: "Calculando...", // Placeholder logic
-                platform: scrapedData.platform,
-                imageUrl: scrapedData.imageUrl,
-            }
+            const res = await fetch("/api/products", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    title: scrapedData.title,
+                    price: scrapedData.price,
+                    commission: "R$ 0,00", // Placeholder
+                    platform: scrapedData.platform,
+                    imageUrl: scrapedData.imageUrl,
+                    affiliateLink: newProductUrl,
+                }),
+            })
 
-            setProducts([newProduct, ...products])
-            setNewProductUrl("")
+            if (res.ok) {
+                const newProduct = await res.json()
+                setProducts([newProduct, ...products])
+                setNewProductUrl("")
+                setIsDialogOpen(false)
+            }
         } catch (error) {
             alert("Erro ao importar produto. Verifique o link.")
         } finally {
             setIsAdding(false)
+        }
+    }
+
+    const handleDeleteProduct = async (id: string) => {
+        if (!confirm("Tem certeza que deseja excluir este produto?")) return
+
+        try {
+            const res = await fetch(`/api/products?id=${id}`, { method: "DELETE" })
+            if (res.ok) {
+                setProducts(products.filter((p) => p.id !== id))
+            }
+        } catch (error) {
+            alert("Erro ao excluir produto.")
         }
     }
 
@@ -79,6 +110,16 @@ export default function ProductsPage() {
         }
     }
 
+    if (isLoading) {
+        return (
+            <DashboardLayout>
+                <div className="flex items-center justify-center h-96">
+                    <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+                </div>
+            </DashboardLayout>
+        )
+    }
+
     return (
         <DashboardLayout>
             <div className="flex flex-col gap-8">
@@ -89,7 +130,7 @@ export default function ProductsPage() {
                             Gerencie seus produtos afiliados e crie campanhas com IA.
                         </p>
                     </div>
-                    <Dialog>
+                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                         <DialogTrigger asChild>
                             <Button>
                                 <Plus className="w-4 h-4 mr-2" />
@@ -157,16 +198,32 @@ export default function ProductsPage() {
                     </div>
                 )}
 
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {products.map((product) => (
-                        <ProductCard
-                            key={product.id}
-                            {...product}
-                            onGenerateCopy={() => handleGenerateCopy(product.title)}
-                            onViewLink={() => window.open("#", "_blank")}
-                        />
-                    ))}
-                </div>
+                {products.length === 0 ? (
+                    <div className="text-center py-12">
+                        <p className="text-muted-foreground mb-4">Nenhum produto cadastrado ainda.</p>
+                        <Button onClick={() => setIsDialogOpen(true)}>
+                            <Plus className="w-4 h-4 mr-2" />
+                            Adicionar Primeiro Produto
+                        </Button>
+                    </div>
+                ) : (
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        {products.map((product) => (
+                            <ProductCard
+                                key={product.id}
+                                id={product.id}
+                                title={product.title}
+                                price={product.price}
+                                commission={product.commission}
+                                platform={product.platform}
+                                imageUrl={product.imageUrl || "https://placehold.co/600x400/png?text=Produto"}
+                                onGenerateCopy={() => handleGenerateCopy(product.title)}
+                                onViewLink={() => window.open(product.affiliateLink || "#", "_blank")}
+                                onDelete={() => handleDeleteProduct(product.id)}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </DashboardLayout>
     )
