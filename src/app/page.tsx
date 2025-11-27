@@ -2,12 +2,14 @@
 
 import { Button } from "@/components/ui/button"
 import { LoginModal } from "@/components/auth/login-modal"
+import { CustomerChat } from "@/components/chat/customer-chat"
 import { Globe, ArrowRight, CheckCircle2, BarChart3, Zap, Shield } from "lucide-react"
 import Link from "next/link"
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen flex flex-col">
+      <CustomerChat />
       {/* Header */}
       <header className="fixed top-0 w-full z-50 glass border-b border-white/10">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
