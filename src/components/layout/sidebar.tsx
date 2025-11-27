@@ -12,6 +12,7 @@ import {
     BarChart3,
     Globe,
     Palette,
+    Share2,
 } from "lucide-react"
 
 const routes = [
