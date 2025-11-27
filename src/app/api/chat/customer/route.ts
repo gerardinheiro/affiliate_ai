@@ -11,55 +11,46 @@ const demoResponses = {
 }
 
 function getDemoResponse(userMessage: string): string {
-    // Normalizar mensagem: lowercase e remover acentos
-    const msg = userMessage
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
+    // Normalizar: lowercase
+    const msg = userMessage.toLowerCase()
 
-    console.log("[CUSTOMER_CHAT] Analyzing message:", msg)
+    console.log("[CUSTOMER_CHAT] Original:", userMessage)
+    console.log("[CUSTOMER_CHAT] Lowercase:", msg)
 
-    // Detectar perguntas sobre preço PRIMEIRO (mais específico)
-    if (msg.includes("preco") ||
-        msg.includes("valor") ||
-        msg.includes("custa") ||
-        msg.includes("pagar") ||
-        msg.includes("plano") ||
-        msg.includes("quanto")) {
-        console.log("[CUSTOMER_CHAT] Detected: PRECO")
+    // Detectar preço (com e sem acento)
+    if (msg.includes("preço") || msg.includes("preco") ||
+        msg.includes("preço") || msg.includes("valor") ||
+        msg.includes("custa") || msg.includes("pagar") ||
+        msg.includes("plano") || msg.includes("quanto")) {
+        console.log("[CUSTOMER_CHAT] ✅ Detected: PRECO")
         return demoResponses.preco
     }
 
-    // Detectar perguntas sobre cadastro
-    if (msg.includes("cadastr") ||
-        msg.includes("registr") ||
-        msg.includes("criar conta") ||
-        msg.includes("comecar") ||
-        msg.includes("entrar") ||
+    // Detectar cadastro
+    if (msg.includes("cadastr") || msg.includes("registr") ||
+        msg.includes("criar conta") || msg.includes("começar") ||
+        msg.includes("comecar") || msg.includes("entrar") ||
         msg.includes("login")) {
-        console.log("[CUSTOMER_CHAT] Detected: CADASTRO")
+        console.log("[CUSTOMER_CHAT] ✅ Detected: CADASTRO")
         return demoResponses.cadastro
     }
 
-    // Detectar perguntas sobre funcionamento
-    if (msg.includes("funciona") ||
-        msg.includes("como faz") ||
-        msg.includes("como usa") ||
-        msg.includes("o que faz") ||
+    // Detectar funcionamento
+    if (msg.includes("funciona") || msg.includes("como faz") ||
+        msg.includes("como usa") || msg.includes("o que faz") ||
         msg.includes("explique")) {
-        console.log("[CUSTOMER_CHAT] Detected: FUNCIONA")
+        console.log("[CUSTOMER_CHAT] ✅ Detected: FUNCIONA")
         return demoResponses.funciona
     }
 
-    // Detectar perguntas sobre recursos
-    if (msg.includes("recurso") ||
-        msg.includes("funcionalidade") ||
+    // Detectar recursos
+    if (msg.includes("recurso") || msg.includes("funcionalidade") ||
         msg.includes("pode fazer")) {
-        console.log("[CUSTOMER_CHAT] Detected: RECURSOS")
+        console.log("[CUSTOMER_CHAT] ✅ Detected: RECURSOS")
         return demoResponses.recursos
     }
 
-    console.log("[CUSTOMER_CHAT] Using default response")
+    console.log("[CUSTOMER_CHAT] ⚠️ Using default response")
     return demoResponses.default
 }
 
@@ -69,19 +60,21 @@ export async function POST(req: Request) {
         const { messages } = body
 
         const lastUserMessage = messages[messages.length - 1]?.content || ""
-        console.log("[CUSTOMER_CHAT] Received message:", lastUserMessage)
+        console.log("[CUSTOMER_CHAT] 📩 Received message:", lastUserMessage)
 
         // Use system OpenAI key for public bot
         const apiKey = process.env.OPENAI_API_KEY
 
         // If no API key, use demo mode
         if (!apiKey) {
-            console.log("[CUSTOMER_CHAT] No API key, using demo mode")
+            console.log("[CUSTOMER_CHAT] 🔑 No API key, using demo mode")
             await new Promise(resolve => setTimeout(resolve, 800))
             const response = getDemoResponse(lastUserMessage)
+            console.log("[CUSTOMER_CHAT] 💬 Sending response:", response.substring(0, 50) + "...")
             return NextResponse.json({ message: response })
         }
 
+        console.log("[CUSTOMER_CHAT] 🤖 Using OpenAI")
         const openai = new OpenAI({ apiKey })
 
         const systemPrompt = `Você é um assistente de vendas prestativo e amigável.
@@ -116,7 +109,7 @@ Seja breve e direto nas respostas (máximo 3 parágrafos).`
             message: completion.choices[0].message.content
         })
     } catch (error) {
-        console.error("[CUSTOMER_CHAT] Error:", error)
+        console.error("[CUSTOMER_CHAT] ❌ Error:", error)
         return NextResponse.json({
             message: demoResponses.default
         })
