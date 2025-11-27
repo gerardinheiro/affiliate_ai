@@ -27,8 +27,8 @@ export function ProductCard({
     onDelete,
 }: ProductCardProps) {
     return (
-        <Card className="overflow-hidden flex flex-col justify-between hover-lift animate-fade-in group border-gray-200 hover:border-indigo-300 transition-all duration-300">
-            <div className="aspect-video w-full bg-gradient-to-br from-indigo-50 to-purple-50 relative flex items-center justify-center overflow-hidden">
+        <Card className="overflow-hidden flex flex-col justify-between hover-lift animate-fade-in group border-white/10 hover:border-indigo-500/50 transition-all duration-300 glass">
+            <div className="aspect-video w-full bg-gradient-to-br from-indigo-500/10 to-purple-500/10 relative flex items-center justify-center overflow-hidden">
                 {imageUrl ? (
                     <img
                         src={imageUrl}
@@ -38,19 +38,19 @@ export function ProductCard({
                 ) : (
                     <div className="text-gray-400 text-sm">Sem Imagem</div>
                 )}
-                <Badge className="absolute top-3 right-3 bg-black/70 hover:bg-black/80 backdrop-blur-sm border-0 shadow-lg">
+                <Badge className="absolute top-3 right-3 bg-black/70 hover:bg-black/80 backdrop-blur-sm border-0 shadow-lg text-white">
                     {platform}
                 </Badge>
             </div>
             <CardHeader className="p-4 pb-3">
-                <CardTitle className="text-lg line-clamp-2 font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">
+                <CardTitle className="text-lg line-clamp-2 font-semibold text-white group-hover:text-indigo-400 transition-colors">
                     {title}
                 </CardTitle>
                 <div className="flex items-center justify-between mt-3">
-                    <span className="font-bold text-xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    <span className="font-bold text-xl bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
                         {price}
                     </span>
-                    <span className="text-sm text-emerald-600 font-semibold px-3 py-1 bg-emerald-50 rounded-full">
+                    <span className="text-sm text-emerald-400 font-semibold px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
                         +{commission}
                     </span>
                 </div>
@@ -58,14 +58,14 @@ export function ProductCard({
             <CardFooter className="p-4 pt-0 flex gap-2">
                 <Button
                     variant="outline"
-                    className="flex-1 hover:bg-gray-50 hover:border-gray-300 transition-all"
+                    className="flex-1 border-white/10 hover:bg-white/10 hover:text-white transition-all text-gray-300"
                     onClick={onViewLink}
                 >
                     <ExternalLink className="w-4 h-4 mr-2" />
                     Link
                 </Button>
                 <Button
-                    className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all"
+                    className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all border-0"
                     onClick={onGenerateCopy}
                 >
                     <Sparkles className="w-4 h-4 mr-2" />
@@ -76,7 +76,7 @@ export function ProductCard({
                         variant="ghost"
                         size="icon"
                         onClick={onDelete}
-                        className="hover:bg-red-50 hover:text-red-600 transition-all"
+                        className="hover:bg-red-500/10 hover:text-red-400 text-gray-400 transition-all"
                     >
                         <Trash2 className="w-4 h-4" />
                     </Button>

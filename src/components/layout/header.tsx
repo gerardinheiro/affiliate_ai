@@ -3,13 +3,13 @@ import { Bell, User } from "lucide-react"
 
 export function Header() {
     return (
-        <div className="flex items-center justify-end p-4 border-b h-16 bg-background">
+        <div className="flex items-center justify-end p-4 border-b border-white/10 h-16 glass">
             <div className="flex items-center gap-x-4">
-                <Button variant="ghost" size="icon">
-                    <Bell className="h-5 w-5 text-muted-foreground" />
+                <Button variant="ghost" size="icon" className="hover:bg-white/10">
+                    <Bell className="h-5 w-5 text-gray-300" />
                 </Button>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                    <User className="h-5 w-5 text-muted-foreground" />
+                <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10">
+                    <User className="h-5 w-5 text-gray-300" />
                 </Button>
             </div>
         </div>
