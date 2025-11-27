@@ -1,6 +1,5 @@
 import { Sidebar } from "@/components/layout/sidebar"
 import { Header } from "@/components/layout/header"
-import { InternalChat } from "@/components/chat/internal-chat"
 
 export default function DashboardLayout({
     children,
@@ -16,7 +15,6 @@ export default function DashboardLayout({
                 <Header />
                 <div className="p-8">{children}</div>
             </main>
-            <InternalChat />
         </div>
     )
 }
