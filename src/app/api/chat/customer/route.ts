@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import OpenAI from "openai"
 
 // Demo responses when API key is not available
-const demoResponses: Record<string, string> = {
+const demoResponses = {
     default: "Olá! Sou o assistente do AffiliateAI 😊\n\nNossa plataforma ajuda afiliados a:\n✅ Gerenciar produtos de várias plataformas\n✅ Criar campanhas automaticamente\n✅ Gerar conteúdo com IA\n\nQuer saber mais sobre alguma funcionalidade específica?",
     funciona: "O AffiliateAI funciona em 3 passos simples:\n\n1️⃣ Conecte suas contas de afiliados (Amazon, Hotmart, Shein, etc)\n2️⃣ Importe seus produtos\n3️⃣ Nossa IA gera copys e criativos automaticamente!\n\nTudo em um só lugar. Quer começar agora?",
     preco: "Temos planos para todos os perfis! 💰\n\nDesde iniciantes até profissionais. O melhor é que você pode começar gratuitamente e testar todas as funcionalidades.\n\nQuer que eu te mostre como se cadastrar?",
@@ -11,31 +11,55 @@ const demoResponses: Record<string, string> = {
 }
 
 function getDemoResponse(userMessage: string): string {
-    const msg = userMessage.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    // Normalizar mensagem: lowercase e remover acentos
+    const msg = userMessage
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
 
-    // Detectar perguntas sobre funcionamento
-    if (msg.match(/como\s+(funciona|faz|usa|trabalha|opera)/i) ||
-        msg.includes("o que faz") ||
-        msg.includes("explique") ||
-        msg.includes("me explique")) {
-        return demoResponses.funciona
-    }
+    console.log("[CUSTOMER_CHAT] Analyzing message:", msg)
 
-    // Detectar perguntas sobre preço
-    if (msg.match(/preco|valor|custa|pagar|plano|assinatura|gratis|gratuito/i)) {
+    // Detectar perguntas sobre preço PRIMEIRO (mais específico)
+    if (msg.includes("preco") ||
+        msg.includes("valor") ||
+        msg.includes("custa") ||
+        msg.includes("pagar") ||
+        msg.includes("plano") ||
+        msg.includes("quanto")) {
+        console.log("[CUSTOMER_CHAT] Detected: PRECO")
         return demoResponses.preco
     }
 
     // Detectar perguntas sobre cadastro
-    if (msg.match(/cadastr|registr|criar\s+conta|comecar|entrar|login|inscrever/i)) {
+    if (msg.includes("cadastr") ||
+        msg.includes("registr") ||
+        msg.includes("criar conta") ||
+        msg.includes("comecar") ||
+        msg.includes("entrar") ||
+        msg.includes("login")) {
+        console.log("[CUSTOMER_CHAT] Detected: CADASTRO")
         return demoResponses.cadastro
     }
 
-    // Detectar perguntas sobre recursos/funcionalidades
-    if (msg.match(/recurso|funcionalidade|feature|pode\s+fazer|capacidade/i)) {
+    // Detectar perguntas sobre funcionamento
+    if (msg.includes("funciona") ||
+        msg.includes("como faz") ||
+        msg.includes("como usa") ||
+        msg.includes("o que faz") ||
+        msg.includes("explique")) {
+        console.log("[CUSTOMER_CHAT] Detected: FUNCIONA")
+        return demoResponses.funciona
+    }
+
+    // Detectar perguntas sobre recursos
+    if (msg.includes("recurso") ||
+        msg.includes("funcionalidade") ||
+        msg.includes("pode fazer")) {
+        console.log("[CUSTOMER_CHAT] Detected: RECURSOS")
         return demoResponses.recursos
     }
 
+    console.log("[CUSTOMER_CHAT] Using default response")
     return demoResponses.default
 }
 
@@ -45,16 +69,17 @@ export async function POST(req: Request) {
         const { messages } = body
 
         const lastUserMessage = messages[messages.length - 1]?.content || ""
+        console.log("[CUSTOMER_CHAT] Received message:", lastUserMessage)
 
         // Use system OpenAI key for public bot
         const apiKey = process.env.OPENAI_API_KEY
 
         // If no API key, use demo mode
         if (!apiKey) {
-            await new Promise(resolve => setTimeout(resolve, 800)) // Simulate API delay
-            return NextResponse.json({
-                message: getDemoResponse(lastUserMessage)
-            })
+            console.log("[CUSTOMER_CHAT] No API key, using demo mode")
+            await new Promise(resolve => setTimeout(resolve, 800))
+            const response = getDemoResponse(lastUserMessage)
+            return NextResponse.json({ message: response })
         }
 
         const openai = new OpenAI({ apiKey })
@@ -91,9 +116,7 @@ Seja breve e direto nas respostas (máximo 3 parágrafos).`
             message: completion.choices[0].message.content
         })
     } catch (error) {
-        console.error("[CUSTOMER_CHAT]", error)
-
-        // Fallback to demo mode on error
+        console.error("[CUSTOMER_CHAT] Error:", error)
         return NextResponse.json({
             message: demoResponses.default
         })
