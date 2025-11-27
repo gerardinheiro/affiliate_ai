@@ -1,15 +1,15 @@
 import OpenAI from "openai"
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY || "mock-key",
-})
+export async function generateAdCopy(productName: string, productDescription: string, apiKey?: string) {
+    const token = apiKey || process.env.OPENAI_API_KEY
 
-export async function generateAdCopy(productName: string, productDescription: string) {
-    if (!process.env.OPENAI_API_KEY) {
+    if (!token) {
         // Fallback for demo without key
         await new Promise(resolve => setTimeout(resolve, 1000))
         return `[DEMO] Descubra o novo ${productName}! ${productDescription.slice(0, 50)}... Compre agora!`
     }
+
+    const openai = new OpenAI({ apiKey: token })
 
     try {
         const completion = await openai.chat.completions.create({
@@ -33,12 +33,16 @@ export async function generateAdCopy(productName: string, productDescription: st
     }
 }
 
-export async function generateImage(prompt: string) {
-    if (!process.env.OPENAI_API_KEY) {
+export async function generateImage(prompt: string, apiKey?: string) {
+    const token = apiKey || process.env.OPENAI_API_KEY
+
+    if (!token) {
         // Fallback for demo without key
         await new Promise(resolve => setTimeout(resolve, 1000))
         return "https://placehold.co/1024x1024/png?text=AI+Image+Demo"
     }
+
+    const openai = new OpenAI({ apiKey: token })
 
     try {
         const response = await openai.images.generate({
