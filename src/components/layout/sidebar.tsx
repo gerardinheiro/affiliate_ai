@@ -34,6 +34,12 @@ const routes = [
         color: "text-pink-700",
     },
     {
+        label: "Automação Social",
+        icon: Share2,
+        href: "/social",
+        color: "text-emerald-500",
+    },
+    {
         label: "Creative Studio",
         icon: Palette,
         href: "/creatives",
