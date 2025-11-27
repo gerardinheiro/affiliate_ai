@@ -5,21 +5,35 @@ import OpenAI from "openai"
 const demoResponses: Record<string, string> = {
     default: "Olá! Sou o assistente do AffiliateAI 😊\n\nNossa plataforma ajuda afiliados a:\n✅ Gerenciar produtos de várias plataformas\n✅ Criar campanhas automaticamente\n✅ Gerar conteúdo com IA\n\nQuer saber mais sobre alguma funcionalidade específica?",
     funciona: "O AffiliateAI funciona em 3 passos simples:\n\n1️⃣ Conecte suas contas de afiliados (Amazon, Hotmart, Shein, etc)\n2️⃣ Importe seus produtos\n3️⃣ Nossa IA gera copys e criativos automaticamente!\n\nTudo em um só lugar. Quer começar agora?",
-    preço: "Temos planos para todos os perfis! 💰\n\nDesde iniciantes até profissionais. O melhor é que você pode começar gratuitamente e testar todas as funcionalidades.\n\nQuer que eu te mostre como se cadastrar?",
+    preco: "Temos planos para todos os perfis! 💰\n\nDesde iniciantes até profissionais. O melhor é que você pode começar gratuitamente e testar todas as funcionalidades.\n\nQuer que eu te mostre como se cadastrar?",
     cadastro: "Super fácil! 🚀\n\n1. Clique em 'Começar Agora' no topo\n2. Faça login com Google\n3. Pronto! Já pode começar a usar\n\nLeva menos de 1 minuto. Vamos lá?",
+    recursos: "Principais recursos do AffiliateAI:\n\n🎯 Gestão centralizada de produtos\n📊 Analytics em tempo real\n🤖 Geração de conteúdo com IA\n🔗 Integração com múltiplas plataformas\n📱 Publicação automática em redes sociais\n\nQual te interessa mais?",
 }
 
 function getDemoResponse(userMessage: string): string {
-    const msg = userMessage.toLowerCase()
+    const msg = userMessage.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
 
-    if (msg.includes("funciona") || msg.includes("como") || msg.includes("faz")) {
+    // Detectar perguntas sobre funcionamento
+    if (msg.match(/como\s+(funciona|faz|usa|trabalha|opera)/i) ||
+        msg.includes("o que faz") ||
+        msg.includes("explique") ||
+        msg.includes("me explique")) {
         return demoResponses.funciona
     }
-    if (msg.includes("preço") || msg.includes("valor") || msg.includes("custa") || msg.includes("pagar")) {
-        return demoResponses.preço
+
+    // Detectar perguntas sobre preço
+    if (msg.match(/preco|valor|custa|pagar|plano|assinatura|gratis|gratuito/i)) {
+        return demoResponses.preco
     }
-    if (msg.includes("cadastr") || msg.includes("registr") || msg.includes("criar conta") || msg.includes("começar")) {
+
+    // Detectar perguntas sobre cadastro
+    if (msg.match(/cadastr|registr|criar\s+conta|comecar|entrar|login|inscrever/i)) {
         return demoResponses.cadastro
+    }
+
+    // Detectar perguntas sobre recursos/funcionalidades
+    if (msg.match(/recurso|funcionalidade|feature|pode\s+fazer|capacidade/i)) {
+        return demoResponses.recursos
     }
 
     return demoResponses.default
