@@ -1,5 +1,8 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
-import { Bell, User } from "lucide-react"
+import { Bell, User, LogOut } from "lucide-react"
+import { signOut } from "next-auth/react"
 
 export function Header() {
     return (
@@ -10,6 +13,15 @@ export function Header() {
                 </Button>
                 <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10">
                     <User className="h-5 w-5 text-gray-300" />
+                </Button>
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="hover:bg-red-500/10 hover:text-red-400 text-gray-300"
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                    title="Sair"
+                >
+                    <LogOut className="h-5 w-5" />
                 </Button>
             </div>
         </div>

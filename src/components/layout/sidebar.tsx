@@ -18,7 +18,7 @@ const routes = [
     {
         label: "Visão Geral",
         icon: LayoutDashboard,
-        href: "/",
+        href: "/dashboard",
         color: "text-sky-500",
     },
     {
