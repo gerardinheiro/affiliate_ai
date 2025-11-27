@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
         const userId = (session.user as any).id
         const body = await req.json()
-        const { title, price, commission, platform, imageUrl, affiliateLink } = body
+        const { title, price, commission, platform, imageUrl, affiliateLink, targetCountry, targetState, targetCity } = body
 
         const product = await db.product.create({
             data: {
@@ -44,6 +44,9 @@ export async function POST(req: NextRequest) {
                 platform,
                 imageUrl,
                 affiliateLink,
+                targetCountry,
+                targetState,
+                targetCity,
                 userId,
             },
         })

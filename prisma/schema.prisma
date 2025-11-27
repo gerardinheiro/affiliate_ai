@@ -24,6 +24,7 @@ model User {
   products      Product[]
   campaigns     Campaign[]
   creatives     Creative[]
+  integrations  Integration[]
 }
 
 model Account {
@@ -61,6 +62,12 @@ model Product {
   platform      String
   imageUrl      String?
   affiliateLink String?
+  
+  // Location Targeting
+  targetCountry String?
+  targetState   String?
+  targetCity    String?
+
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   userId        String
@@ -93,4 +100,22 @@ model Creative {
   updatedAt   DateTime @updatedAt
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Integration {
+  id            String   @id @default(cuid())
+  name          String   // e.g. "Minha conta Amazon US"
+  platform      String   // e.g. "amazon", "hotmart"
+  apiKey        String?
+  accountId     String?
+  
+  // Location Targeting
+  targetCountry String?
+  targetState   String?
+  targetCity    String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

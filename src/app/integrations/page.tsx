@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import DashboardLayout from "@/components/layout/dashboard-layout"
 import { IntegrationCard } from "@/components/integrations/integration-card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -10,9 +10,15 @@ import {
     Share2,
     Globe,
     Search,
-    CreditCard
+    CreditCard,
+    Plus,
+    Loader2,
+    Trash2
 } from "lucide-react"
 import { ConnectionDialog } from "@/components/integrations/connection-dialog"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 
 // Mock data for platforms
 const affiliatePlatforms = [
@@ -47,6 +53,14 @@ const affiliatePlatforms = [
         icon: ShoppingCart,
         color: "text-orange-600",
         signupUrl: "https://shopee.com.br/m/afiliados",
+    },
+    {
+        id: "shein",
+        name: "Shein Afiliados",
+        description: "Moda e acessórios com altas comissões e popularidade global.",
+        icon: ShoppingBag,
+        color: "text-black",
+        signupUrl: "https://br.shein.com/campaign/affiliate-program",
     },
     {
         id: "eduzz",
@@ -85,42 +99,127 @@ const adPlatforms = [
     },
 ]
 
+import { ShoppingBag } from "lucide-react"
+
 export default function IntegrationsPage() {
-    const [connected, setConnected] = useState<string[]>([])
+    const [integrations, setIntegrations] = useState<any[]>([])
+    const [isLoading, setIsLoading] = useState(true)
     const [dialogOpen, setDialogOpen] = useState(false)
     const [selectedPlatform, setSelectedPlatform] = useState<any>(null)
+
+    useEffect(() => {
+        fetchIntegrations()
+    }, [])
+
+    const fetchIntegrations = async () => {
+        try {
+            const res = await fetch("/api/integrations")
+            if (res.ok) {
+                const data = await res.json()
+                setIntegrations(data)
+            }
+        } catch (error) {
+            console.error("Error fetching integrations:", error)
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     const handleConnectClick = (platform: any) => {
         setSelectedPlatform(platform)
         setDialogOpen(true)
     }
 
-    const handleConnectSubmit = (data: any) => {
-        console.log("Connecting to", selectedPlatform?.name, "with data", data)
-        // Simulate API call
-        setTimeout(() => {
-            if (selectedPlatform) {
-                setConnected((prev) => [...prev, selectedPlatform.id])
+    const handleConnectSubmit = async (data: any) => {
+        try {
+            const res = await fetch("/api/integrations", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    platform: selectedPlatform.id,
+                    ...data
+                }),
+            })
+
+            if (res.ok) {
+                fetchIntegrations()
+                setDialogOpen(false)
             }
-            setDialogOpen(false)
-        }, 500)
+        } catch (error) {
+            console.error("Error connecting:", error)
+        }
     }
+
+    const handleDeleteIntegration = async (id: string) => {
+        if (!confirm("Tem certeza que deseja remover esta conexão?")) return
+
+        try {
+            await fetch(`/api/integrations?id=${id}`, { method: "DELETE" })
+            setIntegrations(integrations.filter(i => i.id !== id))
+        } catch (error) {
+            console.error("Error deleting integration:", error)
+        }
+    }
+
+    const connectedPlatformIds = integrations.map(i => i.platform)
 
     return (
         <DashboardLayout>
             <div className="flex flex-col gap-8">
-                <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Conexões</h2>
-                    <p className="text-muted-foreground mt-2">
-                        Gerencie suas integrações com redes de afiliados e plataformas de anúncios.
-                    </p>
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h2 className="text-3xl font-bold tracking-tight text-white">Conexões</h2>
+                        <p className="text-gray-400 mt-2">
+                            Gerencie suas integrações com redes de afiliados e plataformas de anúncios.
+                        </p>
+                    </div>
                 </div>
 
+                {/* Active Connections */}
+                {integrations.length > 0 && (
+                    <div className="space-y-4">
+                        <h3 className="text-xl font-semibold text-white">Minhas Conexões Ativas</h3>
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                            {integrations.map((integration) => (
+                                <Card key={integration.id} className="glass border-white/10 hover:border-indigo-500/50 transition-all">
+                                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                        <CardTitle className="text-sm font-medium text-white">
+                                            {integration.name}
+                                        </CardTitle>
+                                        <Badge variant="outline" className="border-emerald-500/30 text-emerald-400 bg-emerald-500/10">
+                                            Ativo
+                                        </Badge>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="text-2xl font-bold text-white capitalize mb-2">
+                                            {integration.platform}
+                                        </div>
+                                        <div className="text-xs text-gray-400 space-y-1">
+                                            <p>País: {integration.targetCountry === "BR" ? "Brasil 🇧🇷" : integration.targetCountry === "US" ? "EUA 🇺🇸" : integration.targetCountry || "Global"}</p>
+                                            {integration.targetState && <p>Estado: {integration.targetState}</p>}
+                                            {integration.targetCity && <p>Cidade: {integration.targetCity}</p>}
+                                        </div>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="mt-4 w-full text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                                            onClick={() => handleDeleteIntegration(integration.id)}
+                                        >
+                                            <Trash2 className="w-4 h-4 mr-2" />
+                                            Desconectar
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 <Tabs defaultValue="affiliates" className="space-y-6">
-                    <TabsList>
-                        <TabsTrigger value="affiliates">Redes de Afiliados</TabsTrigger>
-                        <TabsTrigger value="ads">Plataformas de Anúncios</TabsTrigger>
-                        <TabsTrigger value="social">Redes Sociais (Orgânico)</TabsTrigger>
+                    <TabsList className="bg-white/5 border border-white/10">
+                        <TabsTrigger value="affiliates" className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-gray-400">Redes de Afiliados</TabsTrigger>
+                        <TabsTrigger value="ads" className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-gray-400">Plataformas de Anúncios</TabsTrigger>
+                        <TabsTrigger value="social" className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-gray-400">Redes Sociais</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="affiliates" className="space-y-4">
@@ -129,7 +228,7 @@ export default function IntegrationsPage() {
                                 <IntegrationCard
                                     key={platform.id}
                                     {...platform}
-                                    isConnected={connected.includes(platform.id)}
+                                    isConnected={connectedPlatformIds.includes(platform.id)}
                                     onConnect={() => handleConnectClick(platform)}
                                     onConfigure={() => handleConnectClick(platform)}
                                 />
@@ -143,7 +242,7 @@ export default function IntegrationsPage() {
                                 <IntegrationCard
                                     key={platform.id}
                                     {...platform}
-                                    isConnected={connected.includes(platform.id)}
+                                    isConnected={connectedPlatformIds.includes(platform.id)}
                                     onConnect={() => handleConnectClick(platform)}
                                     onConfigure={() => handleConnectClick(platform)}
                                 />
@@ -152,8 +251,8 @@ export default function IntegrationsPage() {
                     </TabsContent>
 
                     <TabsContent value="social">
-                        <div className="flex items-center justify-center h-40 border-2 border-dashed rounded-lg">
-                            <p className="text-muted-foreground">Em breve: Conexão com Instagram, Pinterest e YouTube.</p>
+                        <div className="flex items-center justify-center h-40 border-2 border-dashed border-white/10 rounded-lg bg-white/5">
+                            <p className="text-gray-400">Em breve: Conexão com Instagram, Pinterest e YouTube.</p>
                         </div>
                     </TabsContent>
                 </Tabs>
