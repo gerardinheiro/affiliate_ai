@@ -13,7 +13,11 @@ import {
     CreditCard,
     Plus,
     Loader2,
-    Trash2
+    Trash2,
+    ShoppingBag,
+    Instagram,
+    Youtube,
+    Video
 } from "lucide-react"
 import { ConnectionDialog } from "@/components/integrations/connection-dialog"
 import { Button } from "@/components/ui/button"
@@ -99,7 +103,40 @@ const adPlatforms = [
     },
 ]
 
-import { ShoppingBag } from "lucide-react"
+const socialPlatforms = [
+    {
+        id: "instagram",
+        name: "Instagram",
+        description: "Conecte sua conta para publicar stories e reels automaticamente.",
+        icon: Instagram,
+        color: "text-pink-600",
+        signupUrl: "https://instagram.com",
+    },
+    {
+        id: "tiktok",
+        name: "TikTok",
+        description: "Publique vídeos curtos e virais diretamente da plataforma.",
+        icon: Video,
+        color: "text-black",
+        signupUrl: "https://tiktok.com",
+    },
+    {
+        id: "youtube",
+        name: "YouTube",
+        description: "Gerencie seu canal e publique vídeos longos ou Shorts.",
+        icon: Youtube,
+        color: "text-red-600",
+        signupUrl: "https://youtube.com",
+    },
+    {
+        id: "pinterest",
+        name: "Pinterest",
+        description: "Crie pins para seus produtos e aumente o tráfego orgânico.",
+        icon: Share2,
+        color: "text-red-500",
+        signupUrl: "https://pinterest.com",
+    },
+]
 
 export default function IntegrationsPage() {
     const [integrations, setIntegrations] = useState<any[]>([])
@@ -250,9 +287,17 @@ export default function IntegrationsPage() {
                         </div>
                     </TabsContent>
 
-                    <TabsContent value="social">
-                        <div className="flex items-center justify-center h-40 border-2 border-dashed border-white/10 rounded-lg bg-white/5">
-                            <p className="text-gray-400">Em breve: Conexão com Instagram, Pinterest e YouTube.</p>
+                    <TabsContent value="social" className="space-y-4">
+                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                            {socialPlatforms.map((platform) => (
+                                <IntegrationCard
+                                    key={platform.id}
+                                    {...platform}
+                                    isConnected={connectedPlatformIds.includes(platform.id)}
+                                    onConnect={() => handleConnectClick(platform)}
+                                    onConfigure={() => handleConnectClick(platform)}
+                                />
+                            ))}
                         </div>
                     </TabsContent>
                 </Tabs>
