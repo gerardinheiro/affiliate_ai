@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Bell, User, LogOut, X, Share2, Eye, EyeOff } from "lucide-react"
+import { Bell, User, LogOut, X, Share2, Eye, EyeOff, UserCircle } from "lucide-react"
 import { signOut, useSession } from "next-auth/react"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import Link from "next/link"
 
 type Notification = {
     id: string
@@ -270,7 +271,17 @@ export function Header() {
                                 Compartilhar Conquista
                             </Button>
 
-                            <div className="pt-2 border-t border-white/10">
+                            <div className="pt-2 border-t border-white/10 space-y-2">
+                                <Link href="/profile">
+                                    <Button
+                                        variant="ghost"
+                                        className="w-full justify-start text-gray-300 hover:text-white hover:bg-white/10"
+                                        onClick={() => setShowUserMenu(false)}
+                                    >
+                                        <UserCircle className="h-4 w-4 mr-2" />
+                                        Ver Perfil
+                                    </Button>
+                                </Link>
                                 <Button
                                     variant="ghost"
                                     className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-500/10"

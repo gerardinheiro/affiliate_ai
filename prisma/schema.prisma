@@ -20,6 +20,14 @@ model User {
   updatedAt     DateTime  @updatedAt
   openaiApiKey  String?
 
+  // Profile Info
+  bio           String?
+  website       String?
+  instagram     String?
+  tiktok        String?
+  youtube       String?
+  twitter       String?
+
   accounts      Account[]
   sessions      Session[]
   products      Product[]
