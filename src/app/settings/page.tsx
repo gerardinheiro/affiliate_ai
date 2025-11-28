@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { Loader2, Save, Key, ShieldCheck, Megaphone } from "lucide-react"
+import { Loader2, Save, Key, ShieldCheck, Megaphone, Zap } from "lucide-react"
 
 export default function SettingsPage() {
     const [apiKey, setApiKey] = useState("")
@@ -186,6 +186,36 @@ export default function SettingsPage() {
                                 <Save className="w-4 h-4" />
                             )}
                             <span className="ml-2">Salvar Voz da Marca</span>
+                        </Button>
+                    </CardContent>
+                </Card>
+
+                {/* Subscription Management */}
+                <Card className="glass border-white/10">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-white">
+                            <Zap className="w-5 h-5 text-yellow-500" />
+                            Assinatura
+                        </CardTitle>
+                        <CardDescription className="text-gray-400">
+                            Gerencie seu plano e informações de pagamento.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Button
+                            onClick={async () => {
+                                try {
+                                    const res = await fetch("/api/stripe/portal", { method: "POST" })
+                                    const data = await res.json()
+                                    window.location.href = data.url
+                                } catch (error) {
+                                    console.error("Error accessing portal:", error)
+                                    alert("Erro ao acessar portal de assinatura.")
+                                }
+                            }}
+                            className="w-full bg-white/10 hover:bg-white/20 text-white"
+                        >
+                            Gerenciar Assinatura
                         </Button>
                     </CardContent>
                 </Card>
