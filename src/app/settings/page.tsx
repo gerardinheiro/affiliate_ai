@@ -116,6 +116,28 @@ export default function SettingsPage() {
                         )}
                     </CardContent>
                 </Card>
+
+                {/* Admin Panel Link */}
+                <Card className="glass border-white/10">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-white">
+                            <ShieldCheck className="w-5 h-5 text-red-400" />
+                            Painel de Administração
+                        </CardTitle>
+                        <CardDescription className="text-gray-400">
+                            Acesse o painel administrativo para gerenciar usuários e visualizar estatísticas.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Button
+                            onClick={() => window.location.href = '/admin'}
+                            className="w-full bg-red-600 hover:bg-red-700 text-white"
+                        >
+                            <ShieldCheck className="w-4 h-4 mr-2" />
+                            Acessar Painel Admin
+                        </Button>
+                    </CardContent>
+                </Card>
             </div>
         </DashboardLayout>
     )
