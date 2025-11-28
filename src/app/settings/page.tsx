@@ -6,13 +6,16 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { Loader2, Save, Key, ShieldCheck } from "lucide-react"
+import { Loader2, Save, Key, ShieldCheck, Megaphone } from "lucide-react"
 
 export default function SettingsPage() {
     const [apiKey, setApiKey] = useState("")
     const [isLoading, setIsLoading] = useState(true)
     const [isSaving, setIsSaving] = useState(false)
     const [hasKey, setHasKey] = useState(false)
+    const [brandName, setBrandName] = useState("")
+    const [brandTone, setBrandTone] = useState("")
+    const [brandDescription, setBrandDescription] = useState("")
 
     useEffect(() => {
         fetchSettings()
@@ -27,6 +30,9 @@ export default function SettingsPage() {
                     setHasKey(true)
                     setApiKey("********************")
                 }
+                setBrandName(data.brandName || "")
+                setBrandTone(data.brandTone || "")
+                setBrandDescription(data.brandDescription || "")
             }
         } catch (error) {
             console.error("Error fetching settings:", error)
@@ -41,7 +47,12 @@ export default function SettingsPage() {
             const res = await fetch("/api/settings", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ openaiApiKey: apiKey }),
+                body: JSON.stringify({
+                    openaiApiKey: apiKey,
+                    brandName,
+                    brandTone,
+                    brandDescription
+                }),
             })
 
             if (res.ok) {
@@ -114,6 +125,68 @@ export default function SettingsPage() {
                                 <span>Chave de API configurada e ativa.</span>
                             </div>
                         )}
+                    </CardContent>
+                </Card>
+
+                {/* Brand Voice Settings */}
+                <Card className="glass border-white/10">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-white">
+                            <Megaphone className="w-5 h-5 text-pink-500" />
+                            Voz da Marca (Brand Voice)
+                        </CardTitle>
+                        <CardDescription className="text-gray-400">
+                            Configure a identidade da sua marca para que a IA gere conteúdos personalizados.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                        <div className="grid gap-4 md:grid-cols-2">
+                            <div className="space-y-2">
+                                <Label htmlFor="brandName" className="text-gray-300">Nome da Marca</Label>
+                                <Input
+                                    id="brandName"
+                                    placeholder="Ex: AffiliateAI"
+                                    value={brandName}
+                                    onChange={(e) => setBrandName(e.target.value)}
+                                    className="bg-white/5 border-white/10 text-white"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="brandTone" className="text-gray-300">Tom de Voz</Label>
+                                <Input
+                                    id="brandTone"
+                                    placeholder="Ex: Profissional, Divertido, Urgente"
+                                    value={brandTone}
+                                    onChange={(e) => setBrandTone(e.target.value)}
+                                    className="bg-white/5 border-white/10 text-white"
+                                />
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="brandDescription" className="text-gray-300">Descrição da Marca</Label>
+                            <Input
+                                id="brandDescription"
+                                placeholder="Descreva o que sua marca faz e seus valores..."
+                                value={brandDescription}
+                                onChange={(e) => setBrandDescription(e.target.value)}
+                                className="bg-white/5 border-white/10 text-white"
+                            />
+                            <p className="text-xs text-gray-500">
+                                Essas informações serão usadas para contextualizar a IA ao gerar copys e criativos.
+                            </p>
+                        </div>
+                        <Button
+                            onClick={handleSave}
+                            disabled={isSaving}
+                            className="bg-pink-600 hover:bg-pink-700 text-white"
+                        >
+                            {isSaving ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                                <Save className="w-4 h-4" />
+                            )}
+                            <span className="ml-2">Salvar Voz da Marca</span>
+                        </Button>
                     </CardContent>
                 </Card>
 

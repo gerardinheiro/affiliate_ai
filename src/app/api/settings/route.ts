@@ -17,12 +17,18 @@ export async function GET(req: Request) {
             },
             select: {
                 openaiApiKey: true,
+                brandName: true,
+                brandTone: true,
+                brandDescription: true,
             },
         })
 
         // Never return the actual key to the client for security
         return NextResponse.json({
-            hasKey: !!user?.openaiApiKey
+            hasKey: !!user?.openaiApiKey,
+            brandName: user?.brandName,
+            brandTone: user?.brandTone,
+            brandDescription: user?.brandDescription,
         })
     } catch (error) {
         return new NextResponse("Internal Error", { status: 500 })
@@ -38,19 +44,24 @@ export async function POST(req: Request) {
 
     try {
         const body = await req.json()
-        const { openaiApiKey } = body
+        const { openaiApiKey, brandName, brandTone, brandDescription } = body
 
-        if (!openaiApiKey) {
-            return new NextResponse("Missing API Key", { status: 400 })
+        // If only updating brand info, skip API key check
+        if (!openaiApiKey && !brandName && !brandTone && !brandDescription) {
+            return new NextResponse("Missing fields", { status: 400 })
         }
+
+        const updateData: any = {}
+        if (openaiApiKey) updateData.openaiApiKey = openaiApiKey
+        if (brandName !== undefined) updateData.brandName = brandName
+        if (brandTone !== undefined) updateData.brandTone = brandTone
+        if (brandDescription !== undefined) updateData.brandDescription = brandDescription
 
         await db.user.update({
             where: {
                 id: (session.user as any).id,
             },
-            data: {
-                openaiApiKey,
-            },
+            data: updateData,
         })
 
         return NextResponse.json({ success: true })

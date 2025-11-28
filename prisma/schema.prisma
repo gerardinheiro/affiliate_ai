@@ -32,6 +32,14 @@ model User {
   youtube       String?
   twitter       String?
 
+  // Brand Voice
+  brandName        String?
+  brandTone        String? // e.g., "Profissional", "Divertido"
+  brandDescription String? @db.Text
+
+  // Onboarding
+  hasCompletedOnboarding Boolean @default(false)
+
   accounts      Account[]
   sessions      Session[]
   products      Product[]
@@ -40,6 +48,7 @@ model User {
   integrations  Integration[]
   posts         Post[]
   notifications Notification[]
+  stripeCustomer StripeCustomer?
   
   // Gamification
   xp            Int       @default(0)
@@ -48,6 +57,17 @@ model User {
 
   // Bio Page
   bioPage       BioPage?
+}
+
+model StripeCustomer {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  stripeCustomerId String   @unique
+  stripeSubscriptionId String? @unique
+  planId           String?
+  status           String?
+  currentPeriodEnd DateTime?
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PageView {
