@@ -20,7 +20,8 @@ model User {
   updatedAt     DateTime  @updatedAt
   openaiApiKey  String?
   role          String    @default("USER") // USER or ADMIN
-  subscription  String    @default("FREE") // FREE or PAID
+  subscription  String    @default("FREE") // FREE, PAID, or LIFETIME
+  subscriptionExpiresAt DateTime?
   lastLoginAt   DateTime?
 
   // Profile Info
@@ -47,6 +48,14 @@ model User {
 
   // Bio Page
   bioPage       BioPage?
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  page      String   // "/" for landing page
+  createdAt DateTime @default(now())
+  ipAddress String?
+  userAgent String?
 }
 
 model Account {

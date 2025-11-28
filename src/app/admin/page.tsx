@@ -165,10 +165,10 @@ export default function AdminDashboard() {
                             {users.map((user) => (
                                 <div
                                     key={user.id}
-                                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+                                    className="flex items-center justify-between p-4 border border-white/10 rounded-lg bg-white/5 hover:bg-white/10 hover:border-indigo-500/50 transition-all duration-200 cursor-pointer"
                                 >
                                     <div className="flex items-center gap-4 flex-1">
-                                        <Avatar className="h-12 w-12">
+                                        <Avatar className="h-12 w-12 ring-2 ring-white/10">
                                             <AvatarImage src={user.image || undefined} />
                                             <AvatarFallback className="bg-indigo-500/20 text-indigo-400">
                                                 {user.name?.charAt(0).toUpperCase() || "U"}
@@ -176,7 +176,7 @@ export default function AdminDashboard() {
                                         </Avatar>
                                         <div className="flex-1">
                                             <div className="flex items-center gap-2">
-                                                <h4 className="font-semibold">{user.name || "Sem nome"}</h4>
+                                                <h4 className="font-semibold text-white">{user.name || "Sem nome"}</h4>
                                                 {user.role === "ADMIN" && (
                                                     <Badge variant="destructive" className="text-xs">ADMIN</Badge>
                                                 )}
@@ -187,36 +187,36 @@ export default function AdminDashboard() {
                                                     {user.subscription}
                                                 </Badge>
                                             </div>
-                                            <p className="text-sm text-gray-500">{user.email}</p>
+                                            <p className="text-sm text-gray-400">{user.email}</p>
                                         </div>
                                     </div>
 
                                     <div className="grid grid-cols-5 gap-4 text-center">
-                                        <div>
-                                            <p className="text-xs text-gray-500">Nível</p>
-                                            <p className="font-semibold">{user.level}</p>
+                                        <div className="px-3 py-2 rounded-lg bg-indigo-500/10">
+                                            <p className="text-xs text-gray-400">Nível</p>
+                                            <p className="font-semibold text-indigo-400">{user.level}</p>
                                         </div>
-                                        <div>
-                                            <p className="text-xs text-gray-500">Produtos</p>
-                                            <p className="font-semibold">{user.productsCount}</p>
+                                        <div className="px-3 py-2 rounded-lg bg-purple-500/10">
+                                            <p className="text-xs text-gray-400">Produtos</p>
+                                            <p className="font-semibold text-purple-400">{user.productsCount}</p>
                                         </div>
-                                        <div>
-                                            <p className="text-xs text-gray-500">Posts</p>
-                                            <p className="font-semibold">{user.postsCount}</p>
+                                        <div className="px-3 py-2 rounded-lg bg-pink-500/10">
+                                            <p className="text-xs text-gray-400">Posts</p>
+                                            <p className="font-semibold text-pink-400">{user.postsCount}</p>
                                         </div>
-                                        <div>
-                                            <p className="text-xs text-gray-500 flex items-center justify-center gap-1">
+                                        <div className="px-3 py-2 rounded-lg bg-blue-500/10">
+                                            <p className="text-xs text-gray-400 flex items-center justify-center gap-1">
                                                 <Calendar className="h-3 w-3" />
                                                 Cadastro
                                             </p>
-                                            <p className="font-semibold">{user.daysSinceRegistration}d</p>
+                                            <p className="font-semibold text-blue-400">{user.daysSinceRegistration}d</p>
                                         </div>
-                                        <div>
-                                            <p className="text-xs text-gray-500 flex items-center justify-center gap-1">
+                                        <div className="px-3 py-2 rounded-lg bg-orange-500/10">
+                                            <p className="text-xs text-gray-400 flex items-center justify-center gap-1">
                                                 <Clock className="h-3 w-3" />
                                                 Offline
                                             </p>
-                                            <p className="font-semibold text-orange-600">{user.daysOffline}d</p>
+                                            <p className="font-semibold text-orange-400">{user.daysOffline}d</p>
                                         </div>
                                     </div>
                                 </div>

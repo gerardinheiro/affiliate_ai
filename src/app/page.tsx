@@ -1,11 +1,29 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { LoginModal } from "@/components/auth/login-modal"
 import { Globe, ArrowRight, CheckCircle2, BarChart3, Zap, Shield } from "lucide-react"
 import Link from "next/link"
 
 export default function LandingPage() {
+  const [accessCount, setAccessCount] = useState(0)
+
+  useEffect(() => {
+    // Track page view
+    fetch("/api/page-views", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ page: "/" }),
+    })
+
+    // Fetch access count
+    fetch("/api/page-views?page=/")
+      .then(res => res.json())
+      .then(data => setAccessCount(data.count))
+      .catch(err => console.error("Error fetching access count:", err))
+  }, [])
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
@@ -52,7 +70,7 @@ export default function LandingPage() {
             <span className="text-sm font-medium">Plataforma em Crescimento</span>
           </div>
           <div className="text-xs text-gray-400 mb-6">
-            🎯 Mais de 1.000+ acessos este mês
+            🎯 {accessCount.toLocaleString()}+ acessos
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight animate-slide-in">
             Automatize suas Vendas com <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Inteligência Artificial</span>
