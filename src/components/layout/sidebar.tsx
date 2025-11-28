@@ -13,7 +13,10 @@ import {
     Globe,
     Palette,
     Share2,
+    Shield,
 } from "lucide-react"
+import { useSession } from "next-auth/react"
+import { useState, useEffect } from "react"
 
 const routes = [
     {
@@ -59,14 +62,45 @@ const routes = [
         color: "text-emerald-500",
     },
     {
+        label: "Integrações",
+        icon: Globe,
+        href: "/integrations",
+        color: "text-blue-500",
+    },
+    {
         label: "Configurações",
         icon: Settings,
         href: "/settings",
+        color: "text-gray-500",
     },
 ]
 
+const adminRoute = {
+    label: "Admin",
+    icon: Shield,
+    href: "/admin",
+    color: "text-red-500",
+}
+
 export function Sidebar() {
+    const { data: session } = useSession() || { data: null }
+    const [isAdmin, setIsAdmin] = useState(false)
     const pathname = usePathname()
+
+    useEffect(() => {
+        const checkAdmin = async () => {
+            try {
+                const res = await fetch("/api/profile")
+                if (res.ok) {
+                    const user = await res.json()
+                    setIsAdmin(user.role === "ADMIN")
+                }
+            } catch (error) {
+                console.error("Error checking admin:", error)
+            }
+        }
+        checkAdmin()
+    }, [])
 
     return (
         <div className="space-y-4 py-4 flex flex-col h-full glass border-r border-white/10 text-white">
@@ -97,6 +131,22 @@ export function Sidebar() {
                             </div>
                         </Link>
                     ))}
+
+                    {isAdmin && (
+                        <Link
+                            key={adminRoute.href}
+                            href={adminRoute.href}
+                            className={cn(
+                                "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition",
+                                pathname === adminRoute.href ? "text-white bg-white/10" : "text-zinc-400"
+                            )}
+                        >
+                            <div className="flex items-center flex-1">
+                                <adminRoute.icon className={cn("h-5 w-5 mr-3", adminRoute.color)} />
+                                {adminRoute.label}
+                            </div>
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>

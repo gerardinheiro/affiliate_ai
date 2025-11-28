@@ -49,7 +49,10 @@ export default function LandingPage() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
             </span>
-            Nova Geração de Marketing de Afiliados
+            <span className="text-sm font-medium">Plataforma em Crescimento</span>
+          </div>
+          <div className="text-xs text-gray-400 mb-6">
+            🎯 Mais de 1.000+ acessos este mês
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight animate-slide-in">
             Automatize suas Vendas com <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Inteligência Artificial</span>

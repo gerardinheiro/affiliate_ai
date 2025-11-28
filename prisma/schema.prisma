@@ -20,6 +20,8 @@ model User {
   updatedAt     DateTime  @updatedAt
   openaiApiKey  String?
   role          String    @default("USER") // USER or ADMIN
+  subscription  String    @default("FREE") // FREE or PAID
+  lastLoginAt   DateTime?
 
   // Profile Info
   bio           String?
