@@ -7,12 +7,13 @@ import { Metadata } from "next"
 export const dynamic = 'force-dynamic'
 
 type Props = {
-    params: { username: string }
+    params: Promise<{ username: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { username } = await params
     const bioPage = await db.bioPage.findUnique({
-        where: { username: params.username }
+        where: { username }
     })
 
     return {
@@ -22,8 +23,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PublicBioPage({ params }: Props) {
+    const { username } = await params
     const bioPage = await db.bioPage.findUnique({
-        where: { username: params.username },
+        where: { username },
         include: { links: { orderBy: { order: 'asc' } } }
     })
 

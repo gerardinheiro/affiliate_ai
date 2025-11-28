@@ -4,7 +4,8 @@ import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
 
 // PATCH - Update user (admin only)
-export async function PATCH(req: Request, { params }: { params: { userId: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ userId: string }> }) {
+    const { userId } = await params;
     const session = await getServerSession(authOptions)
 
     if (!session?.user) {
@@ -33,7 +34,7 @@ export async function PATCH(req: Request, { params }: { params: { userId: string
         }
 
         const user = await db.user.update({
-            where: { id: params.userId },
+            where: { id: userId },
             data: {
                 level: level !== undefined ? parseInt(level) : undefined,
                 subscription,
