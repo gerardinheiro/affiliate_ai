@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Bell, User, LogOut, X } from "lucide-react"
-import { signOut } from "next-auth/react"
+import { Bell, User, LogOut, X, Share2, Eye, EyeOff } from "lucide-react"
+import { signOut, useSession } from "next-auth/react"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
 type Notification = {
     id: string
@@ -17,11 +18,13 @@ type Notification = {
 }
 
 export function Header() {
+    const { data: session } = useSession()
     const [notifications, setNotifications] = useState<Notification[]>([])
     const [showNotifications, setShowNotifications] = useState(false)
     const [unreadCount, setUnreadCount] = useState(0)
     const [xpData, setXpData] = useState<any>(null)
     const [showUserMenu, setShowUserMenu] = useState(false)
+    const [showValues, setShowValues] = useState(true)
 
     useEffect(() => {
         fetchNotifications()
@@ -187,10 +190,15 @@ export function Header() {
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="rounded-full hover:bg-white/10 relative"
+                        className="rounded-full hover:bg-white/10 relative p-0"
                         onClick={() => setShowUserMenu(!showUserMenu)}
                     >
-                        <User className="h-5 w-5 text-gray-300" />
+                        <Avatar className="h-9 w-9">
+                            <AvatarImage src={session?.user?.image || undefined} />
+                            <AvatarFallback className="bg-indigo-500/20 text-indigo-400">
+                                {session?.user?.name?.charAt(0).toUpperCase() || "U"}
+                            </AvatarFallback>
+                        </Avatar>
                         {xpData && (
                             <Badge className="absolute -bottom-1 -right-1 h-4 w-4 flex items-center justify-center p-0 bg-indigo-500 text-white text-[10px]">
                                 {xpData.level}
@@ -201,19 +209,36 @@ export function Header() {
                     {showUserMenu && xpData && (
                         <Card className="absolute right-0 top-12 w-80 glass border-white/10 bg-black/90 backdrop-blur-xl z-50 shadow-2xl p-4 space-y-4">
                             <div className="flex items-center gap-3 pb-4 border-b border-white/10">
-                                <div className="h-12 w-12 rounded-full bg-indigo-500/20 flex items-center justify-center border border-indigo-500/50">
-                                    <span className="text-xl font-bold text-indigo-400">{xpData.level}</span>
+                                <div className="relative h-12 w-12 rounded-full border-2 border-indigo-500/50">
+                                    <Avatar className="h-full w-full">
+                                        <AvatarImage src={session?.user?.image || undefined} />
+                                        <AvatarFallback className="bg-indigo-500/20 text-indigo-400 text-lg font-bold">
+                                            {session?.user?.name?.charAt(0).toUpperCase() || "U"}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    <Badge className="absolute -bottom-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-indigo-500 text-white text-xs">
+                                        {xpData.level}
+                                    </Badge>
                                 </div>
-                                <div>
-                                    <h3 className="font-bold text-white">Nível {xpData.level}</h3>
-                                    <p className="text-xs text-gray-400">{xpData.xp} XP Total</p>
+                                <div className="flex-1">
+                                    <h3 className="font-bold text-white text-sm">{session?.user?.name || "Usuário"}</h3>
+                                    <p className="text-xs text-indigo-400">Nível {xpData.level}</p>
+                                    {showValues && <p className="text-xs text-gray-400">{xpData.xp} XP Total</p>}
                                 </div>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 hover:bg-white/10"
+                                    onClick={() => setShowValues(!showValues)}
+                                >
+                                    {showValues ? <Eye className="h-4 w-4 text-gray-400" /> : <EyeOff className="h-4 w-4 text-gray-400" />}
+                                </Button>
                             </div>
 
                             <div className="space-y-2">
                                 <div className="flex justify-between text-xs text-gray-400">
                                     <span>Progresso para Nível {xpData.level + 1}</span>
-                                    <span>{Math.round(xpData.progress)}%</span>
+                                    {showValues && <span>{Math.round(xpData.progress)}%</span>}
                                 </div>
                                 <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
                                     <div
@@ -221,10 +246,29 @@ export function Header() {
                                         style={{ width: `${xpData.progress}%` }}
                                     />
                                 </div>
-                                <p className="text-xs text-center text-gray-500 mt-1">
-                                    Faltam {Math.round(xpData.nextLevelXp - xpData.xp)} XP para o próximo nível
-                                </p>
+                                {showValues && (
+                                    <p className="text-xs text-center text-gray-500 mt-1">
+                                        Faltam {Math.round(xpData.nextLevelXp - xpData.xp)} XP para o próximo nível
+                                    </p>
+                                )}
                             </div>
+
+                            <Button
+                                variant="outline"
+                                className="w-full justify-center gap-2 bg-indigo-500/10 border-indigo-500/50 text-indigo-400 hover:bg-indigo-500/20 hover:text-indigo-300"
+                                onClick={() => {
+                                    const text = `🎮 Alcancei o Nível ${xpData.level} com ${xpData.xp} XP no AffiliateAI! 🚀`
+                                    if (navigator.share) {
+                                        navigator.share({ text })
+                                    } else {
+                                        navigator.clipboard.writeText(text)
+                                        alert("Conquista copiada!")
+                                    }
+                                }}
+                            >
+                                <Share2 className="h-4 w-4" />
+                                Compartilhar Conquista
+                            </Button>
 
                             <div className="pt-2 border-t border-white/10">
                                 <Button
