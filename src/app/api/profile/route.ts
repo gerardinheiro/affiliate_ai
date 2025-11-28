@@ -20,6 +20,7 @@ export async function GET(req: Request) {
                 name: true,
                 email: true,
                 image: true,
+                role: true,
                 bio: true,
                 website: true,
                 instagram: true,
