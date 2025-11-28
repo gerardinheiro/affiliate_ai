@@ -27,6 +27,7 @@ export async function GET(req: Request) {
                 tiktok: true,
                 youtube: true,
                 twitter: true,
+                hasCompletedOnboarding: true,
             },
         })
 
