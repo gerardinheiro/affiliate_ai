@@ -122,8 +122,8 @@ export default function ProductsPage() {
         try {
             const copy = await generateCopyAction(productTitle)
             alert(`Copy gerada para "${productTitle}":\n\n"${copy}"`)
-        } catch (error) {
-            alert("Erro ao gerar copy. Verifique sua chave de API.")
+        } catch (error: any) {
+            alert(error.message || "Erro ao gerar copy.")
         } finally {
             setIsGenerating(false)
         }

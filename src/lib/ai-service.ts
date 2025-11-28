@@ -27,9 +27,17 @@ export async function generateAdCopy(productName: string, productDescription: st
         })
 
         return completion.choices[0].message.content
-    } catch (error) {
+    } catch (error: any) {
         console.error("OpenAI Error:", error)
-        throw new Error("Falha ao gerar copy.")
+
+        if (error?.status === 429 || error?.code === 'insufficient_quota') {
+            throw new Error("Saldo insuficiente na OpenAI. Verifique seus créditos em platform.openai.com")
+        }
+        if (error?.status === 401) {
+            throw new Error("Chave de API inválida. Verifique em Configurações.")
+        }
+
+        throw new Error("Falha ao gerar copy. Tente novamente.")
     }
 }
 
@@ -53,8 +61,16 @@ export async function generateImage(prompt: string, apiKey?: string) {
         })
 
         return response.data?.[0]?.url || null
-    } catch (error) {
+    } catch (error: any) {
         console.error("OpenAI Error:", error)
-        throw new Error("Falha ao gerar imagem.")
+
+        if (error?.status === 429 || error?.code === 'insufficient_quota') {
+            throw new Error("Saldo insuficiente na OpenAI. Verifique seus créditos em platform.openai.com")
+        }
+        if (error?.status === 401) {
+            throw new Error("Chave de API inválida. Verifique em Configurações.")
+        }
+
+        throw new Error("Falha ao gerar imagem. Tente novamente.")
     }
 }

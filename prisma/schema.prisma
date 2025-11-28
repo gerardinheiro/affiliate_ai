@@ -28,6 +28,14 @@ model User {
   integrations  Integration[]
   posts         Post[]
   notifications Notification[]
+  
+  // Gamification
+  xp            Int       @default(0)
+  level         Int       @default(1)
+  badges        String[]  // Array of badge IDs
+
+  // Bio Page
+  bioPage       BioPage?
 }
 
 model Account {
@@ -147,3 +155,36 @@ model Notification {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+model BioPage {
+  id          String    @id @default(cuid())
+  username    String    @unique // URL slug
+  displayName String?
+  bio         String?
+  avatarUrl   String?
+  theme       String    @default("default") // "dark", "light", "gradient", "custom"
+  views       Int       @default(0)
+  
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  links       BioLink[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model BioLink {
+  id          String   @id @default(cuid())
+  title       String
+  url         String
+  icon        String?  // "instagram", "youtube", "link"
+  order       Int      @default(0)
+  clicks      Int      @default(0)
+  active      Boolean  @default(true)
+  
+  bioPageId   String
+  bioPage     BioPage  @relation(fields: [bioPageId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+

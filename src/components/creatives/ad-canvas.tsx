@@ -36,9 +36,9 @@ export function AdCanvas({ onUpdate }: AdCanvasProps) {
                 setImage(newImageUrl)
                 onUpdate({ headline, description, cta, image: newImageUrl })
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error(error)
-            alert("Erro ao gerar imagem.")
+            alert(error.message || "Erro ao gerar imagem.")
         } finally {
             setIsGenerating(false)
         }

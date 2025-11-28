@@ -20,13 +20,32 @@ export function Header() {
     const [notifications, setNotifications] = useState<Notification[]>([])
     const [showNotifications, setShowNotifications] = useState(false)
     const [unreadCount, setUnreadCount] = useState(0)
+    const [xpData, setXpData] = useState<any>(null)
+    const [showUserMenu, setShowUserMenu] = useState(false)
 
     useEffect(() => {
         fetchNotifications()
-        // Poll for new notifications every 30 seconds
-        const interval = setInterval(fetchNotifications, 30000)
+        fetchGamification()
+
+        const interval = setInterval(() => {
+            fetchNotifications()
+            fetchGamification()
+        }, 30000)
+
         return () => clearInterval(interval)
     }, [])
+
+    const fetchGamification = async () => {
+        try {
+            const res = await fetch("/api/gamification")
+            if (res.ok) {
+                const data = await res.json()
+                setXpData(data)
+            }
+        } catch (error) {
+            console.error("Error fetching gamification:", error)
+        }
+    }
 
     const fetchNotifications = async () => {
         try {
@@ -163,18 +182,63 @@ export function Header() {
                     )}
                 </div>
 
-                <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10">
-                    <User className="h-5 w-5 text-gray-300" />
-                </Button>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="hover:bg-red-500/10 hover:text-red-400 text-gray-300"
-                    onClick={() => signOut({ callbackUrl: "/" })}
-                    title="Sair"
-                >
-                    <LogOut className="h-5 w-5" />
-                </Button>
+                {/* User Menu with Gamification */}
+                <div className="relative">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="rounded-full hover:bg-white/10 relative"
+                        onClick={() => setShowUserMenu(!showUserMenu)}
+                    >
+                        <User className="h-5 w-5 text-gray-300" />
+                        {xpData && (
+                            <Badge className="absolute -bottom-1 -right-1 h-4 w-4 flex items-center justify-center p-0 bg-indigo-500 text-white text-[10px]">
+                                {xpData.level}
+                            </Badge>
+                        )}
+                    </Button>
+
+                    {showUserMenu && xpData && (
+                        <Card className="absolute right-0 top-12 w-80 glass border-white/10 bg-black/90 backdrop-blur-xl z-50 shadow-2xl p-4 space-y-4">
+                            <div className="flex items-center gap-3 pb-4 border-b border-white/10">
+                                <div className="h-12 w-12 rounded-full bg-indigo-500/20 flex items-center justify-center border border-indigo-500/50">
+                                    <span className="text-xl font-bold text-indigo-400">{xpData.level}</span>
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-white">Nível {xpData.level}</h3>
+                                    <p className="text-xs text-gray-400">{xpData.xp} XP Total</p>
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <div className="flex justify-between text-xs text-gray-400">
+                                    <span>Progresso para Nível {xpData.level + 1}</span>
+                                    <span>{Math.round(xpData.progress)}%</span>
+                                </div>
+                                <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+                                    <div
+                                        className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500"
+                                        style={{ width: `${xpData.progress}%` }}
+                                    />
+                                </div>
+                                <p className="text-xs text-center text-gray-500 mt-1">
+                                    Faltam {Math.round(xpData.nextLevelXp - xpData.xp)} XP para o próximo nível
+                                </p>
+                            </div>
+
+                            <div className="pt-2 border-t border-white/10">
+                                <Button
+                                    variant="ghost"
+                                    className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                                    onClick={() => signOut({ callbackUrl: "/" })}
+                                >
+                                    <LogOut className="h-4 w-4 mr-2" />
+                                    Sair da conta
+                                </Button>
+                            </div>
+                        </Card>
+                    )}
+                </div>
             </div>
         </div>
     )

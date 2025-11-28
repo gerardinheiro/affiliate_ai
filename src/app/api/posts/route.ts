@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { addXp } from "@/lib/gamification"
 
 // GET - List all posts for the user
 export async function GET(req: Request) {
@@ -47,6 +48,9 @@ export async function POST(req: Request) {
                 userId,
             },
         })
+
+        // Add XP for creating post
+        await addXp(userId, 20)
 
         return NextResponse.json(post, { status: 201 })
     } catch (error) {

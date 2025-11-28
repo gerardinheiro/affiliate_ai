@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { addXp } from "@/lib/gamification"
 
 // GET - List all products for the user
 export async function GET(req: NextRequest) {
@@ -50,6 +51,9 @@ export async function POST(req: NextRequest) {
                 userId,
             },
         })
+
+        // Add XP for creating product
+        await addXp(userId, 50)
 
         return NextResponse.json(product, { status: 201 })
     } catch (error) {

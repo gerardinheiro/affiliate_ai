@@ -29,9 +29,9 @@ const routes = [
         color: "text-violet-500",
     },
     {
-        label: "Conexões",
+        label: "Link na Bio",
         icon: LinkIcon,
-        href: "/integrations",
+        href: "/bio-builder",
         color: "text-pink-700",
     },
     {
