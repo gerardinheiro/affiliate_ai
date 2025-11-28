@@ -1,6 +1,6 @@
 "use server"
 
-import { generateAdCopy, generateImage } from "@/lib/ai-service"
+import { generateAdCopy, generateImage, generateVideoScript } from "@/lib/ai-service"
 import { scrapeProduct } from "@/lib/scraper"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
@@ -32,4 +32,9 @@ export async function generateImageAction(prompt: string) {
 
 export async function scrapeProductAction(url: string) {
     return await scrapeProduct(url)
+}
+
+export async function generateVideoScriptAction(productName: string, description: string) {
+    const apiKey = await getUserApiKey()
+    return await generateVideoScript(productName, description, apiKey)
 }
