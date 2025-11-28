@@ -18,7 +18,7 @@ type Notification = {
 }
 
 export function Header() {
-    const { data: session } = useSession()
+    const { data: session } = useSession() || { data: null }
     const [notifications, setNotifications] = useState<Notification[]>([])
     const [showNotifications, setShowNotifications] = useState(false)
     const [unreadCount, setUnreadCount] = useState(0)
