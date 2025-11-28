@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Users, DollarSign, Package, MessageSquare, Loader2, Calendar, Clock } from "lucide-react"
+import { UserEditModal } from "@/components/admin/user-edit-modal"
 
 type AdminStats = {
     totalUsers: number
@@ -40,6 +41,7 @@ export default function AdminDashboard() {
     const [isLoading, setIsLoading] = useState(true)
     const [stats, setStats] = useState<AdminStats | null>(null)
     const [users, setUsers] = useState<UserData[]>([])
+    const [editingUser, setEditingUser] = useState<UserData | null>(null)
 
     useEffect(() => {
         fetchData()
@@ -166,6 +168,7 @@ export default function AdminDashboard() {
                                 <div
                                     key={user.id}
                                     className="flex items-center justify-between p-4 border border-white/10 rounded-lg bg-white/5 hover:bg-white/10 hover:border-indigo-500/50 transition-all duration-200 cursor-pointer"
+                                    onClick={() => setEditingUser(user)}
                                 >
                                     <div className="flex items-center gap-4 flex-1">
                                         <Avatar className="h-12 w-12 ring-2 ring-white/10">
@@ -224,6 +227,16 @@ export default function AdminDashboard() {
                         </div>
                     </CardContent>
                 </Card>
+
+                {/* Edit User Modal */}
+                {editingUser && (
+                    <UserEditModal
+                        user={editingUser}
+                        open={!!editingUser}
+                        onClose={() => setEditingUser(null)}
+                        onSuccess={fetchData}
+                    />
+                )}
             </div>
         </DashboardLayout>
     )
