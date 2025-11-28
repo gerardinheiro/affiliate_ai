@@ -6,28 +6,40 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
 
-async function getUserApiKey() {
+async function getUserContext() {
     const session = await getServerSession(authOptions)
     if (!session?.user) return undefined
 
     const user = await db.user.findUnique({
         where: { id: (session.user as any).id },
-        select: { openaiApiKey: true }
+        select: {
+            openaiApiKey: true,
+            brandName: true,
+            brandTone: true,
+            brandDescription: true
+        }
     })
 
-    return user?.openaiApiKey || undefined
+    return user
 }
 
 export async function generateCopyAction(productName: string) {
-    const apiKey = await getUserApiKey()
+    const user = await getUserContext()
     // In a real app, we would fetch the product description from DB
     const description = "Produto incrível de alta qualidade com garantia de satisfação."
-    return await generateAdCopy(productName, description, apiKey)
+
+    const brandContext = user ? {
+        name: user.brandName || undefined,
+        tone: user.brandTone || undefined,
+        description: user.brandDescription || undefined
+    } : undefined
+
+    return await generateAdCopy(productName, description, user?.openaiApiKey || undefined, brandContext)
 }
 
 export async function generateImageAction(prompt: string) {
-    const apiKey = await getUserApiKey()
-    return await generateImage(prompt, apiKey)
+    const user = await getUserContext()
+    return await generateImage(prompt, user?.openaiApiKey || undefined)
 }
 
 export async function scrapeProductAction(url: string) {
@@ -35,6 +47,13 @@ export async function scrapeProductAction(url: string) {
 }
 
 export async function generateVideoScriptAction(productName: string, description: string) {
-    const apiKey = await getUserApiKey()
-    return await generateVideoScript(productName, description, apiKey)
+    const user = await getUserContext()
+
+    const brandContext = user ? {
+        name: user.brandName || undefined,
+        tone: user.brandTone || undefined,
+        description: user.brandDescription || undefined
+    } : undefined
+
+    return await generateVideoScript(productName, description, user?.openaiApiKey || undefined, brandContext)
 }

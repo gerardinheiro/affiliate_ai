@@ -1,6 +1,6 @@
 import OpenAI from "openai"
 
-export async function generateAdCopy(productName: string, productDescription: string, apiKey?: string) {
+export async function generateAdCopy(productName: string, productDescription: string, apiKey?: string, brandContext?: { name?: string, tone?: string, description?: string }) {
     const token = apiKey || process.env.OPENAI_API_KEY
 
     if (!token) {
@@ -16,7 +16,11 @@ export async function generateAdCopy(productName: string, productDescription: st
             messages: [
                 {
                     role: "system",
-                    content: "Você é um especialista em marketing digital. Crie uma copy curta e persuasiva para um anúncio.",
+                    content: `Você é um especialista em marketing digital. Crie uma copy curta e persuasiva para um anúncio.
+                    ${brandContext?.name ? `Nome da Marca: ${brandContext.name}` : ""}
+                    ${brandContext?.tone ? `Tom de Voz: ${brandContext.tone}` : ""}
+                    ${brandContext?.description ? `Sobre a Marca: ${brandContext.description}` : ""}
+                    `,
                 },
                 {
                     role: "user",
@@ -75,7 +79,7 @@ export async function generateImage(prompt: string, apiKey?: string) {
     }
 }
 
-export async function generateVideoScript(productName: string, description: string, apiKey?: string) {
+export async function generateVideoScript(productName: string, description: string, apiKey?: string, brandContext?: { name?: string, tone?: string, description?: string }) {
     const token = apiKey || process.env.OPENAI_API_KEY
 
     if (!token) {
@@ -95,7 +99,11 @@ export async function generateVideoScript(productName: string, description: stri
             messages: [
                 {
                     role: "system",
-                    content: "You are an expert video marketing scriptwriter. Create a 30-second video script for TikTok/Reels based on the product. Format the output as a JSON array of scenes, where each scene has: 'scene_number', 'visual_description' (what happens on screen), 'audio_script' (what is said/voiceover), and 'duration' (in seconds). Return ONLY the JSON array."
+                    content: `You are an expert video marketing scriptwriter. Create a 30-second video script for TikTok/Reels based on the product. Format the output as a JSON array of scenes, where each scene has: 'scene_number', 'visual_description' (what happens on screen), 'audio_script' (what is said/voiceover), and 'duration' (in seconds). Return ONLY the JSON array.
+                    ${brandContext?.name ? `Brand Name: ${brandContext.name}` : ""}
+                    ${brandContext?.tone ? `Tone of Voice: ${brandContext.tone}` : ""}
+                    ${brandContext?.description ? `Brand Context: ${brandContext.description}` : ""}
+                    `
                 },
                 {
                     role: "user",
