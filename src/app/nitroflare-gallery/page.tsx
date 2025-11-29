@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ExternalLink, Download, Calendar, Image as ImageIcon } from "lucide-react"
+import { ExternalLink, Download, Calendar, Image as ImageIcon, Upload } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { UploadDialog } from "@/components/nitroflare/upload-dialog"
 
 type GalleryImage = {
     id: string
@@ -18,6 +19,7 @@ type GalleryImage = {
 export default function NitroflareGalleryPage() {
     const [images, setImages] = useState<GalleryImage[]>([])
     const [loading, setLoading] = useState(true)
+    const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
 
     useEffect(() => {
         fetchGallery()
@@ -47,17 +49,32 @@ export default function NitroflareGalleryPage() {
 
     return (
         <div className="container mx-auto p-8">
-            <div className="mb-8">
-                <h1 className="text-4xl font-bold text-white mb-2">
-                    Galeria Nitroflare ☁️
-                </h1>
-                <p className="text-gray-400">
-                    Todas as suas imagens geradas por IA, armazenadas em nuvem
-                </p>
-                <Badge variant="outline" className="mt-2">
-                    {images.length} {images.length === 1 ? 'imagem' : 'imagens'} armazenadas
-                </Badge>
+            <div className="mb-8 flex items-start justify-between">
+                <div>
+                    <h1 className="text-4xl font-bold text-white mb-2">
+                        Galeria Nitroflare ☁️
+                    </h1>
+                    <p className="text-gray-400">
+                        Todas as suas imagens geradas por IA, armazenadas em nuvem
+                    </p>
+                    <Badge variant="outline" className="mt-2">
+                        {images.length} {images.length === 1 ? 'imagem' : 'imagens'} armazenadas
+                    </Badge>
+                </div>
+                <Button
+                    onClick={() => setUploadDialogOpen(true)}
+                    className="bg-indigo-500 hover:bg-indigo-600"
+                >
+                    <Upload className="w-4 h-4 mr-2" />
+                    Upload
+                </Button>
             </div>
+
+            <UploadDialog
+                open={uploadDialogOpen}
+                onOpenChange={setUploadDialogOpen}
+                onUploadComplete={fetchGallery}
+            />
 
             {images.length === 0 ? (
                 <Card className="glass border-white/10">

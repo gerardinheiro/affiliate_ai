@@ -57,6 +57,10 @@ model User {
 
   // Bio Page
   bioPage       BioPage?
+  
+  // Nitroflare
+  nitroflareFolders NitroflareFolder[]
+  nitroflareTags    NitroflareTag[]
 }
 
 model StripeCustomer {
@@ -155,6 +159,14 @@ model Creative {
   script      String?  // For video scripts
   templateId  String?
   
+  // Nitroflare Organization
+  folderId    String?
+  folder      NitroflareFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  tags        NitroflareTag[]
+  downloads   Int      @default(0)
+  views       Int      @default(0)
+  fileSize    Int?     // in bytes
+  
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   userId      String
@@ -234,5 +246,38 @@ model BioLink {
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model NitroflareFolder {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  color       String?    // For visual organization
+  icon        String?    // Icon name
+  parentId    String?    // For nested folders
+  parent      NitroflareFolder?  @relation("FolderHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children    NitroflareFolder[] @relation("FolderHierarchy")
+  
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creatives   Creative[]
+  
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model NitroflareTag {
+  id          String     @id @default(cuid())
+  name        String
+  color       String?    // Tag color for visual distinction
+  
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creatives   Creative[]
+  
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  @@unique([userId, name]) // Prevent duplicate tag names per user
 }
 
