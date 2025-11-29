@@ -164,7 +164,7 @@ export default function ProfilePage() {
                                     type="email"
                                     value={profile.email || ""}
                                     disabled
-                                    className="bg-gray-100 cursor-not-allowed"
+                                    className="bg-white/5 cursor-not-allowed text-gray-400"
                                 />
                                 <p className="text-xs text-gray-500">Email não pode ser alterado</p>
                             </div>
