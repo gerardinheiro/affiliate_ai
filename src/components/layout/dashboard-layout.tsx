@@ -27,12 +27,13 @@ export default function DashboardLayout({
     return (
         <div className="h-full relative">
             <WelcomeTour hasCompletedOnboarding={hasCompletedOnboarding} />
-            <div className="hidden h-full md:flex md:w-72 md:flex-col md:fixed md:inset-y-0 z-[80] bg-gray-900">
-                <Sidebar showMobile={showMobileMenu} onClose={() => setShowMobileMenu(false)} />
-            </div>
+
+            {/* Sidebar - always rendered for mobile */}
+            <Sidebar showMobile={showMobileMenu} onClose={() => setShowMobileMenu(false)} />
+
             <main className="md:pl-72 h-full">
                 <Header onMenuClick={() => setShowMobileMenu(!showMobileMenu)} />
-                <div className="p-8">{children}</div>
+                <div className="p-4 md:p-8">{children}</div>
             </main>
         </div>
     )
