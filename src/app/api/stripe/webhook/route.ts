@@ -5,8 +5,13 @@ import { db } from "@/lib/db"
 import Stripe from "stripe"
 
 export async function POST(req: Request) {
+    if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_WEBHOOK_SECRET) {
+        return new NextResponse("Stripe not configured", { status: 503 })
+    }
+
     const body = await req.text()
-    const signature = headers().get("Stripe-Signature") as string
+    const headerList = await headers()
+    const signature = headerList.get("Stripe-Signature") as string
 
     let event: Stripe.Event
 
@@ -25,7 +30,7 @@ export async function POST(req: Request) {
     if (event.type === "checkout.session.completed") {
         const subscription = await stripe.subscriptions.retrieve(
             session.subscription as string
-        )
+        ) as any
 
         if (!session?.metadata?.userId) {
             return new NextResponse("User id is required", { status: 400 })
@@ -56,7 +61,7 @@ export async function POST(req: Request) {
     if (event.type === "invoice.payment_succeeded") {
         const subscription = await stripe.subscriptions.retrieve(
             session.subscription as string
-        )
+        ) as any
 
         await db.stripeCustomer.update({
             where: {

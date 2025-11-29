@@ -8,6 +8,10 @@ const settingsUrl = process.env.NEXTAUTH_URL + "/settings"
 
 export async function POST(req: Request) {
     try {
+        if (!process.env.STRIPE_SECRET_KEY) {
+            return new NextResponse("Stripe not configured", { status: 503 })
+        }
+
         const session = await getServerSession(authOptions)
 
         if (!session?.user) {

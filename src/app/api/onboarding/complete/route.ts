@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { sendWelcomeEmail } from "@/lib/email"
 
 export async function POST(req: Request) {
     const session = await getServerSession(authOptions)
@@ -19,6 +20,11 @@ export async function POST(req: Request) {
                 hasCompletedOnboarding: true,
             },
         })
+
+        // Send welcome email
+        if (session.user.email) {
+            await sendWelcomeEmail(session.user.email, session.user.name || "Afiliado")
+        }
 
         return NextResponse.json({ success: true })
     } catch (error) {
