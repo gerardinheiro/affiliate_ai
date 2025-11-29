@@ -7,10 +7,13 @@ import { Globe, ArrowRight, CheckCircle2, BarChart3, Zap, Shield } from "lucide-
 import Link from "next/link"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import { LocaleProvider, useLocale } from "@/contexts/locale-context"
+import { LanguageSelector } from "@/components/ui/language-selector"
 
-export default function LandingPage() {
+function LandingPageContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const { t } = useLocale()
   const [accessCount, setAccessCount] = useState(0)
 
   useEffect(() => {
@@ -39,20 +42,21 @@ export default function LandingPage() {
           </div>
           <nav className="hidden md:flex items-center gap-8">
             <Link href="#features" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
-              Funcionalidades
+              {t('landing.features')}
             </Link>
             <Link href="#how-it-works" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
-              Como Funciona
+              {t('landing.howItWorks')}
             </Link>
             <Link href="#pricing" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
-              Preços
+              {t('landing.pricing')}
             </Link>
           </nav>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <LanguageSelector />
             {status === "authenticated" ? (
               <Link href="/dashboard">
                 <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                  Ir para Dashboard
+                  {t('landing.dashboard')}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
@@ -60,12 +64,12 @@ export default function LandingPage() {
               <>
                 <LoginModal>
                   <Button variant="ghost" className="text-white hover:bg-white/10">
-                    Entrar
+                    {t('landing.login')}
                   </Button>
                 </LoginModal>
                 <LoginModal>
                   <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                    Começar Grátis
+                    {t('landing.start')}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </LoginModal>
@@ -215,3 +219,12 @@ export default function LandingPage() {
     </div>
   )
 }
+
+export default function LandingPage() {
+  return (
+    <LocaleProvider>
+      <LandingPageContent />
+    </LocaleProvider>
+  )
+}
+
