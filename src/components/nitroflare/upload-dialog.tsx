@@ -90,39 +90,46 @@ export function UploadDialog({ open, onOpenChange, onUploadComplete }: UploadDia
             })
 
             try {
-                // Read file as buffer
+                // Convert image to base64
+                const reader = new FileReader()
+                const imageDataPromise = new Promise<string>((resolve, reject) => {
+                    reader.onload = () => resolve(reader.result as string)
+                    reader.onerror = reject
+                    reader.readAsDataURL(files[i].file)
+                })
+
+                const imageData = await imageDataPromise
+
+                // Try to upload to Nitroflare (optional)
                 const buffer = await files[i].file.arrayBuffer()
                 const fileBuffer = Buffer.from(buffer)
+                const nitroflareResult = await uploadToNitroflare(fileBuffer, files[i].file.name)
 
-                // Upload to Nitroflare
-                const result = await uploadToNitroflare(fileBuffer, files[i].file.name)
-
-                if (result.success) {
-                    // Save to database
-                    const response = await fetch('/api/nitroflare/upload', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            fileName: result.fileName,
-                            nitroflareUrl: result.url,
-                            fileSize: files[i].file.size,
-                        })
+                // Save to database with image data
+                const response = await fetch('/api/nitroflare/upload', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        fileName: files[i].file.name,
+                        nitroflareUrl: nitroflareResult.url || null,
+                        imageData: imageData, // Send base64 image data
+                        fileSize: files[i].file.size,
                     })
+                })
 
-                    if (response.ok) {
-                        setFiles(prev => {
-                            const newFiles = [...prev]
-                            newFiles[i].status = 'success'
-                            newFiles[i].progress = 100
-                            return newFiles
-                        })
-                    } else {
-                        throw new Error('Failed to save to database')
-                    }
+                if (response.ok) {
+                    setFiles(prev => {
+                        const newFiles = [...prev]
+                        newFiles[i].status = 'success'
+                        newFiles[i].progress = 100
+                        return newFiles
+                    })
                 } else {
-                    throw new Error(result.error || 'Upload failed')
+                    const errorData = await response.json().catch(() => ({}))
+                    throw new Error(errorData.error || 'Failed to save to database')
                 }
             } catch (error) {
+                console.error('Upload error:', error)
                 setFiles(prev => {
                     const newFiles = [...prev]
                     newFiles[i].status = 'error'
@@ -168,8 +175,8 @@ export function UploadDialog({ open, onOpenChange, onUploadComplete }: UploadDia
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
                         className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${isDragging
-                                ? 'border-indigo-500 bg-indigo-500/10'
-                                : 'border-white/20 hover:border-white/40'
+                            ? 'border-indigo-500 bg-indigo-500/10'
+                            : 'border-white/20 hover:border-white/40'
                             }`}
                     >
                         <Upload className="w-12 h-12 mx-auto mb-4 text-gray-400" />

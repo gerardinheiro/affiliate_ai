@@ -19,14 +19,15 @@ export async function POST(req: NextRequest) {
         }
 
         const body = await req.json()
-        const { fileName, nitroflareUrl, fileSize, folderId } = body
+        const { fileName, nitroflareUrl, imageData, fileSize, folderId } = body
 
-        // Create creative entry (nitroflareUrl is optional)
+        // Create creative entry (nitroflareUrl is optional, imageData is required)
         const creative = await db.creative.create({
             data: {
                 headline: fileName || "Uploaded Image",
                 description: nitroflareUrl ? "Uploaded via Nitroflare Gallery" : "Uploaded to local storage",
                 cta: "",
+                imageUrl: imageData, // Save base64 image data
                 nitroflareUrl: nitroflareUrl || null,
                 fileSize,
                 folderId: folderId || null,
