@@ -109,7 +109,7 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
                 <Menu className="h-6 w-6 text-gray-300" />
             </Button>
 
-            <div className="flex items-center gap-x-4">
+            <div className="flex items-center gap-x-4 ml-auto">
                 {/* Notifications Bell */}
                 <div className="relative">
                     <Button
