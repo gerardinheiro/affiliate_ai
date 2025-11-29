@@ -8,7 +8,7 @@ const NITROFLARE_UPLOAD_URL = 'http://nitroflare.com/plugins/fileupload/getServe
 
 export interface NitroflareUploadResult {
     success: boolean
-    url?: string
+    url?: string | null
     fileName?: string
     error?: string
 }
@@ -24,10 +24,14 @@ export async function uploadToNitroflare(
     fileName: string
 ): Promise<NitroflareUploadResult> {
     try {
+        // If no API key, return success without uploading to Nitroflare
         if (!NITROFLARE_API_KEY) {
+            console.warn('Nitroflare API key not configured - skipping cloud upload')
             return {
-                success: false,
-                error: 'Nitroflare API key not configured'
+                success: true,
+                url: undefined,
+                fileName: fileName,
+                error: undefined
             }
         }
 
