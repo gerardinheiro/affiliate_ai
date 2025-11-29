@@ -27,6 +27,37 @@ type BioPage = {
     links: BioLink[]
 }
 
+const THEMES = {
+    default: {
+        name: "Simple Dark",
+        bg: "bg-gradient-to-br from-gray-900 to-black",
+        text: "text-white",
+        card: "bg-white/10 text-white hover:bg-white/20",
+        button: "bg-white text-black hover:bg-gray-200"
+    },
+    light: {
+        name: "Clean Light",
+        bg: "bg-gray-50",
+        text: "text-gray-900",
+        card: "bg-white border border-gray-200 text-gray-900 shadow-sm hover:shadow-md",
+        button: "bg-black text-white hover:bg-gray-800"
+    },
+    gradient: {
+        name: "Gradient Purple",
+        bg: "bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500",
+        text: "text-white",
+        card: "bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30",
+        button: "bg-white text-purple-600 hover:bg-gray-100"
+    },
+    neon: {
+        name: "Neon Cyber",
+        bg: "bg-black",
+        text: "text-green-400 font-mono",
+        card: "bg-black border border-green-500/50 text-green-400 hover:bg-green-500/10 hover:border-green-400",
+        button: "bg-green-500 text-black hover:bg-green-400 font-bold"
+    }
+}
+
 export default function BioBuilderPage() {
     const [bioPage, setBioPage] = useState<BioPage | null>(null)
     const [isLoading, setIsLoading] = useState(true)
@@ -234,6 +265,31 @@ export default function BioBuilderPage() {
                                         </Button>
                                     </CardContent>
                                 </Card>
+
+                                <Card className="glass border-white/10">
+                                    <CardHeader>
+                                        <CardTitle className="text-white">Tema</CardTitle>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            {Object.entries(THEMES).map(([key, theme]) => (
+                                                <button
+                                                    key={key}
+                                                    onClick={() => setBioPage(prev => prev ? { ...prev, theme: key } : null)}
+                                                    className={`
+                                                        relative h-24 rounded-lg border-2 transition-all overflow-hidden text-left p-3 flex flex-col justify-end
+                                                        ${bioPage?.theme === key ? 'border-indigo-500 ring-2 ring-indigo-500/20' : 'border-white/10 hover:border-white/30'}
+                                                    `}
+                                                >
+                                                    <div className={`absolute inset-0 ${theme.bg}`} />
+                                                    <span className={`relative z-10 text-sm font-medium ${key === 'light' ? 'text-black' : 'text-white'}`}>
+                                                        {theme.name}
+                                                    </span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </CardContent>
+                                </Card>
                             </TabsContent>
                         </Tabs>
                     </div>
@@ -244,19 +300,35 @@ export default function BioBuilderPage() {
                             <h3 className="text-lg font-medium text-white mb-4">Preview</h3>
                             <div className="border-[8px] border-gray-800 rounded-[3rem] overflow-hidden h-[600px] bg-black relative shadow-2xl">
                                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-gray-800 rounded-b-xl z-10" />
-                                <div className="h-full overflow-y-auto p-6 bg-gradient-to-br from-gray-900 to-black text-center">
-                                    <div className="w-20 h-20 bg-gray-700 rounded-full mx-auto mb-4" />
-                                    <h2 className="text-white font-bold text-xl">{bioPage?.displayName || "Seu Nome"}</h2>
-                                    <p className="text-gray-400 text-sm mb-8">{bioPage?.bio || "Sua bio aparecerá aqui..."}</p>
+                                <div className={`h-full overflow-y-auto p-6 text-center transition-colors duration-300 ${THEMES[bioPage?.theme as keyof typeof THEMES]?.bg || THEMES.default.bg}`}>
+                                    <div className="w-24 h-24 bg-gray-700 rounded-full mx-auto mb-4 border-4 border-white/10 shadow-xl overflow-hidden">
+                                        {bioPage?.avatarUrl ? (
+                                            <img src={bioPage.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-2xl font-bold text-white/50">
+                                                {bioPage?.displayName?.charAt(0) || "?"}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <h2 className={`font-bold text-xl mb-2 ${THEMES[bioPage?.theme as keyof typeof THEMES]?.text || THEMES.default.text}`}>
+                                        {bioPage?.displayName || "Seu Nome"}
+                                    </h2>
+                                    <p className={`text-sm mb-8 opacity-80 ${THEMES[bioPage?.theme as keyof typeof THEMES]?.text || THEMES.default.text}`}>
+                                        {bioPage?.bio || "Sua bio aparecerá aqui..."}
+                                    </p>
 
                                     <div className="space-y-3">
                                         {bioPage?.links.map(link => (
-                                            <div key={link.id} className="block w-full p-3 rounded-lg bg-white/10 text-white text-sm font-medium hover:bg-white/20 transition">
+                                            <a
+                                                key={link.id}
+                                                href="#" // Preview only
+                                                className={`block w-full p-4 rounded-xl font-medium transition-all transform hover:scale-[1.02] ${THEMES[bioPage?.theme as keyof typeof THEMES]?.card || THEMES.default.card}`}
+                                            >
                                                 {link.title}
-                                            </div>
+                                            </a>
                                         ))}
                                         {(!bioPage?.links || bioPage.links.length === 0) && (
-                                            <div className="text-gray-600 text-sm italic">Adicione links para ver aqui</div>
+                                            <div className="text-gray-500 text-sm italic py-4">Adicione links para ver aqui</div>
                                         )}
                                     </div>
                                 </div>

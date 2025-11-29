@@ -14,9 +14,12 @@ import {
     Palette,
     Share2,
     Shield,
+    Cloud,
+    FileText,
 } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useState, useEffect } from "react"
+import { LevelProgress } from "@/components/gamification/level-progress"
 
 const routes = [
     {
@@ -50,6 +53,12 @@ const routes = [
         color: "text-pink-500",
     },
     {
+        label: "AI Studio",
+        icon: FileText,
+        href: "/ai-studio",
+        color: "text-purple-500",
+    },
+    {
         label: "Campanhas",
         icon: Megaphone,
         href: "/campaigns",
@@ -66,6 +75,12 @@ const routes = [
         icon: Globe,
         href: "/integrations",
         color: "text-blue-500",
+    },
+    {
+        label: "Galeria Nitroflare",
+        icon: Cloud,
+        href: "/nitroflare-gallery",
+        color: "text-cyan-500",
     },
     {
         label: "Configurações",
@@ -85,21 +100,23 @@ const adminRoute = {
 export function Sidebar({ showMobile = false, onClose }: { showMobile?: boolean, onClose?: () => void }) {
     const { data: session } = useSession() || { data: null }
     const [isAdmin, setIsAdmin] = useState(false)
+    const [userXp, setUserXp] = useState(0)
     const pathname = usePathname()
 
     useEffect(() => {
-        const checkAdmin = async () => {
+        const checkAdminAndXp = async () => {
             try {
                 const res = await fetch("/api/profile")
                 if (res.ok) {
                     const user = await res.json()
                     setIsAdmin(user.role === "ADMIN")
+                    setUserXp(user.xp || 0)
                 }
             } catch (error) {
-                console.error("Error checking admin:", error)
+                console.error("Error checking admin or fetching XP:", error)
             }
         }
-        checkAdmin()
+        checkAdminAndXp()
     }, [])
 
     return (
@@ -163,6 +180,13 @@ export function Sidebar({ showMobile = false, onClose }: { showMobile?: boolean,
                                 </div>
                             </Link>
                         )}
+                    </div>
+                </div>
+
+                {/* Gamification Widget */}
+                <div className="px-3 mt-auto mb-4">
+                    <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                        <LevelProgress xp={userXp} />
                     </div>
                 </div>
             </div>

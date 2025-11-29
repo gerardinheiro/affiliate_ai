@@ -146,6 +146,8 @@ model Creative {
   description String
   cta         String
   imageUrl    String?
+  nitroflareUrl String? // Backup URL on Nitroflare cloud storage
+  prompt      String?   // AI prompt used to generate the creative
   format      String?  // feed, story, banner
   
   // Video Support

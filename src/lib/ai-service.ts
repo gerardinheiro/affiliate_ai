@@ -1,5 +1,37 @@
 import OpenAI from "openai"
 
+export async function scrapeProduct(url: string) {
+    try {
+        // In a real scenario, this would use Puppeteer or Cheerio
+        // For now, we'll return a mock or try to fetch meta tags
+        const response = await fetch(url)
+        const html = await response.text()
+
+        // Simple regex to extract title and description
+        const titleMatch = html.match(/<title>(.*?)<\/title>/)
+        const descMatch = html.match(/<meta name="description" content="(.*?)"/)
+
+        return {
+            title: titleMatch ? titleMatch[1] : "Produto sem título",
+            description: descMatch ? descMatch[1] : "Sem descrição disponível",
+            images: [],
+            imageUrl: null,
+            price: "R$ 0,00",
+            platform: "Generic"
+        }
+    } catch (error) {
+        console.error("Error scraping product:", error)
+        return {
+            title: "Erro ao ler produto",
+            description: "Não foi possível acessar a URL fornecida.",
+            images: [],
+            imageUrl: null,
+            price: "R$ 0,00",
+            platform: "Generic"
+        }
+    }
+}
+
 export async function generateAdCopy(productName: string, productDescription: string, apiKey?: string, brandContext?: { name?: string, tone?: string, description?: string }) {
     const token = apiKey || process.env.OPENAI_API_KEY
 
