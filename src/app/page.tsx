@@ -13,13 +13,6 @@ export default function LandingPage() {
   const router = useRouter()
   const [accessCount, setAccessCount] = useState(0)
 
-  // Redirect to dashboard if already logged in
-  useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/dashboard")
-    }
-  }, [status, router])
-
   useEffect(() => {
     // Track page view
     fetch("/api/page-views", {
@@ -56,16 +49,28 @@ export default function LandingPage() {
             </Link>
           </nav>
           <div className="flex items-center gap-4">
-            <LoginModal>
-              <Button variant="ghost" className="text-white hover:bg-white/10">
-                Entrar
-              </Button>
-            </LoginModal>
-            <LoginModal>
-              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                Começar Agora
-              </Button>
-            </LoginModal>
+            {status === "authenticated" ? (
+              <Link href="/dashboard">
+                <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                  Ir para Dashboard
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <LoginModal>
+                  <Button variant="ghost" className="text-white hover:bg-white/10">
+                    Entrar
+                  </Button>
+                </LoginModal>
+                <LoginModal>
+                  <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                    Começar Grátis
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </LoginModal>
+              </>
+            )}
           </div>
         </div>
       </header>
