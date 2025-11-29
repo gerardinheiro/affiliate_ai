@@ -131,8 +131,8 @@ export function Sidebar({ showMobile = false, onClose }: { showMobile?: boolean,
 
             {/* Sidebar */}
             <div className={cn(
-                "space-y-4 py-4 flex flex-col h-full glass border-r border-white/10 text-white",
-                "fixed md:relative inset-y-0 left-0 z-[9999] w-72 transform transition-transform duration-300 ease-in-out",
+                "space-y-4 py-4 flex flex-col h-full glass border-r border-white/10 text-white overflow-y-auto",
+                "fixed inset-y-0 left-0 z-[50] w-72 transform transition-transform duration-300 ease-in-out",
                 showMobile ? "translate-x-0" : "-translate-x-full md:translate-x-0"
             )}>
                 <div className="px-3 py-2 flex-1">

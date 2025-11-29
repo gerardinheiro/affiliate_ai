@@ -27,18 +27,6 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
     const [showUserMenu, setShowUserMenu] = useState(false)
     const [showValues, setShowValues] = useState(true)
 
-    useEffect(() => {
-        fetchNotifications()
-        fetchGamification()
-
-        const interval = setInterval(() => {
-            fetchNotifications()
-            fetchGamification()
-        }, 30000)
-
-        return () => clearInterval(interval)
-    }, [])
-
     const fetchGamification = async () => {
         try {
             const res = await fetch("/api/gamification")
@@ -63,6 +51,18 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
             console.error("Error fetching notifications:", error)
         }
     }
+
+    useEffect(() => {
+        fetchNotifications()
+        fetchGamification()
+
+        const interval = setInterval(() => {
+            fetchNotifications()
+            fetchGamification()
+        }, 30000)
+
+        return () => clearInterval(interval)
+    }, [])
 
     const handleMarkAsRead = async (id: string) => {
         try {
@@ -98,7 +98,7 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
     }
 
     return (
-        <div className="flex items-center justify-between p-4 border-b border-white/10 h-16 glass relative">
+        <div className="sticky top-0 z-40 flex items-center justify-between p-4 border-b border-white/10 h-16 glass bg-black/50 backdrop-blur-xl">
             {/* Mobile Menu Button */}
             <Button
                 variant="ghost"
