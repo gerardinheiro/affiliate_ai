@@ -5,9 +5,20 @@ import { Button } from "@/components/ui/button"
 import { LoginModal } from "@/components/auth/login-modal"
 import { Globe, ArrowRight, CheckCircle2, BarChart3, Zap, Shield } from "lucide-react"
 import Link from "next/link"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
 export default function LandingPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
   const [accessCount, setAccessCount] = useState(0)
+
+  // Redirect to dashboard if already logged in
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/dashboard")
+    }
+  }, [status, router])
 
   useEffect(() => {
     // Track page view
