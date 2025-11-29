@@ -128,7 +128,7 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
 
                     {/* Notifications Dropdown */}
                     {showNotifications && (
-                        <Card className="absolute right-0 top-12 w-[90vw] sm:w-96 max-h-[500px] overflow-y-auto glass border-white/10 bg-black/90 backdrop-blur-xl z-[9999] shadow-2xl">
+                        <Card className="absolute right-0 top-12 w-[90vw] sm:w-96 max-h-[500px] overflow-y-auto border-white/10 bg-black z-[9999] shadow-2xl">
                             <div className="p-4 border-b border-white/10 flex justify-between items-center">
                                 <h3 className="font-semibold text-white">Notificações</h3>
                                 <Button
@@ -218,7 +218,7 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
                     </Button>
 
                     {showUserMenu && xpData && (
-                        <Card className="absolute right-0 top-12 w-[90vw] sm:w-80 glass border-white/10 bg-black/90 backdrop-blur-xl z-[9999] shadow-2xl p-4 space-y-4">
+                        <Card className="absolute right-0 top-12 w-[90vw] sm:w-80 border-white/10 bg-black z-[9999] shadow-2xl p-4 space-y-4">
                             <div className="flex items-center gap-3 pb-4 border-b border-white/10">
                                 <div className="relative h-12 w-12 rounded-full border-2 border-indigo-500/50">
                                     <Avatar className="h-full w-full">
