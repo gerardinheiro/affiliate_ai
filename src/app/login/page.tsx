@@ -37,6 +37,9 @@ export default function LoginPage() {
                         </svg>
                         Continuar com Google
                     </Button>
+                    <p className="text-xs text-gray-500 text-center">
+                        ⚠️ No mobile, use o login com email abaixo
+                    </p>
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
                             <span className="w-full border-t border-white/10" />
