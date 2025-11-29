@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Bell, User, LogOut, X, Share2, Eye, EyeOff, UserCircle } from "lucide-react"
+import { Bell, User, LogOut, X, Share2, Eye, EyeOff, UserCircle, Menu } from "lucide-react"
 import { signOut, useSession } from "next-auth/react"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
@@ -18,7 +18,7 @@ type Notification = {
     createdAt: string
 }
 
-export function Header() {
+export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
     const { data: session } = useSession() || { data: null }
     const [notifications, setNotifications] = useState<Notification[]>([])
     const [showNotifications, setShowNotifications] = useState(false)
@@ -26,6 +26,7 @@ export function Header() {
     const [xpData, setXpData] = useState<any>(null)
     const [showUserMenu, setShowUserMenu] = useState(false)
     const [showValues, setShowValues] = useState(true)
+    const [showMobileMenu, setShowMobileMenu] = useState(false)
 
     useEffect(() => {
         fetchNotifications()
@@ -98,7 +99,17 @@ export function Header() {
     }
 
     return (
-        <div className="flex items-center justify-end p-4 border-b border-white/10 h-16 glass relative">
+        <div className="flex items-center justify-between p-4 border-b border-white/10 h-16 glass relative">
+            {/* Mobile Menu Button */}
+            <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden hover:bg-white/10"
+                onClick={() => onMenuClick?.()}
+            >
+                <Menu className="h-6 w-6 text-gray-300" />
+            </Button>
+
             <div className="flex items-center gap-x-4">
                 {/* Notifications Bell */}
                 <div className="relative">
@@ -118,7 +129,7 @@ export function Header() {
 
                     {/* Notifications Dropdown */}
                     {showNotifications && (
-                        <Card className="absolute right-0 top-12 w-96 max-h-[500px] overflow-y-auto glass border-white/10 bg-black/90 backdrop-blur-xl z-50 shadow-2xl">
+                        <Card className="absolute right-0 top-12 w-96 max-h-[500px] overflow-y-auto glass border-white/10 bg-black/90 backdrop-blur-xl z-[9999] shadow-2xl">
                             <div className="p-4 border-b border-white/10 flex justify-between items-center">
                                 <h3 className="font-semibold text-white">Notificações</h3>
                                 <Button
@@ -208,7 +219,7 @@ export function Header() {
                     </Button>
 
                     {showUserMenu && xpData && (
-                        <Card className="absolute right-0 top-12 w-80 glass border-white/10 bg-black/90 backdrop-blur-xl z-50 shadow-2xl p-4 space-y-4">
+                        <Card className="absolute right-0 top-12 w-80 glass border-white/10 bg-black/90 backdrop-blur-xl z-[9999] shadow-2xl p-4 space-y-4">
                             <div className="flex items-center gap-3 pb-4 border-b border-white/10">
                                 <div className="relative h-12 w-12 rounded-full border-2 border-indigo-500/50">
                                     <Avatar className="h-full w-full">
