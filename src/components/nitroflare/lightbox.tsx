@@ -86,7 +86,7 @@ export function Lightbox({ images, currentIndex, onClose, onNavigate }: Lightbox
                                 onClick={() => window.open(currentImage.nitroflareUrl!, '_blank')}
                             >
                                 <ExternalLink className="w-4 h-4 mr-2" />
-                                Nitroflare
+                                Ver Original
                             </Button>
                         )}
                         <Button

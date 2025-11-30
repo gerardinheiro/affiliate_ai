@@ -155,7 +155,7 @@ export function UploadDialog({ open, onOpenChange, onUploadComplete }: UploadDia
                 <DialogHeader>
                     <DialogTitle className="text-white">Upload de Arquivos</DialogTitle>
                     <DialogDescription>
-                        Faça upload de imagens para sua galeria Nitroflare
+                        Faça upload de imagens para sua galeria
                     </DialogDescription>
                 </DialogHeader>
 

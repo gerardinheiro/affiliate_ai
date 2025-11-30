@@ -124,7 +124,7 @@ export default function NitroflareGalleryPage() {
                 <div className="mb-8 flex items-start justify-between">
                     <div>
                         <h1 className="text-4xl font-bold text-white mb-2">
-                            Galeria Nitroflare ☁️
+                            Galeria ☁️
                         </h1>
                         <p className="text-gray-400">
                             Todas as suas imagens geradas por IA, armazenadas em nuvem
@@ -231,7 +231,7 @@ export default function NitroflareGalleryPage() {
                                                     onClick={() => window.open(image.nitroflareUrl!, '_blank')}
                                                 >
                                                     <ExternalLink className="w-4 h-4 mr-2" />
-                                                    Nitroflare
+                                                    Ver Original
                                                 </Button>
                                                 <Button
                                                     variant="outline"

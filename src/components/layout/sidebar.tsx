@@ -77,7 +77,7 @@ const routes = [
         color: "text-blue-500",
     },
     {
-        label: "Galeria Nitroflare",
+        label: "Galeria",
         icon: Cloud,
         href: "/nitroflare-gallery",
         color: "text-cyan-500",
