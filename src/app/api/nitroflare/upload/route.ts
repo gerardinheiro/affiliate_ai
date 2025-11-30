@@ -35,10 +35,29 @@ export async function POST(req: NextRequest) {
         }
 
         // Check if Cloudinary is configured
-        if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
-            console.error("Cloudinary not configured")
+        const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+        const apiKey = process.env.CLOUDINARY_API_KEY;
+        const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+        console.log("Cloudinary Config Debug:", {
+            hasCloudName: !!cloudName,
+            hasApiKey: !!apiKey,
+            hasApiSecret: !!apiSecret,
+            envKeys: Object.keys(process.env).filter(k => k.startsWith('CLOUDINARY'))
+        });
+
+        if (!cloudName || !apiKey || !apiSecret) {
+            console.error("Cloudinary not configured. Missing variables.");
             return NextResponse.json(
-                { error: "Cloudinary not configured. Please add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET to environment variables." },
+                {
+                    error: "Cloudinary not configured",
+                    details: "Missing environment variables. Check server logs.",
+                    debug: {
+                        hasCloudName: !!cloudName,
+                        hasApiKey: !!apiKey,
+                        hasApiSecret: !!apiSecret
+                    }
+                },
                 { status: 500 }
             )
         }
