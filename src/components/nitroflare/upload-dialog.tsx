@@ -117,7 +117,19 @@ export function UploadDialog({ open, onOpenChange, onUploadComplete }: UploadDia
                     })
                 } else {
                     const errorData = await response.json().catch(() => ({}))
-                    throw new Error(errorData.error || 'Failed to save to database')
+                    console.error("Server error response:", errorData)
+
+                    let errorMessage = errorData.error || 'Failed to save to database'
+
+                    // Append details if available
+                    if (errorData.details) {
+                        const detailsStr = typeof errorData.details === 'object'
+                            ? JSON.stringify(errorData.details, null, 2)
+                            : String(errorData.details)
+                        errorMessage += `\n\nDETALHES TÉCNICOS:\n${detailsStr}`
+                    }
+
+                    throw new Error(errorMessage)
                 }
             } catch (error) {
                 console.error('Upload error:', error)
