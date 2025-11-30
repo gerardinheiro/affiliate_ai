@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
-import { writeFile } from "fs/promises"
-import path from "path"
+import { put } from '@vercel/blob'
 
 export async function POST(req: NextRequest) {
     try {
@@ -28,28 +27,27 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "No file provided" }, { status: 400 })
         }
 
-        // Convert file to buffer
-        const bytes = await file.arrayBuffer()
-        const buffer = Buffer.from(bytes)
+        // Check if BLOB_READ_WRITE_TOKEN is configured
+        if (!process.env.BLOB_READ_WRITE_TOKEN) {
+            console.error("BLOB_READ_WRITE_TOKEN not configured")
+            return NextResponse.json(
+                { error: "Blob storage not configured. Please add BLOB_READ_WRITE_TOKEN to environment variables." },
+                { status: 500 }
+            )
+        }
 
-        // Create unique filename
-        const timestamp = Date.now()
-        const filename = `${timestamp}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
-        const filepath = path.join(process.cwd(), 'public', 'uploads', filename)
-
-        // Save file to public/uploads
-        await writeFile(filepath, buffer)
-
-        // Create URL path for the image
-        const imageUrl = `/uploads/${filename}`
+        // Upload to Vercel Blob Storage
+        const blob = await put(file.name, file, {
+            access: 'public',
+        })
 
         // Create creative entry
         const creative = await db.creative.create({
             data: {
                 headline: file.name || "Uploaded Image",
-                description: nitroflareUrl ? "Uploaded via Nitroflare Gallery" : "Uploaded to local storage",
+                description: nitroflareUrl ? "Uploaded via Nitroflare Gallery" : "Uploaded to Vercel Blob Storage",
                 cta: "",
-                imageUrl: imageUrl, // Save file path instead of base64
+                imageUrl: blob.url, // Save Blob URL
                 nitroflareUrl: nitroflareUrl || null,
                 fileSize: file.size,
                 folderId: null,
