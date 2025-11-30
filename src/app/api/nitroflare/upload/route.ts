@@ -41,65 +41,48 @@ export async function POST(req: NextRequest) {
 
         console.log("Cloudinary Config Debug:", {
             hasCloudName: !!cloudName,
-            hasApiKey: !!apiKey,
-            hasApiSecret: !!apiSecret,
-            envKeys: Object.keys(process.env).filter(k => k.startsWith('CLOUDINARY'))
-        });
-
-        if (!cloudName || !apiKey || !apiSecret) {
-            console.error("Cloudinary not configured. Missing variables.");
-            return NextResponse.json(
-                {
-                    error: "Cloudinary not configured",
-                    details: "Missing environment variables. Check server logs.",
-                    debug: {
-                        hasCloudName: !!cloudName,
-                        hasApiKey: !!apiKey,
-                        hasApiSecret: !!apiSecret
-                    }
-                },
                 { status: 500 }
-            )
-        }
+        )
+    }
 
         // Convert file to base64 for Cloudinary upload
         const bytes = await file.arrayBuffer()
-        const buffer = Buffer.from(bytes)
-        const base64 = buffer.toString('base64')
-        const dataURI = `data:${file.type};base64,${base64}`
+    const buffer = Buffer.from(bytes)
+    const base64 = buffer.toString('base64')
+    const dataURI = `data:${file.type};base64,${base64}`
 
-        // Upload to Cloudinary
-        const uploadResponse = await cloudinary.uploader.upload(dataURI, {
-            folder: 'affiliate-ai-uploads',
-            resource_type: 'auto',
-        })
+    // Upload to Cloudinary
+    const uploadResponse = await cloudinary.uploader.upload(dataURI, {
+        folder: 'affiliate-ai-uploads',
+        resource_type: 'auto',
+    })
 
-        // Create creative entry
-        const creative = await db.creative.create({
-            data: {
-                headline: file.name || "Uploaded Image",
-                description: nitroflareUrl ? "Uploaded via Nitroflare Gallery" : "Uploaded to Cloudinary",
-                cta: "",
-                imageUrl: uploadResponse.secure_url, // Cloudinary URL
-                nitroflareUrl: nitroflareUrl || null,
-                fileSize: file.size,
-                folderId: null,
-                userId: user.id,
-                type: "image"
-            }
-        })
+    // Create creative entry
+    const creative = await db.creative.create({
+        data: {
+            headline: file.name || "Uploaded Image",
+            description: nitroflareUrl ? "Uploaded via Nitroflare Gallery" : "Uploaded to Cloudinary",
+            cta: "",
+            imageUrl: uploadResponse.secure_url, // Cloudinary URL
+            nitroflareUrl: nitroflareUrl || null,
+            fileSize: file.size,
+            folderId: null,
+            userId: user.id,
+            type: "image"
+        }
+    })
 
-        return NextResponse.json(creative)
-    } catch (error) {
-        console.error("Upload error details:", error)
-        console.error("Error message:", error instanceof Error ? error.message : 'Unknown error')
-        console.error("Error stack:", error instanceof Error ? error.stack : 'No stack')
-        return NextResponse.json(
-            {
-                error: "Failed to save upload",
-                details: error instanceof Error ? error.message : 'Unknown error'
-            },
-            { status: 500 }
-        )
-    }
+    return NextResponse.json(creative)
+} catch (error) {
+    console.error("Upload error details:", error)
+    console.error("Error message:", error instanceof Error ? error.message : 'Unknown error')
+    console.error("Error stack:", error instanceof Error ? error.stack : 'No stack')
+    return NextResponse.json(
+        {
+            error: "Failed to save upload",
+            details: error instanceof Error ? error.message : 'Unknown error'
+        },
+        { status: 500 }
+    )
+}
 }
