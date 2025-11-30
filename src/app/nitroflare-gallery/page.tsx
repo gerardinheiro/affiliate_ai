@@ -153,7 +153,7 @@ export default function NitroflareGalleryPage() {
                         </CardContent>
                     </Card>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
                         {images.map((image, index) => (
                             <Card key={image.id} className="glass border-white/10 overflow-hidden hover:border-indigo-500/50 transition-all group">
                                 <div
@@ -205,38 +205,32 @@ export default function NitroflareGalleryPage() {
                                         </DropdownMenu>
                                     </div>
                                 </div>
-                                <CardHeader>
-                                    <CardTitle className="text-white text-lg line-clamp-1">
+                                <CardHeader className="p-3">
+                                    <CardTitle className="text-white text-xs line-clamp-1">
                                         {image.headline}
                                     </CardTitle>
-                                    {image.prompt && (
-                                        <CardDescription className="line-clamp-2">
-                                            {image.prompt}
-                                        </CardDescription>
-                                    )}
                                 </CardHeader>
-                                <CardContent className="space-y-3">
-                                    <div className="flex items-center text-sm text-gray-400">
-                                        <Calendar className="w-4 h-4 mr-2" />
-                                        {new Date(image.createdAt).toLocaleDateString('pt-BR')}
+                                <CardContent className="p-3 pt-0 space-y-2">
+                                    <div className="flex items-center text-xs text-gray-400">
+                                        <Calendar className="w-3 h-3 mr-1" />
+                                        {new Date(image.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
                                     </div>
 
-                                    <div className="flex gap-2">
+                                    <div className="flex gap-1">
                                         {image.nitroflareUrl && (
                                             <>
                                                 <Button
                                                     variant="outline"
                                                     size="sm"
-                                                    className="flex-1"
+                                                    className="flex-1 h-7 text-xs px-2"
                                                     onClick={() => window.open(image.nitroflareUrl!, '_blank')}
                                                 >
-                                                    <ExternalLink className="w-4 h-4 mr-2" />
-                                                    Ver Original
+                                                    <ExternalLink className="w-3 h-3" />
                                                 </Button>
                                                 <Button
                                                     variant="outline"
                                                     size="sm"
-                                                    className="flex-1"
+                                                    className="flex-1 h-7 text-xs px-2"
                                                     onClick={() => {
                                                         const link = document.createElement('a')
                                                         link.href = image.imageUrl || ''
@@ -244,8 +238,7 @@ export default function NitroflareGalleryPage() {
                                                         link.click()
                                                     }}
                                                 >
-                                                    <Download className="w-4 h-4 mr-2" />
-                                                    Baixar
+                                                    <Download className="w-3 h-3" />
                                                 </Button>
                                             </>
                                         )}
