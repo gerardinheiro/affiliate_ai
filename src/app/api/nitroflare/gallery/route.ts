@@ -11,13 +11,11 @@ export async function GET() {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
-        // Get all creatives with Nitroflare URLs for this user
+        // Get all creatives (both with and without Nitroflare URLs) for this user
         const creatives = await db.creative.findMany({
             where: {
                 userId: (session.user as any).id,
-                nitroflareUrl: {
-                    not: null
-                }
+                type: "image" // Only show images
             },
             orderBy: {
                 createdAt: 'desc'
