@@ -121,10 +121,14 @@ export function UploadDialog({ open, onOpenChange, onUploadComplete }: UploadDia
                 }
             } catch (error) {
                 console.error('Upload error:', error)
+                // Alert the full error details for debugging
+                const errorMessage = error instanceof Error ? error.message : 'Upload failed'
+                alert(`ERRO DE UPLOAD:\n${errorMessage}\n\nPor favor, tire um print desta mensagem e envie para o suporte.`)
+
                 setFiles(prev => {
                     const newFiles = [...prev]
                     newFiles[i].status = 'error'
-                    newFiles[i].error = error instanceof Error ? error.message : 'Upload failed'
+                    newFiles[i].error = errorMessage
                     return newFiles
                 })
             }
