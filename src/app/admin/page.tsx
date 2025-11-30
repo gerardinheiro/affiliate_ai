@@ -33,6 +33,7 @@ type UserData = {
     daysOffline: number
     productsCount: number
     postsCount: number
+    creativesCount: number
 }
 
 export default function AdminDashboard() {
@@ -194,7 +195,7 @@ export default function AdminDashboard() {
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-5 gap-4 text-center">
+                                    <div className="grid grid-cols-6 gap-4 text-center">
                                         <div className="px-3 py-2 rounded-lg bg-indigo-500/10">
                                             <p className="text-xs text-gray-400">Nível</p>
                                             <p className="font-semibold text-indigo-400">{user.level}</p>
@@ -206,6 +207,10 @@ export default function AdminDashboard() {
                                         <div className="px-3 py-2 rounded-lg bg-pink-500/10">
                                             <p className="text-xs text-gray-400">Posts</p>
                                             <p className="font-semibold text-pink-400">{user.postsCount}</p>
+                                        </div>
+                                        <div className="px-3 py-2 rounded-lg bg-green-500/10">
+                                            <p className="text-xs text-gray-400">Uploads</p>
+                                            <p className="font-semibold text-green-400">{user.creativesCount}</p>
                                         </div>
                                         <div className="px-3 py-2 rounded-lg bg-blue-500/10">
                                             <p className="text-xs text-gray-400 flex items-center justify-center gap-1">

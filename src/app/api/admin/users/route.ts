@@ -38,6 +38,7 @@ export async function GET(req: Request) {
                     select: {
                         products: true,
                         posts: true,
+                        creatives: true,
                     },
                 },
             },
@@ -63,6 +64,7 @@ export async function GET(req: Request) {
                 daysOffline,
                 productsCount: user._count.products,
                 postsCount: user._count.posts,
+                creativesCount: user._count.creatives,
             }
         })
 
