@@ -90,31 +90,22 @@ export function UploadDialog({ open, onOpenChange, onUploadComplete }: UploadDia
             })
 
             try {
-                // Convert image to base64
-                const reader = new FileReader()
-                const imageDataPromise = new Promise<string>((resolve, reject) => {
-                    reader.onload = () => resolve(reader.result as string)
-                    reader.onerror = reject
-                    reader.readAsDataURL(files[i].file)
-                })
-
-                const imageData = await imageDataPromise
-
                 // Try to upload to Nitroflare (optional)
                 const buffer = await files[i].file.arrayBuffer()
                 const fileBuffer = Buffer.from(buffer)
                 const nitroflareResult = await uploadToNitroflare(fileBuffer, files[i].file.name)
 
-                // Save to database with image data
+                // Create FormData for file upload
+                const formData = new FormData()
+                formData.append('file', files[i].file)
+                if (nitroflareResult.url) {
+                    formData.append('nitroflareUrl', nitroflareResult.url)
+                }
+
+                // Save to database with file upload
                 const response = await fetch('/api/nitroflare/upload', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        fileName: files[i].file.name,
-                        nitroflareUrl: nitroflareResult.url || null,
-                        imageData: imageData, // Send base64 image data
-                        fileSize: files[i].file.size,
-                    })
+                    body: formData // Send as FormData instead of JSON
                 })
 
                 if (response.ok) {
