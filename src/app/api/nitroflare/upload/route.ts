@@ -38,9 +38,14 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json(creative)
     } catch (error) {
-        console.error("Upload error:", error)
+        console.error("Upload error details:", error)
+        console.error("Error message:", error instanceof Error ? error.message : 'Unknown error')
+        console.error("Error stack:", error instanceof Error ? error.stack : 'No stack')
         return NextResponse.json(
-            { error: "Failed to save upload" },
+            {
+                error: "Failed to save upload",
+                details: error instanceof Error ? error.message : 'Unknown error'
+            },
             { status: 500 }
         )
     }
