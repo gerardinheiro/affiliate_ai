@@ -55,6 +55,18 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     callbacks: {
+        async signIn({ user }) {
+            // Update lastLoginAt whenever user signs in
+            if (user?.email) {
+                await db.user.update({
+                    where: { email: user.email },
+                    data: { lastLoginAt: new Date() },
+                }).catch(() => {
+                    // Ignore errors if user doesn't exist yet
+                })
+            }
+            return true
+        },
         async session({ session, token }) {
             if (token && session.user) {
                 (session.user as any).id = token.id as string
