@@ -11,6 +11,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Users, DollarSign, Package, MessageSquare, Loader2, Calendar, Clock } from "lucide-react"
 import { UserEditModal } from "@/components/admin/user-edit-modal"
+import { StatsConfig } from "@/components/admin/stats-config"
 
 type AdminStats = {
     totalUsers: number
@@ -229,6 +230,9 @@ export default function AdminDashboard() {
                         </CardContent>
                     </Card>
                 </div>
+
+                {/* Stats Configuration */}
+                <StatsConfig />
 
                 {/* Users Table */}
                 <Card>

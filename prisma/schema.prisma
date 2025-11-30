@@ -82,6 +82,13 @@ model PageView {
   userAgent String?
 }
 
+model GlobalSettings {
+  id        String   @id @default(cuid())
+  key       String   @unique // e.g. "public_stats"
+  value     Json     // Stores the configuration
+  updatedAt DateTime @updatedAt
+}
+
 model Account {
   id                 String  @id @default(cuid())
   userId             String
@@ -280,4 +287,3 @@ model NitroflareTag {
   
   @@unique([userId, name]) // Prevent duplicate tag names per user
 }
-
