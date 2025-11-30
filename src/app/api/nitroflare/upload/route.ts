@@ -98,13 +98,37 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json(creative)
     } catch (error) {
+        // Comprehensive error logging
         console.error("Upload error details:", error)
         console.error("Error message:", error instanceof Error ? error.message : 'Unknown error')
         console.error("Error stack:", error instanceof Error ? error.stack : 'No stack')
+
+        // Serialize the full error object for debugging
+        const errorDetails: any = {
+            message: error instanceof Error ? error.message : 'Unknown error',
+            stack: error instanceof Error ? error.stack : 'No stack',
+        }
+
+        // Capture Cloudinary-specific error properties
+        if (error && typeof error === 'object') {
+            const err = error as any
+            if (err.http_code) errorDetails.http_code = err.http_code
+            if (err.error) errorDetails.cloudinaryError = err.error
+            if (err.name) errorDetails.name = err.name
+            // Capture all enumerable properties
+            Object.keys(err).forEach(key => {
+                if (!errorDetails[key]) {
+                    errorDetails[key] = err[key]
+                }
+            })
+        }
+
+        console.error("Full error details:", JSON.stringify(errorDetails, null, 2))
+
         return NextResponse.json(
             {
                 error: "Failed to save upload",
-                details: error instanceof Error ? error.message : 'Unknown error'
+                details: errorDetails
             },
             { status: 500 }
         )
