@@ -2,7 +2,14 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
-import { put } from '@vercel/blob'
+import { v2 as cloudinary } from 'cloudinary'
+
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+})
 
 export async function POST(req: NextRequest) {
     try {
@@ -27,27 +34,34 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "No file provided" }, { status: 400 })
         }
 
-        // Check if BLOB_READ_WRITE_TOKEN is configured
-        if (!process.env.BLOB_READ_WRITE_TOKEN) {
-            console.error("BLOB_READ_WRITE_TOKEN not configured")
+        // Check if Cloudinary is configured
+        if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+            console.error("Cloudinary not configured")
             return NextResponse.json(
-                { error: "Blob storage not configured. Please add BLOB_READ_WRITE_TOKEN to environment variables." },
+                { error: "Cloudinary not configured. Please add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET to environment variables." },
                 { status: 500 }
             )
         }
 
-        // Upload to Vercel Blob Storage
-        const blob = await put(file.name, file, {
-            access: 'public',
+        // Convert file to base64 for Cloudinary upload
+        const bytes = await file.arrayBuffer()
+        const buffer = Buffer.from(bytes)
+        const base64 = buffer.toString('base64')
+        const dataURI = `data:${file.type};base64,${base64}`
+
+        // Upload to Cloudinary
+        const uploadResponse = await cloudinary.uploader.upload(dataURI, {
+            folder: 'affiliate-ai-uploads',
+            resource_type: 'auto',
         })
 
         // Create creative entry
         const creative = await db.creative.create({
             data: {
                 headline: file.name || "Uploaded Image",
-                description: nitroflareUrl ? "Uploaded via Nitroflare Gallery" : "Uploaded to Vercel Blob Storage",
+                description: nitroflareUrl ? "Uploaded via Nitroflare Gallery" : "Uploaded to Cloudinary",
                 cta: "",
-                imageUrl: blob.url, // Save Blob URL
+                imageUrl: uploadResponse.secure_url, // Cloudinary URL
                 nitroflareUrl: nitroflareUrl || null,
                 fileSize: file.size,
                 folderId: null,
