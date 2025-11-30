@@ -5,6 +5,8 @@ import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import DashboardLayout from "@/components/layout/dashboard-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Users, DollarSign, Package, MessageSquare, Loader2, Calendar, Clock } from "lucide-react"
@@ -43,6 +45,9 @@ export default function AdminDashboard() {
     const [stats, setStats] = useState<AdminStats | null>(null)
     const [users, setUsers] = useState<UserData[]>([])
     const [editingUser, setEditingUser] = useState<UserData | null>(null)
+    const [accessCount, setAccessCount] = useState(0)
+    const [editingAccessCount, setEditingAccessCount] = useState(false)
+    const [newAccessCount, setNewAccessCount] = useState("0")
 
     useEffect(() => {
         fetchData()
@@ -50,21 +55,26 @@ export default function AdminDashboard() {
 
     const fetchData = async () => {
         try {
-            const [statsRes, usersRes] = await Promise.all([
+            const [statsRes, usersRes, accessRes] = await Promise.all([
                 fetch("/api/admin/stats"),
                 fetch("/api/admin/users"),
+                fetch("/api/page-views?page=/")
             ])
 
-            if (statsRes.status === 403 || usersRes.status === 403) {
-                router.push("/")
-                return
+            if (statsRes.ok) {
+                const data = await statsRes.json()
+                setStats(data)
             }
 
-            if (statsRes.ok && usersRes.ok) {
-                const statsData = await statsRes.json()
-                const usersData = await usersRes.json()
-                setStats(statsData)
-                setUsers(usersData)
+            if (usersRes.ok) {
+                const data = await usersRes.json()
+                setUsers(data)
+            }
+
+            if (accessRes.ok) {
+                const data = await accessRes.json()
+                setAccessCount(data.count)
+                setNewAccessCount(data.count.toString())
             }
         } catch (error) {
             console.error("Error fetching admin data:", error)
@@ -154,6 +164,68 @@ export default function AdminDashboard() {
                             <p className="text-xs text-muted-foreground mt-1">
                                 Média de {(stats.totalPosts / stats.totalUsers).toFixed(1)} por usuário
                             </p>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Contador de Acessos</CardTitle>
+                            <Users className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            {editingAccessCount ? (
+                                <div className="space-y-2">
+                                    <Input
+                                        type="number"
+                                        value={newAccessCount}
+                                        onChange={(e) => setNewAccessCount(e.target.value)}
+                                        className="text-2xl font-bold h-12"
+                                    />
+                                    <div className="flex gap-2">
+                                        <Button
+                                            size="sm"
+                                            onClick={async () => {
+                                                try {
+                                                    const res = await fetch("/api/admin/access-count", {
+                                                        method: "PATCH",
+                                                        headers: { "Content-Type": "application/json" },
+                                                        body: JSON.stringify({ count: parseInt(newAccessCount) })
+                                                    })
+                                                    if (res.ok) {
+                                                        setAccessCount(parseInt(newAccessCount))
+                                                        setEditingAccessCount(false)
+                                                        alert("Contador atualizado!")
+                                                    }
+                                                } catch (error) {
+                                                    alert("Erro ao atualizar contador")
+                                                }
+                                            }}
+                                        >
+                                            Salvar
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            variant="outline"
+                                            onClick={() => {
+                                                setNewAccessCount(accessCount.toString())
+                                                setEditingAccessCount(false)
+                                            }}
+                                        >
+                                            Cancelar
+                                        </Button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div
+                                    className="cursor-pointer"
+                                    onClick={() => setEditingAccessCount(true)}
+                                >
+                                    <div className="text-2xl font-bold">{accessCount.toLocaleString()}</div>
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                        Clique para editar
+                                    </p>
+                                </div>
+                            )}
                         </CardContent>
                     </Card>
                 </div>
