@@ -16,6 +16,7 @@ import {
     Shield,
     Cloud,
     FileText,
+    Trophy,
 } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useState, useEffect } from "react"
@@ -69,6 +70,12 @@ const routes = [
         icon: BarChart3,
         href: "/analytics",
         color: "text-emerald-500",
+    },
+    {
+        label: "Conquistas",
+        icon: Trophy,
+        href: "/achievements",
+        color: "text-yellow-500",
     },
     {
         label: "Integrações",
