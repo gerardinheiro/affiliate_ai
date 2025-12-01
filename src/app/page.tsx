@@ -157,7 +157,6 @@ function LandingPageContent() {
           </Button>
         </div>
     </div>
-      </div >
       </section >
 
     {/* Features Grid */ }
