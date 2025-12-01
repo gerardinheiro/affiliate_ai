@@ -49,6 +49,7 @@ model User {
   posts         Post[]
   notifications Notification[]
   stripeCustomer StripeCustomer?
+  analyticsEvents AnalyticsEvent[]
   
   // Gamification
   xp            Int       @default(0)
@@ -87,6 +88,21 @@ model GlobalSettings {
   key       String   @unique // e.g. "public_stats"
   value     Json     // Stores the configuration
   updatedAt DateTime @updatedAt
+}
+
+model AnalyticsEvent {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  eventType   String   // "product_view", "link_click", "creative_view", "bio_view", etc.
+  eventName   String   // Human-readable name
+  metadata    Json?    // Additional data (product ID, link URL, etc.)
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([userId, eventType])
+  @@index([userId, createdAt])
 }
 
 model Account {
