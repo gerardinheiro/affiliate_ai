@@ -39,7 +39,7 @@ const rarityBorders = {
     legendary: "border-yellow-500/30",
 }
 
-export function AchievementsPage() {
+export default function AchievementsPage() {
     const [data, setData] = useState<BadgesData | null>(null)
     const [isLoading, setIsLoading] = useState(true)
 
@@ -193,7 +193,8 @@ function BadgeCard({ badge, locked }: { badge: BadgeData; locked: boolean }) {
                 <div className="flex items-center justify-center gap-2">
                     <Badge
                         variant="outline"
-                        className={`${locked ? "border-gray-700 text-gray-500" : `border-${badge.rarity}-500/30 text-${badge.rarity}-400`} capitalize`}
+                        className={`${locked ? "border-gray-700 text-gray-500" : `border-${badge.rarity}-500/30 text-${badge.rarity}-400`
+                            } capitalize`}
                     >
                         {badge.rarity === "legendary" && "Lendário"}
                         {badge.rarity === "epic" && "Épico"}
