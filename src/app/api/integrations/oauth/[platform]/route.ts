@@ -4,10 +4,10 @@ import { authOptions } from "@/lib/auth"
 
 export async function GET(
     req: Request,
-    { params }: { params: { platform: string } }
+    { params }: { params: Promise<{ platform: string }> }
 ) {
     const session = await getServerSession(authOptions)
-    const platform = params.platform
+    const { platform } = await params
 
     if (!session?.user) {
         return new NextResponse("Unauthorized", { status: 401 })
@@ -49,10 +49,10 @@ export async function GET(
 
 export async function POST(
     req: Request,
-    { params }: { params: { platform: string } }
+    { params }: { params: Promise<{ platform: string }> }
 ) {
     const session = await getServerSession(authOptions)
-    const platform = params.platform
+    const { platform } = await params
 
     if (!session?.user) {
         return new NextResponse("Unauthorized", { status: 401 })
