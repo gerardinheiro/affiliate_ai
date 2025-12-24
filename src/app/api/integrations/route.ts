@@ -35,7 +35,18 @@ export async function POST(req: Request) {
 
     try {
         const body = await req.json()
-        const { platform, name, apiKey, accountId, targetCountry, targetState, targetCity } = body
+        const {
+            platform,
+            name,
+            apiKey,
+            accountId,
+            accessToken,
+            refreshToken,
+            expiresAt,
+            targetCountry,
+            targetState,
+            targetCity
+        } = body
 
         if (!platform || !name) {
             return new NextResponse("Missing required fields", { status: 400 })
@@ -48,6 +59,9 @@ export async function POST(req: Request) {
                 name,
                 apiKey,
                 accountId,
+                accessToken,
+                refreshToken,
+                expiresAt: expiresAt ? new Date(expiresAt) : null,
                 targetCountry,
                 targetState,
                 targetCity,

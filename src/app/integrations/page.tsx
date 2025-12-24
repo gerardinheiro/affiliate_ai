@@ -217,37 +217,59 @@ export default function IntegrationsPage() {
                     <div className="space-y-4">
                         <h3 className="text-xl font-semibold text-white">Minhas Conexões Ativas</h3>
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                            {integrations.map((integration) => (
-                                <Card key={integration.id} className="glass border-white/10 hover:border-indigo-500/50 transition-all">
-                                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                        <CardTitle className="text-sm font-medium text-white">
-                                            {integration.name}
-                                        </CardTitle>
-                                        <Badge variant="outline" className="border-emerald-500/30 text-emerald-400 bg-emerald-500/10">
-                                            Ativo
-                                        </Badge>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="text-2xl font-bold text-white capitalize mb-2">
-                                            {integration.platform}
-                                        </div>
-                                        <div className="text-xs text-gray-400 space-y-1">
-                                            <p>País: {integration.targetCountry === "BR" ? "Brasil 🇧🇷" : integration.targetCountry === "US" ? "EUA 🇺🇸" : integration.targetCountry || "Global"}</p>
-                                            {integration.targetState && <p>Estado: {integration.targetState}</p>}
-                                            {integration.targetCity && <p>Cidade: {integration.targetCity}</p>}
-                                        </div>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            className="mt-4 w-full text-red-400 hover:text-red-300 hover:bg-red-500/10"
-                                            onClick={() => handleDeleteIntegration(integration.id)}
-                                        >
-                                            <Trash2 className="w-4 h-4 mr-2" />
-                                            Desconectar
-                                        </Button>
-                                    </CardContent>
-                                </Card>
-                            ))}
+                            {integrations.map((integration) => {
+                                const platformInfo = [...affiliatePlatforms, ...adPlatforms, ...socialPlatforms].find(p => p.id === integration.platform)
+                                const Icon = platformInfo?.icon || Globe
+
+                                return (
+                                    <Card key={integration.id} className="glass border-white/10 hover:border-indigo-500/50 transition-all">
+                                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                            <div className="flex items-center gap-2">
+                                                <div className={`p-1.5 rounded-md bg-white/5 ${platformInfo?.color || "text-gray-400"}`}>
+                                                    <Icon className="w-4 h-4" />
+                                                </div>
+                                                <CardTitle className="text-sm font-medium text-white">
+                                                    {integration.name}
+                                                </CardTitle>
+                                            </div>
+                                            <Badge variant="outline" className="border-emerald-500/30 text-emerald-400 bg-emerald-500/10">
+                                                Ativo
+                                            </Badge>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <div className="text-xl font-bold text-white capitalize mb-2">
+                                                {platformInfo?.name || integration.platform}
+                                            </div>
+                                            <div className="text-xs text-gray-400 space-y-1">
+                                                <p className="flex items-center gap-1">
+                                                    <Globe className="w-3 h-3" />
+                                                    Região: {integration.targetCountry === "BR" ? "Brasil 🇧🇷" : integration.targetCountry === "US" ? "EUA 🇺🇸" : integration.targetCountry || "Global"}
+                                                </p>
+                                                {integration.targetState && <p>Estado: {integration.targetState}</p>}
+                                                {integration.accountId && (
+                                                    <p className="font-mono bg-white/5 px-1.5 py-0.5 rounded inline-block">
+                                                        ID: {integration.accountId}
+                                                    </p>
+                                                )}
+                                                {integration.expiresAt && (
+                                                    <p className="text-amber-400/80">
+                                                        Expira em: {new Date(integration.expiresAt).toLocaleDateString()}
+                                                    </p>
+                                                )}
+                                            </div>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="mt-4 w-full text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                                                onClick={() => handleDeleteIntegration(integration.id)}
+                                            >
+                                                <Trash2 className="w-4 h-4 mr-2" />
+                                                Desconectar
+                                            </Button>
+                                        </CardContent>
+                                    </Card>
+                                )
+                            })}
                         </div>
                     </div>
                 )}

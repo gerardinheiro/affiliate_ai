@@ -203,6 +203,11 @@ model Integration {
   apiKey        String?
   accountId     String?
   
+  // OAuth fields
+  accessToken   String?
+  refreshToken  String?
+  expiresAt     DateTime?
+  
   // Location Targeting
   targetCountry String?
   targetState   String?
