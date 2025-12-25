@@ -15,26 +15,51 @@ export async function GET(
 
     // This would normally redirect to the platform's OAuth page
     // For now, we'll return the config for the frontend to handle
+    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000"
+    const redirectUri = `${baseUrl}/api/integrations/oauth/callback`
+
     const config: Record<string, Record<string, string>> = {
         google_ads: {
             authUrl: "https://accounts.google.com/o/oauth2/v2/auth",
             clientId: process.env.GOOGLE_ADS_CLIENT_ID || "",
             scope: "https://www.googleapis.com/auth/adwords",
+            redirectUri,
         },
         meta_ads: {
             authUrl: "https://www.facebook.com/v12.0/dialog/oauth",
             clientId: process.env.META_ADS_CLIENT_ID || "",
             scope: "ads_management,ads_read",
+            redirectUri,
         },
         tiktok_ads: {
             authUrl: "https://business-api.tiktok.com/portal/auth",
             clientId: process.env.TIKTOK_ADS_CLIENT_ID || "",
             scope: "ads.manage",
+            redirectUri,
+        },
+        tiktok: {
+            authUrl: "https://www.tiktok.com/auth/authorize/",
+            clientId: process.env.TIKTOK_CLIENT_ID || "",
+            scope: "user.info.basic,video.list,video.upload",
+            redirectUri,
+        },
+        youtube: {
+            authUrl: "https://accounts.google.com/o/oauth2/v2/auth",
+            clientId: process.env.GOOGLE_CLIENT_ID || "",
+            scope: "https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload",
+            redirectUri,
+        },
+        pinterest: {
+            authUrl: "https://www.pinterest.com/oauth/",
+            clientId: process.env.PINTEREST_CLIENT_ID || "",
+            scope: "boards:read,pins:read,pins:write",
+            redirectUri,
         },
         instagram: {
             authUrl: "https://api.instagram.com/oauth/authorize",
             clientId: process.env.INSTAGRAM_CLIENT_ID || "",
             scope: "instagram_basic,instagram_content_publish",
+            redirectUri,
         },
     }
 
@@ -65,17 +90,112 @@ export async function POST(
             return new NextResponse("Missing code", { status: 400 })
         }
 
-        // In a real scenario, we would exchange the code for tokens here
-        // For now, we'll mock the token exchange
-        console.log(`Exchanging code for ${platform} tokens...`)
+        const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000"
+        const redirectUri = `${baseUrl}/api/integrations/oauth/callback`
 
-        const mockTokens = {
-            accessToken: `mock_access_token_${Math.random().toString(36).substring(7)}`,
-            refreshToken: `mock_refresh_token_${Math.random().toString(36).substring(7)}`,
-            expiresAt: new Date(Date.now() + 3600 * 1000), // 1 hour from now
+        let tokenUrl = ""
+        let body: any = {}
+
+        if (platform === "google_ads") {
+            tokenUrl = "https://oauth2.googleapis.com/token"
+            body = {
+                code,
+                client_id: process.env.GOOGLE_ADS_CLIENT_ID,
+                client_secret: process.env.GOOGLE_ADS_CLIENT_SECRET,
+                redirect_uri: redirectUri,
+                grant_type: "authorization_code",
+            }
+        } else if (platform === "meta_ads") {
+            tokenUrl = "https://graph.facebook.com/v12.0/oauth/access_token"
+            body = {
+                client_id: process.env.META_ADS_CLIENT_ID,
+                client_secret: process.env.META_ADS_CLIENT_SECRET,
+                redirect_uri: redirectUri,
+                code,
+            }
+        } else if (platform === "tiktok_ads") {
+            tokenUrl = "https://business-api.tiktok.com/open_api/v1.3/oauth2/access_token/"
+            body = {
+                app_id: process.env.TIKTOK_ADS_CLIENT_ID,
+                secret: process.env.TIKTOK_ADS_CLIENT_SECRET,
+                auth_code: code,
+            }
+        } else if (platform === "tiktok") {
+            tokenUrl = "https://open-api.tiktok.com/oauth/access_token/"
+            body = {
+                client_key: process.env.TIKTOK_CLIENT_ID,
+                client_secret: process.env.TIKTOK_CLIENT_SECRET,
+                code,
+                grant_type: "authorization_code",
+            }
+        } else if (platform === "youtube") {
+            tokenUrl = "https://oauth2.googleapis.com/token"
+            body = {
+                code,
+                client_id: process.env.GOOGLE_CLIENT_ID,
+                client_secret: process.env.GOOGLE_CLIENT_SECRET,
+                redirect_uri: redirectUri,
+                grant_type: "authorization_code",
+            }
+        } else if (platform === "pinterest") {
+            tokenUrl = "https://api.pinterest.com/v5/oauth/token"
+            const auth = Buffer.from(`${process.env.PINTEREST_CLIENT_ID}:${process.env.PINTEREST_CLIENT_SECRET}`).toString("base64")
+            const response = await fetch(tokenUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Authorization": `Basic ${auth}`
+                },
+                body: new URLSearchParams({
+                    code,
+                    redirect_uri: redirectUri,
+                    grant_type: "authorization_code",
+                })
+            })
+            // Pinterest needs special handling for the response
+            if (!response.ok) {
+                const errorData = await response.json()
+                console.error(`[OAUTH_TOKEN_ERROR_PINTEREST]`, errorData)
+                return new NextResponse("Failed to exchange token", { status: 500 })
+            }
+            const data = await response.json()
+            return NextResponse.json({
+                accessToken: data.access_token,
+                refreshToken: data.refresh_token || null,
+                expiresAt: data.expires_in ? new Date(Date.now() + data.expires_in * 1000) : null,
+            })
+        } else if (platform === "instagram") {
+            tokenUrl = "https://api.instagram.com/oauth/access_token"
+            body = {
+                client_id: process.env.INSTAGRAM_CLIENT_ID,
+                client_secret: process.env.INSTAGRAM_CLIENT_SECRET,
+                grant_type: "authorization_code",
+                redirect_uri: redirectUri,
+                code,
+            }
         }
 
-        return NextResponse.json(mockTokens)
+        const response = await fetch(tokenUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json()
+            console.error(`[OAUTH_TOKEN_ERROR_${platform.toUpperCase()}]`, errorData)
+            return new NextResponse("Failed to exchange token", { status: 500 })
+        }
+
+        const data = await response.json()
+
+        return NextResponse.json({
+            accessToken: data.access_token,
+            refreshToken: data.refresh_token || null,
+            expiresAt: data.expires_in ? new Date(Date.now() + data.expires_in * 1000) : null,
+        })
     } catch (error) {
         console.error(`[OAUTH_CALLBACK_${platform.toUpperCase()}]`, error)
         return new NextResponse("Internal Error", { status: 500 })

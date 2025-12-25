@@ -52,6 +52,33 @@ export async function POST(req: Request) {
             return new NextResponse("Missing required fields", { status: 400 })
         }
 
+        // Optional: Validate credentials for specific platforms
+        if (platform === "hotmart" && apiKey) {
+            try {
+                const hotmartRes = await fetch("https://developers.hotmart.com/payments/api/v1/users/me", {
+                    headers: { "Authorization": `Bearer ${apiKey}` }
+                })
+                if (!hotmartRes.ok) {
+                    return new NextResponse("Token Hotmart inválido", { status: 400 })
+                }
+            } catch (e) {
+                console.error("Hotmart validation error", e)
+            }
+        }
+
+        if (platform === "eduzz" && apiKey) {
+            try {
+                const eduzzRes = await fetch("https://api2.eduzz.com/credential/v1/me", {
+                    headers: { "token": apiKey }
+                })
+                if (!eduzzRes.ok) {
+                    return new NextResponse("API Key Eduzz inválida", { status: 400 })
+                }
+            } catch (e) {
+                console.error("Eduzz validation error", e)
+            }
+        }
+
         const integration = await db.integration.create({
             data: {
                 userId: (session.user as any).id,

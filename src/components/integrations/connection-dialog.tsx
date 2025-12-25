@@ -49,33 +49,86 @@ export function ConnectionDialog({
         onClose()
     }
 
-    const isOAuthPlatform = platformName.includes("Google") || platformName.includes("Meta") || platformName.includes("Facebook") || platformName.includes("TikTok") || platformName.includes("Instagram")
+    const isOAuthPlatform = platformName.includes("Google") ||
+        platformName.includes("Meta") ||
+        platformName.includes("Facebook") ||
+        platformName.includes("TikTok") ||
+        platformName.includes("Instagram") ||
+        platformName.includes("YouTube") ||
+        platformName.includes("Pinterest")
 
     const handleOAuthConnect = async () => {
-        // In a real scenario, this would open a popup to our OAuth route
-        // which would then redirect to the platform
         const platformId = platformName.toLowerCase().replace(" ", "_")
 
         try {
             const res = await fetch(`/api/integrations/oauth/${platformId}`)
             if (res.ok) {
-                // In a real scenario, we would use the config from the API
-                // const config = await res.json()
+                const config = await res.json()
+                const { authUrl, clientId, scope, redirectUri } = config
 
-                // Simulate OAuth popup and callback
-                // In production, window.open(config.authUrl) would be used
-                console.log(`Opening OAuth popup for ${platformName}...`)
+                // Construct the full OAuth URL
+                const url = new URL(authUrl)
+                url.searchParams.append("client_id", clientId)
+                url.searchParams.append("redirect_uri", redirectUri)
+                url.searchParams.append("response_type", "code")
+                url.searchParams.append("scope", scope)
+                url.searchParams.append("access_type", "offline") // For Google refresh tokens
+                url.searchParams.append("prompt", "consent")
 
-                // Mocking the callback result
-                setTimeout(() => {
-                    onConnect({
-                        name: `${platformName} Account`,
-                        accessToken: "mock_access_token",
-                        refreshToken: "mock_refresh_token",
-                        expiresAt: new Date(Date.now() + 3600 * 1000).toISOString()
-                    })
-                    onClose()
-                }, 1500)
+                // Open popup
+                const width = 600
+                const height = 700
+                const left = window.screenX + (window.innerWidth - width) / 2
+                const top = window.screenY + (window.innerHeight - height) / 2
+                const popup = window.open(
+                    url.toString(),
+                    "oauth-popup",
+                    `width=${width},height=${height},left=${left},top=${top}`
+                )
+
+                // Listen for message from callback
+                const handleMessage = async (event: MessageEvent) => {
+                    if (event.origin !== window.location.origin) return
+                    if (event.data?.type === "OAUTH_CALLBACK") {
+                        window.removeEventListener("message", handleMessage)
+                        const { code, error } = event.data
+
+                        if (error) {
+                            console.error("OAuth Error from popup:", error)
+                            return
+                        }
+
+                        if (code) {
+                            // Exchange code for tokens
+                            const tokenRes = await fetch(`/api/integrations/oauth/${platformId}`, {
+                                method: "POST",
+                                body: JSON.stringify({ code }),
+                            })
+
+                            if (tokenRes.ok) {
+                                const tokens = await tokenRes.json()
+                                onConnect({
+                                    name: `${platformName} Account`,
+                                    platform: platformId,
+                                    ...tokens,
+                                })
+                                onClose()
+                            } else {
+                                console.error("Failed to exchange token")
+                            }
+                        }
+                    }
+                }
+
+                window.addEventListener("message", handleMessage)
+
+                // Cleanup listener if popup is closed manually
+                const checkPopup = setInterval(() => {
+                    if (!popup || popup.closed) {
+                        clearInterval(checkPopup)
+                        window.removeEventListener("message", handleMessage)
+                    }
+                }, 1000)
             }
         } catch (error) {
             console.error("OAuth Error:", error)
