@@ -39,6 +39,7 @@ export function ConnectionDialog({
     ],
 }: ConnectionDialogProps) {
     const [formData, setFormData] = useState<Record<string, string>>({})
+    const [error, setError] = useState<string | null>(null)
 
     const handleChange = (name: string, value: string) => {
         setFormData((prev) => ({ ...prev, [name]: value }))
@@ -59,6 +60,7 @@ export function ConnectionDialog({
 
     const handleOAuthConnect = async () => {
         const platformId = platformName.toLowerCase().replace(" ", "_")
+        setError(null)
 
         try {
             const res = await fetch(`/api/integrations/oauth/${platformId}`)
@@ -91,10 +93,10 @@ export function ConnectionDialog({
                     if (event.origin !== window.location.origin) return
                     if (event.data?.type === "OAUTH_CALLBACK") {
                         window.removeEventListener("message", handleMessage)
-                        const { code, error } = event.data
+                        const { code, error: callbackError } = event.data
 
-                        if (error) {
-                            console.error("OAuth Error from popup:", error)
+                        if (callbackError) {
+                            setError(`Erro na autenticação: ${callbackError}`)
                             return
                         }
 
@@ -114,7 +116,7 @@ export function ConnectionDialog({
                                 })
                                 onClose()
                             } else {
-                                console.error("Failed to exchange token")
+                                setError("Falha ao trocar código por token de acesso.")
                             }
                         }
                     }
@@ -129,9 +131,13 @@ export function ConnectionDialog({
                         window.removeEventListener("message", handleMessage)
                     }
                 }, 1000)
+            } else {
+                const errorText = await res.text()
+                setError(errorText || "Erro ao iniciar conexão OAuth.")
             }
         } catch (error) {
             console.error("OAuth Error:", error)
+            setError("Erro interno ao tentar conectar.")
         }
     }
 
@@ -175,6 +181,11 @@ export function ConnectionDialog({
                         <p className="text-sm text-center text-gray-400 max-w-[300px]">
                             Você será redirecionado para a página de autorização do {platformName}.
                         </p>
+                        {error && (
+                            <div className="w-full p-3 rounded-md bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center">
+                                {error}
+                            </div>
+                        )}
                         <Button
                             className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
                             onClick={handleOAuthConnect}

@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { LoginModal } from "@/components/auth/login-modal"
-import { Globe, ArrowRight, CheckCircle2, BarChart3, Zap, Shield } from "lucide-react"
+import { ArrowRight, CheckCircle2, BarChart3, Zap, Shield } from "lucide-react"
 import Link from "next/link"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { LocaleProvider, useLocale } from "@/contexts/locale-context"
 import { LanguageSelector } from "@/components/ui/language-selector"
 import { Users, Package, Megaphone, Share2 } from "lucide-react"
+import { Logo3D } from "@/components/ui/logo-3d"
 
 function LandingPageContent() {
   const { data: session, status } = useSession()
@@ -49,8 +50,8 @@ function LandingPageContent() {
       <header className="fixed top-0 w-full z-50 glass border-b border-white/10">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Globe className="w-8 h-8 text-indigo-500" />
-            <span className="text-xl font-bold text-white">Affiliate<span className="text-indigo-500">AI</span></span>
+            <Logo3D className="w-10 h-10" />
+            <span className="text-xl font-bold text-white">Affiliate<span className="text-yellow-500">AI</span></span>
           </div>
           <nav className="hidden md:flex items-center gap-8">
             <Link href="#features" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
@@ -242,21 +243,238 @@ function LandingPageContent() {
           </div>
         </div>
       </section>
+      {/* Pricing Section */}
+      <section id="pricing" className="py-20 bg-black/20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Planos e Preços</h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Escolha o plano ideal para o seu momento e comece a escalar suas vendas hoje mesmo.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Free Plan */}
+            <div className="p-8 rounded-3xl glass border border-white/10 flex flex-col hover:border-white/20 transition-all">
+              <div className="mb-8">
+                <h3 className="text-xl font-bold text-white mb-2">Free</h3>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-white">R$ 0</span>
+                  <span className="text-gray-500">/mês</span>
+                </div>
+                <p className="text-sm text-gray-500 mt-2">Para quem está começando.</p>
+              </div>
+              <ul className="space-y-4 mb-8 flex-1">
+                <li className="flex items-center gap-3 text-gray-300 text-sm">
+                  <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
+                  Até 3 produtos ativos
+                </li>
+                <li className="flex items-center gap-3 text-gray-300 text-sm">
+                  <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
+                  5 criativos por mês
+                </li>
+                <li className="flex items-center gap-3 text-gray-300 text-sm">
+                  <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
+                  Analytics básico
+                </li>
+                <li className="flex items-center gap-3 text-gray-500 text-sm line-through">
+                  Automação Social
+                </li>
+              </ul>
+              <LoginModal>
+                <Button variant="outline" className="w-full border-white/10 text-white hover:bg-white/5">
+                  Começar Agora
+                </Button>
+              </LoginModal>
+            </div>
 
-      {/* Footer */}
+            {/* Pro Plan */}
+            <div className="p-8 rounded-3xl glass border-2 border-indigo-500/50 flex flex-col relative transform scale-105 shadow-2xl shadow-indigo-500/10">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-indigo-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                Mais Popular
+              </div>
+              <div className="mb-8">
+                <h3 className="text-xl font-bold text-white mb-2">Pro</h3>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-white">R$ 97</span>
+                  <span className="text-gray-500">/mês</span>
+                </div>
+                <p className="text-sm text-indigo-400 mt-2">Para afiliados profissionais.</p>
+              </div>
+              <ul className="space-y-4 mb-8 flex-1">
+                <li className="flex items-center gap-3 text-gray-300 text-sm">
+                  <CheckCircle2 className="w-5 h-5 text-indigo-500 shrink-0" />
+                  Produtos ilimitados
+                </li>
+                <li className="flex items-center gap-3 text-gray-300 text-sm">
+                  <CheckCircle2 className="w-5 h-5 text-indigo-500 shrink-0" />
+                  50 criativos por mês
+                </li>
+                <li className="flex items-center gap-3 text-gray-300 text-sm">
+                  <CheckCircle2 className="w-5 h-5 text-indigo-500 shrink-0" />
+                  IA de Copy Avançada
+                </li>
+                <li className="flex items-center gap-3 text-gray-300 text-sm">
+                  <CheckCircle2 className="w-5 h-5 text-indigo-500 shrink-0" />
+                  Analytics Detalhado
+                </li>
+              </ul>
+              <LoginModal>
+                <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/20">
+                  Assinar Agora
+                </Button>
+              </LoginModal>
+            </div>
+
+            {/* Business Plan */}
+            <div className="p-8 rounded-3xl glass border border-white/10 flex flex-col hover:border-white/20 transition-all">
+              <div className="mb-8">
+                <h3 className="text-xl font-bold text-white mb-2">Business</h3>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-white">R$ 197</span>
+                  <span className="text-gray-500">/mês</span>
+                </div>
+                <p className="text-sm text-gray-500 mt-2">Para agências e grandes operações.</p>
+              </div>
+              <ul className="space-y-4 mb-8 flex-1">
+                <li className="flex items-center gap-3 text-gray-300 text-sm">
+                  <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
+                  Tudo no Pro
+                </li>
+                <li className="flex items-center gap-3 text-gray-300 text-sm">
+                  <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
+                  Automação Social Ilimitada
+                </li>
+                <li className="flex items-center gap-3 text-gray-300 text-sm">
+                  <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
+                  Suporte Prioritário 24/7
+                </li>
+                <li className="flex items-center gap-3 text-gray-300 text-sm">
+                  <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
+                  Acesso Antecipado a Novas IAs
+                </li>
+              </ul>
+              <LoginModal>
+                <Button variant="outline" className="w-full border-white/10 text-white hover:bg-white/5">
+                  Falar com Consultor
+                </Button>
+              </LoginModal>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* Testimonials Section */}
+      <section id="testimonials" className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">O que dizem nossos usuários</h2>
+            <p className="text-gray-400">Junte-se a centenas de afiliados que já estão escalando com IA.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="p-8 rounded-2xl glass border border-white/10">
+              <div className="flex gap-1 text-yellow-500 mb-4">
+                {"★".repeat(5)}
+              </div>
+              <p className="text-gray-300 mb-6 italic">
+                "O AffiliateAI mudou o meu jogo. Antes eu perdia horas criando copys, agora a IA faz tudo em segundos e com muito mais conversão."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center font-bold text-indigo-400">
+                  JS
+                </div>
+                <div>
+                  <p className="text-white font-bold text-sm">João Silva</p>
+                  <p className="text-gray-500 text-xs">Afiliado Pro</p>
+                </div>
+              </div>
+            </div>
+            <div className="p-8 rounded-2xl glass border border-white/10">
+              <div className="flex gap-1 text-yellow-500 mb-4">
+                {"★".repeat(5)}
+              </div>
+              <p className="text-gray-300 mb-6 italic">
+                "A integração com o Instagram e TikTok é fantástica. Postar criativos nunca foi tão fácil. Recomendo muito!"
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-purple-400">
+                  MA
+                </div>
+                <div>
+                  <p className="text-white font-bold text-sm">Maria Almeida</p>
+                  <p className="text-gray-500 text-xs">Social Media</p>
+                </div>
+              </div>
+            </div>
+            <div className="p-8 rounded-2xl glass border border-white/10">
+              <div className="flex gap-1 text-yellow-500 mb-4">
+                {"★".repeat(5)}
+              </div>
+              <p className="text-gray-300 mb-6 italic">
+                "O suporte é excelente e a plataforma é muito intuitiva. O ROI das minhas campanhas subiu 40% no primeiro mês."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center font-bold text-emerald-400">
+                  RC
+                </div>
+                <div>
+                  <p className="text-white font-bold text-sm">Ricardo Costa</p>
+                  <p className="text-gray-500 text-xs">Infoprodutor</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="py-20 bg-black/20">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Perguntas Frequentes</h2>
+            <p className="text-gray-400">
+              Tudo o que você precisa saber sobre o AffiliateAI.
+            </p>
+          </div>
+          <div className="space-y-4">
+            <div className="p-6 rounded-2xl glass border border-white/10">
+              <h3 className="text-lg font-bold text-white mb-2">Como a IA gera os criativos?</h3>
+              <p className="text-gray-400">
+                Nossa IA analisa o seu link de produto, extrai as principais características e benefícios, e gera automaticamente copys persuasivas e sugestões de imagens/vídeos otimizados para conversão.
+              </p>
+            </div>
+            <div className="p-6 rounded-2xl glass border border-white/10">
+              <h3 className="text-lg font-bold text-white mb-2">Quais plataformas são suportadas?</h3>
+              <p className="text-gray-400">
+                Atualmente suportamos Hotmart, Eduzz, Kiwify e integração direta com Meta Ads (Facebook/Instagram), Google Ads, TikTok e Pinterest.
+              </p>
+            </div>
+            <div className="p-6 rounded-2xl glass border border-white/10">
+              <h3 className="text-lg font-bold text-white mb-2">Preciso ter experiência com tráfego pago?</h3>
+              <p className="text-gray-400">
+                Não! O AffiliateAI foi desenhado tanto para iniciantes quanto para profissionais. A IA cuida da parte técnica e criativa para você.
+              </p>
+            </div>
+            <div className="p-6 rounded-2xl glass border border-white/10">
+              <h3 className="text-lg font-bold text-white mb-2">Posso cancelar minha assinatura a qualquer momento?</h3>
+              <p className="text-gray-400">
+                Sim, você pode cancelar sua assinatura Pro ou Business a qualquer momento diretamente pelo seu painel de configurações, sem letras miúdas.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
       <footer className="py-12 border-t border-white/10 bg-black/40 mt-auto">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-2">
-              <Globe className="w-6 h-6 text-indigo-500" />
-              <span className="text-lg font-bold text-white">Affiliate<span className="text-indigo-500">AI</span></span>
+              <Logo3D className="w-8 h-8" />
+              <span className="text-lg font-bold text-white">Affiliate<span className="text-yellow-500">AI</span></span>
             </div>
             <div className="text-gray-500 text-sm">
               © 2024 AffiliateAI. Todos os direitos reservados.
             </div>
             <div className="flex gap-6">
               <Link href="#" className="text-gray-400 hover:text-white transition-colors">Termos</Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">Privacidade</Link>
+              <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacidade</Link>
               <Link href="#" className="text-gray-400 hover:text-white transition-colors">Contato</Link>
             </div>
           </div>

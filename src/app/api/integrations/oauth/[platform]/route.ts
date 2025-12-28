@@ -56,9 +56,9 @@ export async function GET(
             redirectUri,
         },
         instagram: {
-            authUrl: "https://api.instagram.com/oauth/authorize",
-            clientId: process.env.INSTAGRAM_CLIENT_ID || "",
-            scope: "instagram_basic,instagram_content_publish",
+            authUrl: "https://www.facebook.com/v12.0/dialog/oauth",
+            clientId: process.env.INSTAGRAM_CLIENT_ID || process.env.META_ADS_CLIENT_ID || "",
+            scope: "instagram_basic,instagram_content_publish,pages_read_engagement",
             redirectUri,
         },
     }
@@ -67,6 +67,10 @@ export async function GET(
 
     if (!platformConfig) {
         return new NextResponse("Platform not supported for OAuth", { status: 400 })
+    }
+
+    if (!platformConfig.clientId) {
+        return new NextResponse(`Configuração ausente para ${platform}. Verifique as variáveis de ambiente.`, { status: 400 })
     }
 
     return NextResponse.json(platformConfig)

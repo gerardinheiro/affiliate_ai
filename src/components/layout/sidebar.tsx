@@ -21,6 +21,7 @@ import {
 import { useSession } from "next-auth/react"
 import { useState, useEffect } from "react"
 import { LevelProgress } from "@/components/gamification/level-progress"
+import { Logo3D } from "@/components/ui/logo-3d"
 
 const routes = [
     {
@@ -144,11 +145,9 @@ export function Sidebar({ showMobile = false, onClose }: { showMobile?: boolean,
             )}>
                 <div className="px-3 py-2 flex-1">
                     <Link href="/" className="flex items-center pl-3 mb-14">
-                        <div className="relative w-8 h-8 mr-4">
-                            <Globe className="w-8 h-8 text-indigo-500" />
-                        </div>
+                        <Logo3D className="w-10 h-10 mr-3" />
                         <h1 className="text-2xl font-bold">
-                            Affiliate<span className="text-indigo-500">AI</span>
+                            Affiliate<span className="text-yellow-500">AI</span>
                         </h1>
                     </Link>
                     <div className="space-y-1">
