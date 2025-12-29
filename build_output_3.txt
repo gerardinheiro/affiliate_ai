@@ -1,0 +1,49 @@
+
+> affiliate_ai@0.1.0 build
+> prisma generate && next build
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+
+Ô£ö Generated Prisma Client (v5.10.2) to .\node_modules\@prisma\client in 256ms
+
+Start using Prisma Client in Node.js (See: https://pris.ly/d/client)
+```
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
+```
+or start using Prisma Client at the edge (See: https://pris.ly/d/accelerate)
+```
+import { PrismaClient } from '@prisma/client/edge'
+const prisma = new PrismaClient()
+```
+
+See other ways of importing Prisma Client: http://pris.ly/d/importing-client
+
+ÔöîÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÉ
+Ôöé  Deploying your app to serverless or edge functions?        Ôöé
+Ôöé  Try Prisma Accelerate for connection pooling and caching.  Ôöé
+Ôöé  https://pris.ly/cli/accelerate                             Ôöé
+ÔööÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÿ
+
+   Ôû▓ Next.js 16.0.7 (Turbopack)
+   - Environments: .env.local, .env
+
+ ÔÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+   Creating an optimized production build ...
+ Ô£ô Compiled successfully in 12.5s
+   Running TypeScript ...
+Failed to compile.
+
+./src/app/integrations/page.tsx:328:37
+Type error: Type '{ isConnected: boolean; onConnect: () => void; onConfigure: () => void; id: string; name: string; description: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; color: string; signupUrl: string; key: string; }' is not assignable to type 'IntrinsicAttributes & IntegrationCardProps'.
+  Property 'onConnect' does not exist on type 'IntrinsicAttributes & IntegrationCardProps'.
+
+  326 |                                     {...platform}
+  327 |                                     isConnected={connectedPlatformIds.includes(platform.id)}
+> 328 |                                     onConnect={() => handleConnectClick(platform)}
+      |                                     ^
+  329 |                                     onConfigure={() => handleConnectClick(platform)}
+  330 |                                 />
+  331 |                             ))}
+Next.js build worker exited with code: 1 and signal: null

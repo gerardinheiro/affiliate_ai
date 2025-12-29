@@ -1,7 +1,7 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Sparkles, Trash2 } from "lucide-react"
+import { ExternalLink, Sparkles, Trash2, Megaphone } from "lucide-react"
 
 interface ProductCardProps {
     id: string
@@ -13,6 +13,7 @@ interface ProductCardProps {
     onGenerateCopy: () => void
     onViewLink: () => void
     onDelete?: () => void
+    onPromote?: () => void
 }
 
 export function ProductCard({
@@ -25,6 +26,7 @@ export function ProductCard({
     onGenerateCopy,
     onViewLink,
     onDelete,
+    onPromote,
 }: ProductCardProps) {
     return (
         <Card className="overflow-hidden flex flex-col justify-between hover-lift animate-fade-in group border-white/10 hover:border-indigo-500/50 transition-all duration-300 glass">
@@ -55,30 +57,42 @@ export function ProductCard({
                     </span>
                 </div>
             </CardHeader>
-            <CardFooter className="p-4 pt-0 flex gap-2">
-                <Button
-                    variant="outline"
-                    className="flex-1 border-white/10 hover:bg-white/10 hover:text-white transition-all text-gray-300"
-                    onClick={onViewLink}
-                >
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Link
-                </Button>
-                <Button
-                    className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all border-0"
-                    onClick={onGenerateCopy}
-                >
-                    <Sparkles className="w-4 h-4 mr-2" />
-                    IA
-                </Button>
+            <CardFooter className="p-4 pt-0 flex flex-col gap-2">
+                <div className="flex gap-2 w-full">
+                    <Button
+                        variant="outline"
+                        className="flex-1 border-white/10 hover:bg-white/10 hover:text-white transition-all text-gray-300"
+                        onClick={onViewLink}
+                    >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Link
+                    </Button>
+                    <Button
+                        className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all border-0"
+                        onClick={onGenerateCopy}
+                    >
+                        <Sparkles className="w-4 h-4 mr-2" />
+                        IA
+                    </Button>
+                </div>
+                {onPromote && (
+                    <Button
+                        className="w-full bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30"
+                        onClick={onPromote}
+                    >
+                        <Megaphone className="w-4 h-4 mr-2" />
+                        Promover
+                    </Button>
+                )}
                 {onDelete && (
                     <Button
                         variant="ghost"
-                        size="icon"
+                        size="sm"
                         onClick={onDelete}
-                        className="hover:bg-red-500/10 hover:text-red-400 text-gray-400 transition-all"
+                        className="w-full hover:bg-red-500/10 hover:text-red-400 text-gray-400 transition-all mt-1"
                     >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Remover
                     </Button>
                 )}
             </CardFooter>

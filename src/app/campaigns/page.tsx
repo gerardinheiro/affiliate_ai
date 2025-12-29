@@ -26,7 +26,7 @@ import {
 
 type Campaign = {
     id: string
-    title: string
+    name: string
     platform: string
     status: "active" | "paused"
     clicks: number
@@ -40,7 +40,7 @@ export default function CampaignsPage() {
     const [isLoading, setIsLoading] = useState(true)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [newCampaign, setNewCampaign] = useState({
-        title: "",
+        name: "",
         platform: "Google Ads",
     })
 
@@ -63,7 +63,7 @@ export default function CampaignsPage() {
     }
 
     const handleCreateCampaign = async () => {
-        if (!newCampaign.title) return
+        if (!newCampaign.name) return
 
         try {
             const res = await fetch("/api/campaigns", {
@@ -75,7 +75,7 @@ export default function CampaignsPage() {
             if (res.ok) {
                 const campaign = await res.json()
                 setCampaigns([campaign, ...campaigns])
-                setNewCampaign({ title: "", platform: "Google Ads" })
+                setNewCampaign({ name: "", platform: "Google Ads" })
                 setIsDialogOpen(false)
             }
         } catch (error) {
@@ -152,12 +152,12 @@ export default function CampaignsPage() {
                             </DialogHeader>
                             <div className="grid gap-4 py-4">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="title">Nome da Campanha</Label>
+                                    <Label htmlFor="name">Nome da Campanha</Label>
                                     <Input
-                                        id="title"
+                                        id="name"
                                         placeholder="Ex: Fone Bluetooth - Google Ads"
-                                        value={newCampaign.title}
-                                        onChange={(e) => setNewCampaign({ ...newCampaign, title: e.target.value })}
+                                        value={newCampaign.name}
+                                        onChange={(e) => setNewCampaign({ ...newCampaign, name: e.target.value })}
                                     />
                                 </div>
                                 <div className="grid gap-2">
@@ -179,7 +179,7 @@ export default function CampaignsPage() {
                                 </div>
                             </div>
                             <DialogFooter>
-                                <Button onClick={handleCreateCampaign} disabled={!newCampaign.title}>
+                                <Button onClick={handleCreateCampaign} disabled={!newCampaign.name}>
                                     Criar Campanha
                                 </Button>
                             </DialogFooter>
@@ -201,7 +201,7 @@ export default function CampaignsPage() {
                             <CampaignCard
                                 key={campaign.id}
                                 id={campaign.id}
-                                title={campaign.title}
+                                name={campaign.name}
                                 platform={campaign.platform}
                                 status={campaign.status}
                                 clicks={campaign.clicks}

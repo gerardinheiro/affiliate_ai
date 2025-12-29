@@ -1,23 +1,74 @@
 import OpenAI from "openai"
 
+import { load } from "cheerio"
+
 export async function scrapeProduct(url: string) {
     try {
-        // In a real scenario, this would use Puppeteer or Cheerio
-        // For now, we'll return a mock or try to fetch meta tags
-        const response = await fetch(url)
+        const response = await fetch(url, {
+            headers: {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            }
+        })
         const html = await response.text()
+        const $ = load(html)
 
-        // Simple regex to extract title and description
-        const titleMatch = html.match(/<title>(.*?)<\/title>/)
-        const descMatch = html.match(/<meta name="description" content="(.*?)"/)
+        // Title Strategy
+        const title =
+            $('meta[property="og:title"]').attr('content') ||
+            $('meta[name="twitter:title"]').attr('content') ||
+            $('title').text() ||
+            "Produto sem título"
+
+        // Description Strategy
+        const description =
+            $('meta[property="og:description"]').attr('content') ||
+            $('meta[name="twitter:description"]').attr('content') ||
+            $('meta[name="description"]').attr('content') ||
+            "Sem descrição disponível"
+
+        // Image Strategy
+        const imageUrl =
+            $('meta[property="og:image"]').attr('content') ||
+            $('meta[name="twitter:image"]').attr('content') ||
+            $('link[rel="image_src"]').attr('href') ||
+            null
+
+        // Price Strategy (Best Effort)
+        let price = "R$ 0,00"
+
+        // Try OpenGraph Price
+        const ogPrice = $('meta[property="product:price:amount"]').attr('content')
+        const ogCurrency = $('meta[property="product:price:currency"]').attr('content') || "BRL"
+
+        if (ogPrice) {
+            price = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: ogCurrency }).format(parseFloat(ogPrice))
+        } else {
+            // Try JSON-LD
+            try {
+                $('script[type="application/ld+json"]').each((_, el) => {
+                    const json = JSON.parse($(el).html() || '{}')
+                    if (json['@type'] === 'Product' || json['@type'] === 'Offer') {
+                        const offer = json.offers || json
+                        const p = offer.price || offer.lowPrice || offer.highPrice
+                        const c = offer.priceCurrency || "BRL"
+                        if (p) {
+                            price = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: c }).format(parseFloat(p))
+                            return false // break loop
+                        }
+                    }
+                })
+            } catch (e) {
+                // ignore json parse errors
+            }
+        }
 
         return {
-            title: titleMatch ? titleMatch[1] : "Produto sem título",
-            description: descMatch ? descMatch[1] : "Sem descrição disponível",
-            images: [],
-            imageUrl: null,
-            price: "R$ 0,00",
-            platform: "Generic"
+            title: title.trim(),
+            description: description.trim(),
+            images: imageUrl ? [imageUrl] : [],
+            imageUrl,
+            price,
+            platform: new URL(url).hostname.replace('www.', '')
         }
     } catch (error) {
         console.error("Error scraping product:", error)

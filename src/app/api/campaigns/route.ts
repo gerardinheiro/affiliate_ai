@@ -34,14 +34,15 @@ export async function POST(req: NextRequest) {
 
         const userId = (session.user as any).id
         const body = await req.json()
-        const { title, platform, status } = body
+        const { name, platform, status, productId } = body
 
         const campaign = await db.campaign.create({
             data: {
-                title,
+                name,
                 platform,
                 status: status || "paused",
                 userId,
+                productId: productId || "", // Fallback for old API calls
             },
         })
 

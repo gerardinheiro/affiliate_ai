@@ -150,21 +150,28 @@ model Product {
   updatedAt     DateTime @updatedAt
   userId        String
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  campaigns     Campaign[]
 }
 
 model Campaign {
   id          String   @id @default(cuid())
-  title       String
+  name        String
   platform    String
   status      String   @default("paused") // active, paused, ended
+  imageUrl    String?
   clicks      Int      @default(0)
   conversions Int      @default(0)
+  budget      Float    @default(0.0)
   spent       Float    @default(0.0)
   revenue     Float    @default(0.0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Creative {

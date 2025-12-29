@@ -1,0 +1,175 @@
+
+> affiliate_ai@0.1.0 build
+> prisma generate && next build
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+
+Ô£ö Generated Prisma Client (v5.10.2) to .\node_modules\@prisma\client in 248ms
+
+Start using Prisma Client in Node.js (See: https://pris.ly/d/client)
+```
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
+```
+or start using Prisma Client at the edge (See: https://pris.ly/d/accelerate)
+```
+import { PrismaClient } from '@prisma/client/edge'
+const prisma = new PrismaClient()
+```
+
+See other ways of importing Prisma Client: http://pris.ly/d/importing-client
+
+ÔöîÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÉ
+Ôöé  Deploying your app to serverless or edge functions?        Ôöé
+Ôöé  Try Prisma Accelerate for connection pooling and caching.  Ôöé
+Ôöé  https://pris.ly/cli/accelerate                             Ôöé
+ÔööÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÿ
+
+   Ôû▓ Next.js 16.0.7 (Turbopack)
+   - Environments: .env.local, .env
+
+ ÔÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+   Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 6 errors:
+./src/app/achievements/page.tsx:172:27
+Parsing ecmascript source code failed
+  170 |                     })}
+  171 |                 </TabsContent>
+> 172 |             </TabsContent>
+      |                           ^
+> 173 |
+      | ^
+> 174 |             <TabsContent value="leaderboard">
+      | ^^^^^^^^^^^^^
+  175 |                 <Leaderboard />
+  176 |             </TabsContent>
+  177 |         </Tabs>
+
+Expected '</', got 'jsx text (
+
+            )'
+
+
+./src/app/u/[username]/page.tsx:47:5
+Parsing ecmascript source code failed
+  45 |     // await db.bioPage.update({ where: { id: bioPage.id }, data: { views: { increment: 1 } } })
+  46 |
+> 47 |     import { THEMES } from "@/lib/themes"
+     |     ^^^^^^
+  48 |
+  49 |     import { BioTracker } from "@/components/bio/bio-tracker"
+  50 |     import { BioLinkItem } from "@/components/bio/bio-link-item"
+
+'import', and 'export' cannot be used outside of module code
+
+
+./src/components/dashboard/stats-dashboard.tsx:24:1
+Module not found: Can't resolve '@/components/ui/skeleton'
+  22 | } from "lucide-react"
+  23 | import { StatsData } from "@/lib/stats-service"
+> 24 | import { Skeleton } from "@/components/ui/skeleton"
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  25 |
+  26 | export function StatsDashboard() {
+  27 |     const [data, setData] = useState<StatsData | null>(null)
+
+Import map: aliased to relative './src/components/ui/skeleton' inside of [project]/
+
+
+Import trace:
+  Server Component:
+    ./src/components/dashboard/stats-dashboard.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/components/campaigns/create-campaign-modal.tsx:12:1
+Module not found: Can't resolve 'sonner'
+  10 | import { generateAdCopyAction } from "@/app/actions"
+  11 | import { Megaphone, Sparkles, Loader2, Copy, Check, Image as ImageIcon } from "lucide-react"
+> 12 | import { toast } from "sonner"
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | import { ImagePicker } from "@/components/creatives/image-picker"
+  14 |
+  15 | interface CreateCampaignModalProps {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/components/campaigns/create-campaign-modal.tsx [Client Component Browser]
+    ./src/app/products/page.tsx [Client Component Browser]
+    ./src/app/products/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/campaigns/create-campaign-modal.tsx [Client Component SSR]
+    ./src/app/products/page.tsx [Client Component SSR]
+    ./src/app/products/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/components/campaigns/create-campaign-modal.tsx:10:1
+Export generateAdCopyAction doesn't exist in target module
+   8 | import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+   9 | import { Textarea } from "@/components/ui/textarea"
+> 10 | import { generateAdCopyAction } from "@/app/actions"
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | import { Megaphone, Sparkles, Loader2, Copy, Check, Image as ImageIcon } from "lucide-react"
+  12 | import { toast } from "sonner"
+  13 | import { ImagePicker } from "@/components/creatives/image-picker"
+
+The export generateAdCopyAction was not found in module [project]/src/app/actions.ts [app-client] (ecmascript).
+Did you mean to import generateCopyAction?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./src/components/campaigns/create-campaign-modal.tsx [Client Component Browser]
+    ./src/app/products/page.tsx [Client Component Browser]
+    ./src/app/products/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/campaigns/create-campaign-modal.tsx [Client Component SSR]
+    ./src/app/products/page.tsx [Client Component SSR]
+    ./src/app/products/page.tsx [Server Component]
+
+
+./src/components/campaigns/create-campaign-modal.tsx:10:1
+Export generateAdCopyAction doesn't exist in target module
+   8 | import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+   9 | import { Textarea } from "@/components/ui/textarea"
+> 10 | import { generateAdCopyAction } from "@/app/actions"
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | import { Megaphone, Sparkles, Loader2, Copy, Check, Image as ImageIcon } from "lucide-react"
+  12 | import { toast } from "sonner"
+  13 | import { ImagePicker } from "@/components/creatives/image-picker"
+
+The export generateAdCopyAction was not found in module [project]/src/app/actions.ts [app-ssr] (ecmascript).
+Did you mean to import generateCopyAction?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./src/components/campaigns/create-campaign-modal.tsx [Client Component Browser]
+    ./src/app/products/page.tsx [Client Component Browser]
+    ./src/app/products/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/campaigns/create-campaign-modal.tsx [Client Component SSR]
+    ./src/app/products/page.tsx [Client Component SSR]
+    ./src/app/products/page.tsx [Server Component]
+
+
+    at <unknown> (./src/app/achievements/page.tsx:172:27)
+    at <unknown> (./src/app/u/[username]/page.tsx:47:5)
+    at <unknown> (./src/components/dashboard/stats-dashboard.tsx:24:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/components/campaigns/create-campaign-modal.tsx:12:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/components/campaigns/create-campaign-modal.tsx:10:1)
+    at <unknown> (./src/components/campaigns/create-campaign-modal.tsx:10:1)

@@ -38,6 +38,9 @@ type Product = {
     targetCity?: string
 }
 
+import { CreateCampaignModal } from "@/components/campaigns/create-campaign-modal"
+import { ImagePicker } from "@/components/creatives/image-picker"
+
 export default function ProductsPage() {
     const [products, setProducts] = useState<Product[]>([])
     const [isLoading, setIsLoading] = useState(true)
@@ -48,6 +51,11 @@ export default function ProductsPage() {
     const [targetCity, setTargetCity] = useState("")
     const [isAdding, setIsAdding] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [manualImageUrl, setManualImageUrl] = useState("")
+
+    // Campaign Modal State
+    const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false)
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
     useEffect(() => {
         fetchProducts()
@@ -80,7 +88,7 @@ export default function ProductsPage() {
                     price: scrapedData.price,
                     commission: "R$ 0,00", // Placeholder
                     platform: scrapedData.platform,
-                    imageUrl: scrapedData.imageUrl,
+                    imageUrl: manualImageUrl || scrapedData.imageUrl,
                     affiliateLink: newProductUrl,
                     targetCountry,
                     targetState,
@@ -129,6 +137,11 @@ export default function ProductsPage() {
         }
     }
 
+    const handlePromote = (product: Product) => {
+        setSelectedProduct(product)
+        setIsCampaignModalOpen(true)
+    }
+
     if (isLoading) {
         return (
             <DashboardLayout>
@@ -175,6 +188,21 @@ export default function ProductsPage() {
                                         value={newProductUrl}
                                         onChange={(e) => setNewProductUrl(e.target.value)}
                                     />
+                                </div>
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label className="text-right text-gray-300">
+                                        Imagem (Opcional)
+                                    </Label>
+                                    <div className="col-span-3">
+                                        <ImagePicker
+                                            value={manualImageUrl}
+                                            onChange={setManualImageUrl}
+                                            label="Selecionar da Galeria"
+                                        />
+                                        <p className="text-[10px] text-gray-500 mt-1">
+                                            Se deixado em branco, tentaremos capturar a imagem do link automaticamente.
+                                        </p>
+                                    </div>
                                 </div>
                                 <div className="grid grid-cols-4 items-center gap-4">
                                     <Label className="text-right text-gray-300">País Alvo</Label>
@@ -277,9 +305,23 @@ export default function ProductsPage() {
                                 onGenerateCopy={() => handleGenerateCopy(product.title)}
                                 onViewLink={() => window.open(product.affiliateLink || "#", "_blank")}
                                 onDelete={() => handleDeleteProduct(product.id)}
+                                onPromote={() => handlePromote(product)}
                             />
                         ))}
                     </div>
+                )}
+
+                {selectedProduct && (
+                    <CreateCampaignModal
+                        isOpen={isCampaignModalOpen}
+                        onClose={() => setIsCampaignModalOpen(false)}
+                        product={{
+                            id: selectedProduct.id,
+                            title: selectedProduct.title,
+                            description: "", // We might want to store description in DB later
+                            url: selectedProduct.affiliateLink || ""
+                        }}
+                    />
                 )}
             </div>
         </DashboardLayout>

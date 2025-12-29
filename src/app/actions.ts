@@ -24,9 +24,9 @@ async function getUserContext() {
     return user
 }
 
-export async function generateCopyAction(productName: string) {
+export async function generateCopyAction(productName: string, description?: string) {
     const user = await getUserContext()
-    const description = "Produto incrível de alta qualidade com garantia de satisfação."
+    const productDescription = description || "Produto incrível de alta qualidade com garantia de satisfação."
 
     const brandContext = user ? {
         name: user.brandName || undefined,
@@ -34,7 +34,7 @@ export async function generateCopyAction(productName: string) {
         description: user.brandDescription || undefined
     } : undefined
 
-    const copy = await generateAdCopy(productName, description, user?.openaiApiKey || undefined, brandContext)
+    const copy = await generateAdCopy(productName, productDescription, user?.openaiApiKey || undefined, brandContext)
 
     if (copy && user) {
         try {
@@ -47,7 +47,7 @@ export async function generateCopyAction(productName: string) {
                         headline: `Ad Copy: ${productName}`,
                         description: copy,
                         cta: 'Learn More',
-                        prompt: `Product: ${productName}, Desc: ${description}`
+                        prompt: `Product: ${productName}, Desc: ${productDescription}`
                     }
                 })
 

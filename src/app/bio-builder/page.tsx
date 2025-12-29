@@ -7,56 +7,14 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Plus, Trash2, GripVertical, ExternalLink, Save, Loader2, Layout, Link as LinkIcon } from "lucide-react"
+import { Plus, ExternalLink, Save, Loader2 } from "lucide-react"
 import { Textarea } from "@/components/ui/textarea"
+import { LinkEditor } from "@/components/bio/link-editor"
+import { BioAnalytics } from "@/components/bio/bio-analytics"
 
-type BioLink = {
-    id: string
-    title: string
-    url: string
-    icon: string
-    order: number
-}
+import { BioPage, BioLink } from "@/types/bio"
 
-type BioPage = {
-    username: string
-    displayName: string
-    bio: string
-    theme: string
-    avatarUrl: string
-    links: BioLink[]
-}
-
-const THEMES = {
-    default: {
-        name: "Simple Dark",
-        bg: "bg-gradient-to-br from-gray-900 to-black",
-        text: "text-white",
-        card: "bg-white/10 text-white hover:bg-white/20",
-        button: "bg-white text-black hover:bg-gray-200"
-    },
-    light: {
-        name: "Clean Light",
-        bg: "bg-gray-50",
-        text: "text-gray-900",
-        card: "bg-white border border-gray-200 text-gray-900 shadow-sm hover:shadow-md",
-        button: "bg-black text-white hover:bg-gray-800"
-    },
-    gradient: {
-        name: "Gradient Purple",
-        bg: "bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500",
-        text: "text-white",
-        card: "bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30",
-        button: "bg-white text-purple-600 hover:bg-gray-100"
-    },
-    neon: {
-        name: "Neon Cyber",
-        bg: "bg-black",
-        text: "text-green-400 font-mono",
-        card: "bg-black border border-green-500/50 text-green-400 hover:bg-green-500/10 hover:border-green-400",
-        button: "bg-green-500 text-black hover:bg-green-400 font-bold"
-    }
-}
+import { THEMES } from "@/lib/themes"
 
 export default function BioBuilderPage() {
     const [bioPage, setBioPage] = useState<BioPage | null>(null)
@@ -142,6 +100,25 @@ export default function BioBuilderPage() {
         }
     }
 
+    const handleReorderLinks = async (newLinks: BioLink[]) => {
+        // Optimistic update
+        setBioPage(prev => prev ? { ...prev, links: newLinks } : null)
+
+        try {
+            await fetch("/api/bio/links", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    links: newLinks.map((l, index) => ({ id: l.id, order: index }))
+                })
+            })
+        } catch (error) {
+            console.error("Error reordering links:", error)
+            // Revert on error (optional, but good practice)
+            fetchBioPage()
+        }
+    }
+
     if (isLoading) return <DashboardLayout><div className="p-8 text-white">Carregando...</div></DashboardLayout>
 
     return (
@@ -169,6 +146,7 @@ export default function BioBuilderPage() {
                             <TabsList className="grid w-full grid-cols-2 bg-white/5">
                                 <TabsTrigger value="links">Links</TabsTrigger>
                                 <TabsTrigger value="appearance">Aparência</TabsTrigger>
+                                <TabsTrigger value="analytics">Analytics</TabsTrigger>
                             </TabsList>
 
                             <TabsContent value="links" className="space-y-6 mt-6">
@@ -202,23 +180,13 @@ export default function BioBuilderPage() {
                                 </Card>
 
                                 <div className="space-y-4">
-                                    {bioPage?.links.map((link) => (
-                                        <div key={link.id} className="flex items-center gap-4 p-4 rounded-lg glass border border-white/10 group">
-                                            <GripVertical className="text-gray-500 cursor-move" />
-                                            <div className="flex-1">
-                                                <h4 className="font-medium text-white">{link.title}</h4>
-                                                <p className="text-sm text-gray-400 truncate">{link.url}</p>
-                                            </div>
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                className="text-red-400 hover:bg-red-500/10"
-                                                onClick={() => handleDeleteLink(link.id)}
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </Button>
-                                        </div>
-                                    ))}
+                                    {bioPage?.links && (
+                                        <LinkEditor
+                                            links={bioPage.links}
+                                            onReorder={handleReorderLinks}
+                                            onDelete={handleDeleteLink}
+                                        />
+                                    )}
                                 </div>
                             </TabsContent>
 
@@ -290,6 +258,10 @@ export default function BioBuilderPage() {
                                         </div>
                                     </CardContent>
                                 </Card>
+                            </TabsContent>
+
+                            <TabsContent value="analytics" className="space-y-6 mt-6">
+                                {bioPage && <BioAnalytics bioPage={bioPage} />}
                             </TabsContent>
                         </Tabs>
                     </div>

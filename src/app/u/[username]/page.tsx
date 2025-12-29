@@ -2,6 +2,9 @@ import { db } from "@/lib/db"
 import { Button } from "@/components/ui/button"
 import { ExternalLink } from "lucide-react"
 import { Metadata } from "next"
+import { THEMES, ThemeKey } from "@/lib/themes"
+import { BioTracker } from "@/components/bio/bio-tracker"
+import { BioLinkItem } from "@/components/bio/bio-link-item"
 
 // Force dynamic rendering for public profile
 export const dynamic = 'force-dynamic'
@@ -44,37 +47,11 @@ export default async function PublicBioPage({ params }: Props) {
     // In a real app, use a separate API route or server action to avoid blocking
     // await db.bioPage.update({ where: { id: bioPage.id }, data: { views: { increment: 1 } } })
 
-    const THEMES = {
-        default: {
-            bg: "bg-gradient-to-br from-gray-900 to-black",
-            text: "text-white",
-            card: "bg-white/10 text-white hover:bg-white/20 border-white/5",
-            button: "bg-white text-black hover:bg-gray-200"
-        },
-        light: {
-            bg: "bg-gray-50",
-            text: "text-gray-900",
-            card: "bg-white border-gray-200 text-gray-900 shadow-sm hover:shadow-md",
-            button: "bg-black text-white hover:bg-gray-800"
-        },
-        gradient: {
-            bg: "bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500",
-            text: "text-white",
-            card: "bg-white/20 backdrop-blur-md border-white/30 text-white hover:bg-white/30",
-            button: "bg-white text-purple-600 hover:bg-gray-100"
-        },
-        neon: {
-            bg: "bg-black",
-            text: "text-green-400 font-mono",
-            card: "bg-black border-green-500/50 text-green-400 hover:bg-green-500/10 hover:border-green-400",
-            button: "bg-green-500 text-black hover:bg-green-400 font-bold"
-        }
-    }
-
-    const theme = THEMES[bioPage.theme as keyof typeof THEMES] || THEMES.default
+    const theme = THEMES[bioPage.theme as ThemeKey] || THEMES.default
 
     return (
         <div className={`min-h-screen p-6 ${theme.bg} ${theme.text}`}>
+            <BioTracker bioPageId={bioPage.id} />
             <div className="max-w-md mx-auto pt-12 text-center space-y-8">
                 {/* Profile Header */}
                 <div className="space-y-4">
@@ -96,18 +73,15 @@ export default async function PublicBioPage({ params }: Props) {
                 {/* Links */}
                 <div className="space-y-4">
                     {bioPage.links.map((link) => (
-                        <a
+                        <BioLinkItem
                             key={link.id}
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`block w-full p-4 rounded-xl transition-all transform hover:scale-[1.02] border ${theme.card}`}
-                        >
-                            <div className="flex items-center justify-center relative">
-                                <span className="font-medium">{link.title}</span>
-                                <ExternalLink className={`w-4 h-4 absolute right-0 opacity-50 ${theme.text}`} />
-                            </div>
-                        </a>
+                            link={{
+                                ...link,
+                                icon: link.icon || ""
+                            }}
+                            bioPageId={bioPage.id}
+                            theme={bioPage.theme as ThemeKey}
+                        />
                     ))}
 
                     {bioPage.links.length === 0 && (

@@ -8,14 +8,17 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Loader2, Copy, Video, FileText, Check } from "lucide-react"
-import { generateCopyAction, generateVideoScriptAction } from "@/app/actions"
+import { Loader2, Copy, Video, FileText, Check, Image as ImageIcon, Link as LinkIcon } from "lucide-react"
+import { generateCopyAction, generateVideoScriptAction, scrapeProductAction } from "@/app/actions"
+import { ImageGenerator } from "@/components/creatives/image-generator"
 
 export default function AIStudioPage() {
     const [isLoading, setIsLoading] = useState(false)
     const [activeTab, setActiveTab] = useState("copy")
 
     // Copy State
+    const [importUrl, setImportUrl] = useState("")
+    const [isImporting, setIsImporting] = useState(false)
     const [productName, setProductName] = useState("")
     const [productDesc, setProductDesc] = useState("")
     const [generatedCopy, setGeneratedCopy] = useState("")
@@ -24,6 +27,24 @@ export default function AIStudioPage() {
     const [scriptProduct, setScriptProduct] = useState("")
     const [scriptDesc, setScriptDesc] = useState("")
     const [generatedScript, setGeneratedScript] = useState<any[]>([])
+
+    const handleImportUrl = async () => {
+        if (!importUrl) return
+        setIsImporting(true)
+        try {
+            const data = await scrapeProductAction(importUrl)
+            if (data) {
+                setProductName(data.title)
+                setProductDesc(data.description + (data.price ? `\nPreço: ${data.price}` : ""))
+                alert("Dados importados com sucesso!")
+            }
+        } catch (error) {
+            console.error(error)
+            alert("Erro ao importar dados da URL")
+        } finally {
+            setIsImporting(false)
+        }
+    }
 
     const handleGenerateCopy = async () => {
         if (!productName || !productDesc) return
@@ -69,9 +90,10 @@ export default function AIStudioPage() {
                 </div>
 
                 <Tabs defaultValue="copy" value={activeTab} onValueChange={setActiveTab} className="w-full">
-                    <TabsList className="grid w-full grid-cols-2 bg-white/5">
+                    <TabsList className="grid w-full grid-cols-3 bg-white/5">
                         <TabsTrigger value="copy" className="gap-2"><FileText className="w-4 h-4" /> Ad Copy Generator</TabsTrigger>
                         <TabsTrigger value="video" className="gap-2"><Video className="w-4 h-4" /> Video Script Writer</TabsTrigger>
+                        <TabsTrigger value="image" className="gap-2"><ImageIcon className="w-4 h-4" /> Image Generator</TabsTrigger>
                     </TabsList>
 
                     {/* AD COPY TAB */}
@@ -82,6 +104,26 @@ export default function AIStudioPage() {
                                 <CardDescription>Descreva o que você quer vender.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label className="text-gray-300">Importar de URL (Opcional)</Label>
+                                    <div className="flex gap-2">
+                                        <Input
+                                            placeholder="https://loja.com/produto"
+                                            value={importUrl}
+                                            onChange={e => setImportUrl(e.target.value)}
+                                            className="bg-white/5 border-white/10 text-white"
+                                        />
+                                        <Button
+                                            variant="outline"
+                                            onClick={handleImportUrl}
+                                            disabled={isImporting || !importUrl}
+                                            className="whitespace-nowrap"
+                                        >
+                                            {isImporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <LinkIcon className="w-4 h-4" />}
+                                            <span className="ml-2 hidden sm:inline">Importar</span>
+                                        </Button>
+                                    </div>
+                                </div>
                                 <div className="space-y-2">
                                     <Label className="text-gray-300">Nome do Produto</Label>
                                     <Input
@@ -213,8 +255,14 @@ export default function AIStudioPage() {
                             </CardContent>
                         </Card>
                     </TabsContent>
+
+
+                    {/* IMAGE GENERATOR TAB */}
+                    <TabsContent value="image" className="mt-6">
+                        <ImageGenerator />
+                    </TabsContent>
                 </Tabs>
-            </div>
-        </DashboardLayout>
+            </div >
+        </DashboardLayout >
     )
 }

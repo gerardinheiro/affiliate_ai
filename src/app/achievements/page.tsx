@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, Lock, Trophy } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Leaderboard } from "@/components/gamification/leaderboard"
 
 interface BadgeData {
     id: string
@@ -45,7 +46,10 @@ export default function AchievementsPage() {
 
     useEffect(() => {
         fetch("/api/badges")
-            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) throw new Error("Failed to fetch badges")
+                return res.json()
+            })
             .then((data) => setData(data))
             .catch((err) => console.error("Failed to load badges", err))
             .finally(() => setIsLoading(false))
@@ -110,6 +114,7 @@ export default function AchievementsPage() {
                     <TabsTrigger value="unlocked">Desbloqueadas ({data.totalBadges})</TabsTrigger>
                     <TabsTrigger value="locked">Bloqueadas ({data.lockedBadges.length})</TabsTrigger>
                     <TabsTrigger value="rarity">Por Raridade</TabsTrigger>
+                    <TabsTrigger value="leaderboard">Ranking</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="unlocked" className="space-y-4">
@@ -164,8 +169,12 @@ export default function AchievementsPage() {
                         )
                     })}
                 </TabsContent>
+
+                <TabsContent value="leaderboard">
+                    <Leaderboard />
+                </TabsContent>
             </Tabs>
-        </div>
+        </div >
     )
 }
 

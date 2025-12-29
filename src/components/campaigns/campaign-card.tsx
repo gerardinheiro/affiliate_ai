@@ -5,7 +5,7 @@ import { BarChart3, PauseCircle, PlayCircle, Trash2 } from "lucide-react"
 
 interface CampaignCardProps {
     id: string
-    title: string
+    name: string
     platform: string
     status: "active" | "paused" | "ended"
     clicks: number
@@ -18,7 +18,7 @@ interface CampaignCardProps {
 
 export function CampaignCard({
     id,
-    title,
+    name,
     platform,
     status,
     clicks,
@@ -35,7 +35,7 @@ export function CampaignCard({
             <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-3 bg-white/5 border-b border-white/5">
                 <div className="space-y-2 flex-1">
                     <CardTitle className="text-base font-semibold text-white line-clamp-1">
-                        {title}
+                        {name}
                     </CardTitle>
                     <div className="flex items-center gap-2 flex-wrap">
                         <Badge variant="outline" className="border-white/20 text-gray-300 font-medium">
@@ -43,8 +43,8 @@ export function CampaignCard({
                         </Badge>
                         <Badge
                             className={`${isActive
-                                    ? "bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 border-0 shadow-sm text-white"
-                                    : "bg-white/10 text-gray-400 border-0"
+                                ? "bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 border-0 shadow-sm text-white"
+                                : "bg-white/10 text-gray-400 border-0"
                                 } font-medium`}
                         >
                             {isActive ? "● Ativo" : "○ Pausado"}
@@ -91,8 +91,8 @@ export function CampaignCard({
                     size="sm"
                     onClick={onToggleStatus}
                     className={`ml-auto ${isActive
-                            ? "text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 border-amber-500/20"
-                            : "text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 border-emerald-500/20"
+                        ? "text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 border-amber-500/20"
+                        : "text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 border-emerald-500/20"
                         } transition-all font-medium bg-transparent`}
                 >
                     {isActive ? (

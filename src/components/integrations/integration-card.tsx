@@ -8,8 +8,10 @@ interface IntegrationCardProps {
     description: string
     icon: React.ElementType
     isConnected: boolean
-    onConnect: () => void
-    onConfigure: () => void
+    onConnect?: () => void
+    onConfigure?: () => void
+    onTest?: () => void
+    isTesting?: boolean
     signupUrl?: string
     color?: string
 }
@@ -21,6 +23,8 @@ export function IntegrationCard({
     isConnected,
     onConnect,
     onConfigure,
+    onTest,
+    isTesting,
     signupUrl,
     color = "text-gray-500",
 }: IntegrationCardProps) {
@@ -45,9 +49,16 @@ export function IntegrationCard({
             </CardContent>
             <CardFooter className="flex flex-col gap-2 pt-0">
                 {isConnected ? (
-                    <Button variant="outline" className="w-full" onClick={onConfigure}>
-                        Configurar
-                    </Button>
+                    <div className="flex gap-2 w-full">
+                        <Button variant="outline" className="flex-1" onClick={onConfigure}>
+                            Configurar
+                        </Button>
+                        {onTest && (
+                            <Button variant="secondary" className="flex-1" onClick={onTest} disabled={isTesting}>
+                                {isTesting ? "Testando..." : "Testar"}
+                            </Button>
+                        )}
+                    </div>
                 ) : (
                     <Button className="w-full" onClick={onConnect}>
                         Conectar

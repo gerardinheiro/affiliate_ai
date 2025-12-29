@@ -198,6 +198,43 @@ export default function IntegrationsPage() {
         }
     }
 
+    const [testingId, setTestingId] = useState<string | null>(null)
+
+    const handleTestConnection = async (integration: any) => {
+        setTestingId(integration.id)
+
+        try {
+            let url = ""
+            if (integration.platform === "google_ads") {
+                url = "/api/integrations/google-ads/test"
+            } else if (integration.platform === "tiktok_ads") {
+                url = "/api/integrations/tiktok-ads/test"
+            } else {
+                return
+            }
+
+            const res = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ integrationId: integration.id }),
+            })
+
+            const data = await res.json()
+
+            if (res.ok && data.success) {
+                const count = data.customersCount !== undefined ? data.customersCount : data.advertisersCount
+                alert(`Sucesso! ${count} contas encontradas.`)
+            } else {
+                alert(`Erro: ${data.message}`)
+            }
+        } catch (error) {
+            console.error("Test failed", error)
+            alert("Falha ao testar conexão.")
+        } finally {
+            setTestingId(null)
+        }
+    }
+
     const connectedPlatformIds = integrations.map(i => i.platform)
 
     return (
@@ -297,15 +334,20 @@ export default function IntegrationsPage() {
 
                     <TabsContent value="ads" className="space-y-4">
                         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                            {adPlatforms.map((platform) => (
-                                <IntegrationCard
-                                    key={platform.id}
-                                    {...platform}
-                                    isConnected={connectedPlatformIds.includes(platform.id)}
-                                    onConnect={() => handleConnectClick(platform)}
-                                    onConfigure={() => handleConnectClick(platform)}
-                                />
-                            ))}
+                            {adPlatforms.map((platform) => {
+                                const integration = integrations.find(i => i.platform === platform.id)
+                                return (
+                                    <IntegrationCard
+                                        key={platform.id}
+                                        {...platform}
+                                        isConnected={!!integration}
+                                        onConnect={() => handleConnectClick(platform)}
+                                        onConfigure={() => handleConnectClick(platform)}
+                                        onTest={(platform.id === "google_ads" || platform.id === "tiktok_ads") && integration ? () => handleTestConnection(integration) : undefined}
+                                        isTesting={integration && testingId === integration.id}
+                                    />
+                                )
+                            })}
                         </div>
                     </TabsContent>
 
