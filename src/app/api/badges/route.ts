@@ -7,7 +7,7 @@ import { db } from "@/lib/db"
 export const dynamic = 'force-dynamic'
 
 // GET - Get user's badges and achievements
-export async function GET(req: Request) {
+export async function GET() {
     const session = await getServerSession(authOptions)
 
     if (!session?.user) {
@@ -15,7 +15,7 @@ export async function GET(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
 
         const user = await db.user.findUnique({
             where: { id: userId },
@@ -55,7 +55,7 @@ export async function GET(req: Request) {
 }
 
 // POST - Check and award new badges
-export async function POST(req: Request) {
+export async function POST() {
     const session = await getServerSession(authOptions)
 
     if (!session?.user) {
@@ -63,7 +63,7 @@ export async function POST(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
 
         const newBadges = await checkAndAwardBadges(userId)
 

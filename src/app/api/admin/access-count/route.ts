@@ -12,7 +12,7 @@ export async function PATCH(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const user = await db.user.findUnique({
             where: { id: userId },
             select: { role: true },

@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
 
 // GET - List all notifications for the user
-export async function GET(req: Request) {
+export async function GET() {
     const session = await getServerSession(authOptions)
 
     if (!session?.user) {
@@ -12,7 +12,7 @@ export async function GET(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const notifications = await db.notification.findMany({
             where: { userId },
             orderBy: { createdAt: "desc" },
@@ -35,7 +35,7 @@ export async function PATCH(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const { searchParams } = new URL(req.url)
         const id = searchParams.get("id")
 
@@ -70,7 +70,7 @@ export async function DELETE(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const { searchParams } = new URL(req.url)
         const id = searchParams.get("id")
 

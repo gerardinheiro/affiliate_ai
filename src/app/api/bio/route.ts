@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
 
 // GET - Fetch user's bio page
-export async function GET(req: Request) {
+export async function GET() {
     const session = await getServerSession(authOptions)
 
     if (!session?.user) {
@@ -12,7 +12,7 @@ export async function GET(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
 
         let bioPage = await db.bioPage.findUnique({
             where: { userId },
@@ -60,7 +60,7 @@ export async function PATCH(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const body = await req.json()
         const { username, displayName, bio, theme, avatarUrl } = body
 

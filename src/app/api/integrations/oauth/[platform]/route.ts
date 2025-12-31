@@ -98,7 +98,7 @@ export async function POST(
         const redirectUri = `${baseUrl}/api/integrations/oauth/callback`
 
         let tokenUrl = ""
-        let body: any = {}
+        let body: Record<string, string | undefined> = {}
 
         if (platform === "google_ads") {
             tokenUrl = "https://oauth2.googleapis.com/token"
@@ -200,7 +200,7 @@ export async function POST(
             refreshToken: data.refresh_token || null,
             expiresAt: data.expires_in ? new Date(Date.now() + data.expires_in * 1000) : null,
         })
-    } catch (error) {
+    } catch (error: unknown) {
         console.error(`[OAUTH_CALLBACK_${platform.toUpperCase()}]`, error)
         return new NextResponse("Internal Error", { status: 500 })
     }

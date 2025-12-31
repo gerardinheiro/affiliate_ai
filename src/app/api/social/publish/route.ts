@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { pinterestAdsService } from "@/lib/pinterest-ads"
+import { tiktokAdsService } from "@/lib/tiktok-ads"
 
 // POST - Publish post to social networks
 export async function POST(req: Request) {
@@ -12,7 +14,7 @@ export async function POST(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const body = await req.json()
         const { postId } = body
 
@@ -41,12 +43,47 @@ export async function POST(req: Request) {
             })
         }
 
-        // In a real app, this would call the actual social media APIs
-        // For now, we'll just simulate the publishing
-        const results = post.platforms.map(platform => ({
-            platform,
-            success: true,
-            message: `Post publicado com sucesso no ${platform}!`
+        // Real publishing logic
+        const results = await Promise.all(post.platforms.map(async (platform) => {
+            try {
+                const integration = integrations.find(i => i.platform === platform)
+                if (!integration || !integration.refreshToken) {
+                    return { platform, success: false, message: "Integração não configurada corretamente" }
+                }
+
+                if (platform === "pinterest") {
+                    // 1. Refresh token
+                    const accessToken = await pinterestAdsService.getAccessToken(integration.refreshToken)
+
+                    // 2. Create Pin
+                    await pinterestAdsService.createPin(accessToken, integration.accountId || "default", {
+                        title: post.content.substring(0, 100),
+                        description: post.content,
+                        imageUrl: post.imageUrl || ""
+                    })
+
+                    return { platform, success: true, message: "Pin criado com sucesso no Pinterest!" }
+                }
+
+                if (platform === "tiktok") {
+                    // 1. Refresh token
+                    const accessToken = await tiktokAdsService.getAccessToken(integration.refreshToken)
+
+                    // 2. Publish Video
+                    await tiktokAdsService.publishVideo(accessToken, {
+                        videoUrl: post.imageUrl || "", // Assuming imageUrl is the video URL for TikTok
+                        title: post.content.substring(0, 80)
+                    })
+
+                    return { platform, success: true, message: "Vídeo publicado com sucesso no TikTok!" }
+                }
+
+                // Fallback for other platforms (still simulated for now)
+                return { platform, success: true, message: `Post publicado (simulado) no ${platform}!` }
+            } catch (error: any) {
+                console.error(`Error publishing to ${platform}:`, error)
+                return { platform, success: false, message: error.message || `Erro ao publicar no ${platform}` }
+            }
         }))
 
         // Update post status

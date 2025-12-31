@@ -1,19 +1,14 @@
-import { withAuth } from "next-auth/middleware"
+import createMiddleware from 'next-intl/middleware';
 
-export default withAuth({
-    pages: {
-        signIn: "/login",
-    },
-})
+export default createMiddleware({
+    // A list of all locales that are supported
+    locales: ['en', 'pt'],
+
+    // Used when no locale matches
+    defaultLocale: 'pt'
+});
 
 export const config = {
-    matcher: [
-        "/dashboard/:path*",
-        "/products/:path*",
-        "/campaigns/:path*",
-        "/integrations/:path*",
-        "/creatives/:path*",
-        "/analytics/:path*",
-        "/settings/:path*",
-    ],
-}
+    // Match only internationalized pathnames
+    matcher: ['/', '/(pt|en)/:path*']
+};

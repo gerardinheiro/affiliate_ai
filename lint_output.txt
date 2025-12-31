@@ -1,0 +1,439 @@
+
+D:\minha ideia\affiliate_ai\src\app\actions.ts
+   15:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   45:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   55:51  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   84:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   97:51  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  130:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  141:51  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\admin\page.tsx
+   43:19  warning  'session' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   44:11  warning  'router' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  200:58  warning  'error' is defined but never used             @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\app\ai-studio\page.tsx
+   11:42   warning  'Check' is defined but never used                                @typescript-eslint/no-unused-vars
+   29:60   error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  244:94   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  244:115  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+D:\minha ideia\affiliate_ai\src\app\analytics\page.tsx
+   73:8   warning  React Hook useEffect has a missing dependency: 'fetchAnalytics'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  339:11  error    Unexpected any. Specify a different type                                                                           @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\admin\access-count\route.ts
+  15:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\admin\settings\route.ts
+   7:27  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  15:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  45:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\admin\stats\route.ts
+   7:27  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  15:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\admin\users\[userId]\route.ts
+  16:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\admin\users\route.ts
+   7:27  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  15:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\analytics\route.ts
+  17:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\badges\route.ts
+  10:27  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  18:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  58:28  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  66:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\bio\links\route.ts
+  15:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  48:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  82:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\bio\route.ts
+   7:27  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  15:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  63:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\campaigns\create\route.ts
+  14:52  warning  'headlines' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  14:63  warning  'descriptions' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  20:41  error    Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+  45:21  error    Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\campaigns\route.ts
+    7:27  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+   14:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   35:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   64:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  100:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\chat\internal\route.ts
+  20:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  34:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\creatives\route.ts
+   8:27  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  16:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  38:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  75:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\gamification\leaderboard\route.ts
+  43:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\gamification\route.ts
+   5:10  warning  'calculateLevel' is defined but never used  @typescript-eslint/no-unused-vars
+   7:27  warning  'req' is defined but never used             @typescript-eslint/no-unused-vars
+  16:43  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\integrations\google-ads\test\route.ts
+  24:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  54:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\integrations\oauth\[platform]\route.ts
+  101:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\integrations\route.ts
+    6:27  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+   16:42  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   24:14  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+   84:42  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  123:42  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  128:14  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\app\api\integrations\tiktok-ads\test\route.ts
+  24:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  42:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\nitroflare\files\route.ts
+  25:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\nitroflare\folders\route.ts
+  7:27  warning  'req' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\app\api\nitroflare\gallery\route.ts
+  17:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\nitroflare\tags\route.ts
+  7:27  warning  'req' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\app\api\notifications\route.ts
+   7:27  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  15:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  38:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  73:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\onboarding\complete\route.ts
+   7:28  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  17:38  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\posts\route.ts
+   8:27  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  16:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  38:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  71:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\products\route.ts
+   8:27  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  15:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  36:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  73:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\profile\route.ts
+   7:27  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  15:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  50:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\public-stats\route.ts
+   6:27  warning  'req' is defined but never used                      @typescript-eslint/no-unused-vars
+  13:44  error    Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+  19:13  warning  'realPostsCount' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  43:31  error    Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\settings\route.ts
+   6:27  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  16:38  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  33:14  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+  54:27  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  62:38  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\social\publish\route.ts
+  15:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\stats\route.ts
+   6:27  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  14:77  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\stripe\checkout\route.ts
+  22:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\stripe\portal\route.ts
+   9:28  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  21:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\api\stripe\webhook\route.ts
+  24:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  33:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  64:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\bio-builder\page.tsx
+    8:52  warning  'CardDescription' is defined but never used                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+   62:18  warning  'error' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   87:18  warning  'error' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   98:18  warning  'error' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  278:45  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\minha ideia\affiliate_ai\src\app\campaigns\page.tsx
+   81:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  101:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  114:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\app\integrations\page.tsx
+   13:5   warning  'CreditCard' is defined but never used          @typescript-eslint/no-unused-vars
+   14:5   warning  'Plus' is defined but never used                @typescript-eslint/no-unused-vars
+   15:5   warning  'Loader2' is defined but never used             @typescript-eslint/no-unused-vars
+  142:54  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+  143:12  warning  'isLoading' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  145:62  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+  165:43  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+  170:46  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+  203:54  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\login\page.tsx
+  57:60  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  58:63  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\nitroflare-gallery\page.tsx
+    4:29  warning  'CardDescription' is defined but never used                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+  164:41  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  307:60  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  307:86  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+
+D:\minha ideia\affiliate_ai\src\app\page.tsx
+   16:17   warning  'session' is assigned a value but never used                     @typescript-eslint/no-unused-vars
+   17:9    warning  'router' is assigned a value but never used                      @typescript-eslint/no-unused-vars
+  378:17   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  378:146  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  395:17   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  395:124  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  412:17   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  412:127  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+D:\minha ideia\affiliate_ai\src\app\pricing\page.tsx
+  5:26  warning  'Zap' is defined but never used     @typescript-eslint/no-unused-vars
+  5:31  warning  'Shield' is defined but never used  @typescript-eslint/no-unused-vars
+  5:39  warning  'Star' is defined but never used    @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\app\products\page.tsx
+  108:18  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+  123:18  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+  133:25  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\settings\page.tsx
+  13:12  warning  'isLoading' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\app\social\page.tsx
+   89:18  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+  107:18  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+  122:18  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+  128:63  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\app\u\[username]\page.tsx
+   2:10  warning  'Button' is defined but never used                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+   3:10  warning  'ExternalLink' is defined but never used                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+  60:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\minha ideia\affiliate_ai\src\components\admin\stats-config.tsx
+   69:87  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  133:48  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\components\admin\user-edit-modal.tsx
+  36:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\components\auth\login-modal.tsx
+  12:10  warning  'Globe' is defined but never used         @typescript-eslint/no-unused-vars
+  27:43  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  28:46  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\components\bio\bio-analytics.tsx
+  4:10  warning  'BarChart' is defined but never used  @typescript-eslint/no-unused-vars
+  6:19  warning  'BioLink' is defined but never used   @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\components\bio\link-editor.tsx
+   3:10  warning  'useState' is defined but never used  @typescript-eslint/no-unused-vars
+  21:32  warning  'Pencil' is defined but never used    @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\components\campaigns\campaign-card.tsx
+   4:10  warning  'BarChart3' is defined but never used  @typescript-eslint/no-unused-vars
+  20:5   warning  'id' is defined but never used         @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\components\campaigns\create-campaign-modal.tsx
+  11:40  warning  'Copy' is defined but never used       @typescript-eslint/no-unused-vars
+  11:46  warning  'Check' is defined but never used      @typescript-eslint/no-unused-vars
+  11:62  warning  'ImageIcon' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\components\chat\internal-chat.tsx
+  7:10  warning  'MessageCircle' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\components\creatives\ad-canvas.tsx
+  15:22  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+  24:12  warning  'activeTab' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  42:25  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\components\creatives\ad-preview.tsx
+  37:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\minha ideia\affiliate_ai\src\components\creatives\image-generator.tsx
+   8:39  warning  'Download' is defined but never used                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+  87:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\minha ideia\affiliate_ai\src\components\creatives\image-picker.tsx
+  14:8   warning  'Image' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  34:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\minha ideia\affiliate_ai\src\components\creatives\video-generator.tsx
+   7:10   warning  'Textarea' is defined but never used                             @typescript-eslint/no-unused-vars
+  20:42   error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  43:81   error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  48:31   error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  68:49   error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  81:101  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  81:122  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+D:\minha ideia\affiliate_ai\src\components\dashboard\stats-dashboard.tsx
+  177:78  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\components\gallery\gallery-toolbar.tsx
+   5:34  warning  'Download' is defined but never used    @typescript-eslint/no-unused-vars
+  32:5   warning  'totalCount' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\components\gamification\leaderboard.tsx
+  6:10  warning  'Trophy' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\components\gamification\level-progress.tsx
+  3:10  warning  'Progress' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\components\landing\testimonials-section.tsx
+  122:41  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  122:67  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  196:37  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  196:56  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+D:\minha ideia\affiliate_ai\src\components\layout\header.tsx
+   5:16  warning  'User' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+  26:42  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-explicit-any
+  56:9   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\minha ideia\affiliate_ai\src\components\layout\header.tsx:56:9
+  54 |
+  55 |     useEffect(() => {
+> 56 |         fetchNotifications()
+     |         ^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  57 |         fetchGamification()
+  58 |
+  59 |         const interval = setInterval(() => {  react-hooks/set-state-in-effect
+
+D:\minha ideia\affiliate_ai\src\components\layout\sidebar.tsx
+  109:19  warning  'session' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\components\nitroflare\lightbox.tsx
+  72:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\minha ideia\affiliate_ai\src\components\nitroflare\upload-dialog.tsx
+    9:21  warning  'FileImage' is defined but never used                                                                                                                                                                                                                                                    @typescript-eslint/no-unused-vars
+  212:37  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\minha ideia\affiliate_ai\src\components\onboarding\welcome-tour.tsx
+  49:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\minha ideia\affiliate_ai\src\components\onboarding\welcome-tour.tsx:49:13
+  47 |     useEffect(() => {
+  48 |         if (!hasCompletedOnboarding) {
+> 49 |             setOpen(true)
+     |             ^^^^^^^ Avoid calling setState() directly within an effect
+  50 |         }
+  51 |     }, [hasCompletedOnboarding])
+  52 |  react-hooks/set-state-in-effect
+
+D:\minha ideia\affiliate_ai\src\components\products\product-card.tsx
+   1:16  warning  'CardContent' is defined but never used                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+  20:5   warning  'id' is defined but never used                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+  35:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\minha ideia\affiliate_ai\src\components\ui\input.tsx
+  4:18  error  An interface declaring no members is equivalent to its supertype  @typescript-eslint/no-empty-object-type
+
+D:\minha ideia\affiliate_ai\src\components\ui\textarea.tsx
+  5:18  error  An interface declaring no members is equivalent to its supertype  @typescript-eslint/no-empty-object-type
+
+D:\minha ideia\affiliate_ai\src\contexts\locale-context.tsx
+  21:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\minha ideia\affiliate_ai\src\contexts\locale-context.tsx:21:13
+  19 |         const savedLocale = localStorage.getItem('locale') as Locale
+  20 |         if (savedLocale && (savedLocale === 'pt-BR' || savedLocale === 'en')) {
+> 21 |             setLocaleState(savedLocale)
+     |             ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  22 |         }
+  23 |     }, [])
+  24 |  react-hooks/set-state-in-effect
+
+D:\minha ideia\affiliate_ai\src\lib\ai-service.ts
+   60:22  warning  'e' is defined but never used             @typescript-eslint/no-unused-vars
+  117:21  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  151:21  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  202:18  warning  'e' is defined but never used             @typescript-eslint/no-unused-vars
+  206:21  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\lib\analytics.ts
+  17:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\lib\auth.ts
+   9:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  72:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\lib\google-ads.ts
+   1:10  warning  'db' is defined but never used           @typescript-eslint/no-unused-vars
+  62:43  warning  'accessToken' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\lib\nitroflare.ts
+  57:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  62:48  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\minha ideia\affiliate_ai\src\lib\stats-service.ts
+   1:10  warning  'db' is defined but never used      @typescript-eslint/no-unused-vars
+  26:29  warning  'userId' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\lib\stripe.ts
+  8:41  warning  'userId' is defined but never used  @typescript-eslint/no-unused-vars
+  8:57  warning  'email' is defined but never used   @typescript-eslint/no-unused-vars
+
+D:\minha ideia\affiliate_ai\src\lib\tiktok-ads.ts
+  1:10  warning  'db' is defined but never used  @typescript-eslint/no-unused-vars
+
+Ô£û 221 problems (121 errors, 100 warnings)
+

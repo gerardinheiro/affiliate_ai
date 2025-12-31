@@ -1,0 +1,210 @@
+{
+    "Dashboard": {
+        "title": "Dashboard",
+        "personalize": "Personalizar",
+        "saveLayout": "Salvar Layout",
+        "cancel": "Cancelar",
+        "restore": "Restaurar",
+        "clicks": "Total de Cliques",
+        "conversions": "Conversões",
+        "ctr": "Taxa de Conversão (CTR)",
+        "earnings": "Ganhos Estimados",
+        "performance": "Performance de Vendas",
+        "recentActivity": "Atividade Recente",
+        "noActivity": "Nenhuma atividade recente.",
+        "vsLast30Days": "vs. últimos 30 dias"
+    },
+    "Products": {
+        "title": "Produtos",
+        "description": "Gerencie seus produtos afiliados e crie campanhas com IA.",
+        "addProduct": "Adicionar Produto",
+        "importProduct": "Importar Produto",
+        "searchPlaceholder": "Buscar produtos...",
+        "findBestProducts": "Encontrar Melhores Produtos",
+        "noProducts": "Nenhum produto cadastrado ainda.",
+        "addFirstProduct": "Adicionar Primeiro Produto",
+        "dialogTitle": "Adicionar Novo Produto",
+        "dialogDescription": "Cole o link do produto e defina onde ele pode ser vendido.",
+        "productLink": "Link do Produto",
+        "imageOptional": "Imagem (Opcional)",
+        "imagePickerLabel": "Selecionar da Galeria",
+        "imagePickerHint": "Se deixado em branco, tentaremos capturar a imagem do link automaticamente.",
+        "targetCountry": "País Alvo",
+        "selectCountry": "Selecione o país",
+        "state": "Estado",
+        "city": "Cidade",
+        "analyzing": "Analisando...",
+        "aiWritingCopy": "A IA está escrevendo sua copy...",
+        "deleteConfirm": "Tem certeza que deseja excluir este produto?",
+        "importError": "Erro ao importar produto. Verifique o link.",
+        "deleteError": "Erro ao excluir produto.",
+        "copyError": "Erro ao gerar copy.",
+        "card": {
+            "link": "Link",
+            "ia": "IA",
+            "promote": "Promover",
+            "remove": "Remover",
+            "noImage": "Sem Imagem"
+        }
+    },
+    "Social": {
+        "title": "Automação Social",
+        "description": "Crie e agende posts para suas redes sociais conectadas.",
+        "tabs": {
+            "composer": "Criar Post",
+            "calendar": "Calendário",
+            "history": "Histórico"
+        },
+        "composer": {
+            "title": "Criar Novo Post",
+            "content": "Conteúdo",
+            "contentPlaceholder": "Escreva sua mensagem...",
+            "imageUrl": "URL da Imagem (opcional)",
+            "platforms": "Plataformas",
+            "schedule": "Agendar para (opcional)",
+            "submitSchedule": "Agendar Post",
+            "submitDraft": "Criar Rascunho",
+            "success": "Post criado com sucesso!",
+            "error": "Erro ao criar post",
+            "validation": "Preencha o conteúdo e selecione pelo menos uma plataforma"
+        },
+        "history": {
+            "title": "Meus Posts",
+            "noPosts": "Nenhum post criado ainda.",
+            "publishedAt": "Publicado em {date}",
+            "scheduledFor": "Agendado para {date}",
+            "createdAt": "Criado em {date}",
+            "publishNow": "Publicar Agora",
+            "delete": "Excluir",
+            "deleteConfirm": "Tem certeza que deseja excluir este post?",
+            "publishSuccess": "Post publicado com sucesso!",
+            "publishError": "Erro ao publicar post",
+            "deleteError": "Erro ao excluir post"
+        }
+    },
+    "Creatives": {
+        "title": "Creative Studio",
+        "description": "Crie, edite e visualize seus anúncios com ajuda da IA.",
+        "myCreatives": "Meus Criativos",
+        "saveCreative": "Salvar Criativo",
+        "saving": "Salvando...",
+        "publishAd": "Publicar Anúncio",
+        "saveSuccess": "Criativo salvo com sucesso! (+30 XP)",
+        "saveError": "Erro ao salvar criativo.",
+        "historyTitle": "Meus Criativos Salvos",
+        "historyDescription": "Histórico de anúncios e roteiros gerados.",
+        "tabs": {
+            "instagram": "Instagram Feed",
+            "google": "Google Search"
+        },
+        "canvas": {
+            "headline": "Seu Título Incrível Aqui",
+            "description": "Descrição persuasiva do seu produto vai aqui.",
+            "cta": "Saiba Mais"
+        }
+    },
+    "Integrations": {
+        "title": "Conexões",
+        "description": "Gerencie suas integrações com redes de afiliados e plataformas de anúncios.",
+        "myConnections": "Minhas Conexões Ativas",
+        "active": "Ativo",
+        "region": "Região",
+        "state": "Estado",
+        "disconnect": "Desconectar",
+        "deleteConfirm": "Tem certeza que deseja remover esta conexão?",
+        "tabs": {
+            "affiliates": "Redes de Afiliados",
+            "ads": "Plataformas de Anúncios",
+            "social": "Redes Sociais"
+        },
+        "card": {
+            "connected": "Conectado",
+            "configure": "Configurar",
+            "test": "Testar",
+            "testing": "Testando...",
+            "connect": "Conectar",
+            "noAccount": "Não tem conta? Cadastre-se"
+        },
+        "dialog": {
+            "connectTitle": "Conectar {platform}",
+            "oauthDescription": "Faça login para autorizar o acesso direto à sua conta.",
+            "apiDescription": "Configure sua conexão e defina a região de atuação.",
+            "redirectMessage": "Você será redirecionado para a página de autorização do {platform}.",
+            "connectWith": "Conectar com {platform}",
+            "accountName": "Nome da Conta (Apelido)",
+            "apiKey": "API Key",
+            "accountId": "ID da Conta / Afiliado",
+            "targetCountry": "País Alvo",
+            "selectCountry": "Selecione o país",
+            "state": "Estado",
+            "city": "Cidade",
+            "saveConnection": "Salvar Conexão"
+        }
+    },
+    "AIStudio": {
+        "title": "AI Studio ✍️",
+        "description": "Crie textos persuasivos e roteiros de vídeo com Inteligência Artificial.",
+        "tabs": {
+            "copy": "Ad Copy Generator",
+            "video": "Video Script Writer",
+            "image": "Image Generator"
+        },
+        "copy": {
+            "title": "Detalhes do Produto",
+            "subtitle": "Descreva o que você quer vender.",
+            "importUrl": "Importar de URL (Opcional)",
+            "importButton": "Importar",
+            "productName": "Nome do Produto",
+            "productNamePlaceholder": "Ex: Tênis Runner Pro",
+            "description": "Descrição / Benefícios",
+            "descriptionPlaceholder": "Ex: Tênis leve, ortopédico, ideal para corridas longas...",
+            "generateButton": "Gerar Copy",
+            "resultTitle": "Resultado",
+            "copyButton": "Copiar",
+            "emptyState": "Seu texto gerado aparecerá aqui.",
+            "importSuccess": "Dados importados com sucesso!",
+            "importError": "Erro ao importar dados da URL",
+            "generateSuccess": "Copy gerada e salva com sucesso! (+30 XP)",
+            "generateError": "Erro ao gerar copy",
+            "copied": "Copiado para a área de transferência"
+        },
+        "video": {
+            "title": "Briefing do Vídeo",
+            "subtitle": "Para TikTok, Reels ou Shorts.",
+            "product": "Produto / Tópico",
+            "productPlaceholder": "Ex: Curso de Inglês Online",
+            "keyPoints": "Pontos Chave",
+            "keyPointsPlaceholder": "Ex: Aprenda rápido, professores nativos, certificado incluso...",
+            "generateButton": "Gerar Roteiro",
+            "resultTitle": "Roteiro (Storyboard)",
+            "copyJson": "Copiar JSON",
+            "emptyState": "Seu roteiro aparecerá aqui.",
+            "visual": "Visual",
+            "audio": "Áudio / Locução",
+            "generateSuccess": "Roteiro gerado e salvo com sucesso! (+30 XP)",
+            "generateError": "Erro ao gerar roteiro"
+        }
+    },
+    "Sidebar": {
+        "overview": "Visão Geral",
+        "products": "Produtos",
+        "bioLink": "Link na Bio",
+        "social": "Automação Social",
+        "creativeStudio": "Creative Studio",
+        "aiStudio": "AI Studio",
+        "campaigns": "Campanhas",
+        "analytics": "Analytics",
+        "achievements": "Conquistas",
+        "integrations": "Integrações",
+        "gallery": "Galeria",
+        "settings": "Configurações",
+        "admin": "Admin"
+    },
+    "Common": {
+        "loading": "Carregando...",
+        "error": "Ocorreu um erro.",
+        "success": "Sucesso!",
+        "save": "Salvar",
+        "delete": "Excluir"
+    }
+}

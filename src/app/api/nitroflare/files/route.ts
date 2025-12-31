@@ -22,7 +22,11 @@ export async function PATCH(req: NextRequest) {
         const body = await req.json()
         const { id, headline, folderId, tagIds } = body
 
-        const updateData: any = {}
+        const updateData: {
+            headline?: string
+            folderId?: string
+            tags?: { set: { id: string }[] }
+        } = {}
         if (headline !== undefined) updateData.headline = headline
         if (folderId !== undefined) updateData.folderId = folderId
 

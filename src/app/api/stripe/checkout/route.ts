@@ -19,7 +19,7 @@ export async function POST(req: Request) {
         }
 
         const { priceId } = await req.json()
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const userEmail = session.user.email
 
         // 1. Check if user already has a Stripe Customer ID

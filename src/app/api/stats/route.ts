@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { statsService } from "@/lib/stats-service"
 
-export async function GET(req: Request) {
+export async function GET() {
     const session = await getServerSession(authOptions)
 
     if (!session?.user) {
@@ -11,7 +11,7 @@ export async function GET(req: Request) {
     }
 
     try {
-        const stats = await statsService.getDashboardStats((session.user as any).id)
+        const stats = await statsService.getDashboardStats((session.user as { id: string }).id)
         return NextResponse.json(stats)
     } catch (error) {
         console.error("[STATS_GET]", error)

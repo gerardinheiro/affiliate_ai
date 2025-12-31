@@ -114,13 +114,14 @@ export async function generateAdCopy(productName: string, productDescription: st
         })
 
         return completion.choices[0].message.content
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("OpenAI Error:", error)
 
-        if (error?.status === 429 || error?.code === 'insufficient_quota') {
+        const err = error as { status?: number; code?: string }
+        if (err?.status === 429 || err?.code === 'insufficient_quota') {
             throw new Error("Saldo insuficiente na OpenAI. Verifique seus créditos em platform.openai.com")
         }
-        if (error?.status === 401) {
+        if (err?.status === 401) {
             throw new Error("Chave de API inválida. Verifique em Configurações.")
         }
 
@@ -148,13 +149,14 @@ export async function generateImage(prompt: string, apiKey?: string) {
         })
 
         return response.data?.[0]?.url || null
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("OpenAI Error:", error)
 
-        if (error?.status === 429 || error?.code === 'insufficient_quota') {
+        const err = error as { status?: number; code?: string }
+        if (err?.status === 429 || err?.code === 'insufficient_quota') {
             throw new Error("Saldo insuficiente na OpenAI. Verifique seus créditos em platform.openai.com")
         }
-        if (error?.status === 401) {
+        if (err?.status === 401) {
             throw new Error("Chave de API inválida. Verifique em Configurações.")
         }
 
@@ -203,13 +205,14 @@ export async function generateVideoScript(productName: string, description: stri
             // Fallback if JSON parsing fails
             return [{ scene_number: 1, visual_description: "Script generated as text", audio_script: content, duration: 30 }]
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("OpenAI Error:", error)
 
-        if (error?.status === 429 || error?.code === 'insufficient_quota') {
+        const err = error as { status?: number; code?: string }
+        if (err?.status === 429 || err?.code === 'insufficient_quota') {
             throw new Error("Saldo insuficiente na OpenAI. Verifique seus créditos em platform.openai.com")
         }
-        if (error?.status === 401) {
+        if (err?.status === 401) {
             throw new Error("Chave de API inválida. Verifique em Configurações.")
         }
 

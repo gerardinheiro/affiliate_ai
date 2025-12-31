@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
         // Get user's OpenAI API key
         const user = await db.user.findUnique({
-            where: { id: (session.user as any).id },
+            where: { id: (session.user as { id: string }).id },
             select: { openaiApiKey: true, name: true }
         })
 
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
 
         // Get user's products for context
         const products = await db.product.findMany({
-            where: { userId: (session.user as any).id },
+            where: { userId: (session.user as { id: string }).id },
             select: { title: true, platform: true, price: true },
             take: 10
         })

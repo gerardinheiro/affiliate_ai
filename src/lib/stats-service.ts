@@ -15,7 +15,7 @@ export interface StatsData {
     }[]
     recentActivity: {
         id: string
-        type: "click" | "conversion" | "payout"
+        type: "click" | "conversion" | "payout" | "view"
         description: string
         date: string
         amount?: number
@@ -24,79 +24,92 @@ export interface StatsData {
 
 export class StatsService {
     async getDashboardStats(userId: string): Promise<StatsData> {
-        // In a real scenario, we would query the database for clicks and conversions.
-        // For now, we'll generate realistic mock data based on the user's ID to keep it consistent.
+        const thirtyDaysAgo = new Date()
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
-        const today = new Date()
-        const chartData = []
+        // 1. Fetch Summary from Campaigns
+        const campaigns = await db.campaign.findMany({
+            where: { userId }
+        })
 
-        let totalClicks = 0
-        let totalConversions = 0
-        let totalEarnings = 0
+        const totalClicks = campaigns.reduce((acc, c) => acc + c.clicks, 0)
+        const totalConversions = campaigns.reduce((acc, c) => acc + c.conversions, 0)
+        const totalEarnings = campaigns.reduce((acc, c) => acc + c.revenue, 0)
 
-        // Generate last 30 days of data
+        // 2. Fetch Events for Chart & Activity
+        const events = await db.analyticsEvent.findMany({
+            where: {
+                userId,
+                createdAt: { gte: thirtyDaysAgo }
+            },
+            orderBy: { createdAt: 'asc' }
+        })
+
+        // Group events by date for the chart
+        const dailyData: Record<string, { clicks: number, conversions: number, earnings: number }> = {}
+
+        // Initialize last 30 days to ensure no gaps in the chart
         for (let i = 29; i >= 0; i--) {
-            const date = new Date(today)
+            const date = new Date()
             date.setDate(date.getDate() - i)
-
-            // Random data generation
-            const baseClicks = Math.floor(Math.random() * 50) + 20
-            const clicks = baseClicks + Math.floor(Math.random() * 20)
-            const conversions = Math.floor(clicks * (Math.random() * 0.05 + 0.01)) // 1-6% conversion rate
-            const earnings = conversions * (Math.random() * 20 + 10) // $10-$30 per conversion
-
-            totalClicks += clicks
-            totalConversions += conversions
-            totalEarnings += earnings
-
-            chartData.push({
-                date: date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
-                clicks,
-                conversions,
-                earnings: Number(earnings.toFixed(2))
-            })
+            const dateStr = date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
+            dailyData[dateStr] = { clicks: 0, conversions: 0, earnings: 0 }
         }
 
-        const recentActivity = [
-            {
-                id: "1",
-                type: "conversion" as const,
-                description: "Venda: Curso de Marketing Digital",
-                date: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 mins ago
-                amount: 45.90
-            },
-            {
-                id: "2",
-                type: "click" as const,
-                description: "Clique em: Ebook de Receitas",
-                date: new Date(Date.now() - 1000 * 60 * 120).toISOString(), // 2 hours ago
-            },
-            {
-                id: "3",
-                type: "conversion" as const,
-                description: "Venda: Kit de Ferramentas AI",
-                date: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(), // 5 hours ago
-                amount: 120.50
-            },
-            {
-                id: "4",
-                type: "payout" as const,
-                description: "Saque processado",
-                date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(), // 2 days ago
-                amount: -500.00
+        events.forEach(event => {
+            const dateStr = new Date(event.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
+            if (dailyData[dateStr]) {
+                if (event.eventType === 'link_click' || event.eventType === 'product_click') {
+                    dailyData[dateStr].clicks++
+                }
+                // If we have conversion events tracked in AnalyticsEvent
+                if (event.eventType === 'conversion') {
+                    dailyData[dateStr].conversions++
+                    const amount = (event.metadata as any)?.amount || 0
+                    dailyData[dateStr].earnings += amount
+                }
             }
-        ]
+        })
+
+        const chartData = Object.entries(dailyData).map(([date, data]) => ({
+            date,
+            clicks: data.clicks,
+            conversions: data.conversions,
+            earnings: Number(data.earnings.toFixed(2))
+        }))
+
+        // 3. Recent Activity (Latest 10 events)
+        const recentEvents = await db.analyticsEvent.findMany({
+            where: { userId },
+            take: 10,
+            orderBy: { createdAt: 'desc' }
+        })
+
+        const recentActivity = recentEvents.map(event => ({
+            id: event.id,
+            type: this.mapEventType(event.eventType),
+            description: event.eventName,
+            date: event.createdAt.toISOString(),
+            amount: (event.metadata as any)?.amount
+        }))
 
         return {
             summary: {
                 clicks: totalClicks,
                 conversions: totalConversions,
                 earnings: Number(totalEarnings.toFixed(2)),
-                ctr: Number(((totalConversions / totalClicks) * 100).toFixed(2))
+                ctr: totalClicks > 0 ? Number(((totalConversions / totalClicks) * 100).toFixed(2)) : 0
             },
             chartData,
             recentActivity
         }
+    }
+
+    private mapEventType(type: string): "click" | "conversion" | "payout" | "view" {
+        if (type.includes('click')) return 'click'
+        if (type.includes('conversion')) return 'conversion'
+        if (type.includes('payout')) return 'payout'
+        return 'view'
     }
 }
 

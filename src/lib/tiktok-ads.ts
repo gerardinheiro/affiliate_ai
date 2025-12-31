@@ -43,6 +43,36 @@ export class TikTokAdsService {
 
         return data.data?.list || []
     }
+
+    async publishVideo(accessToken: string, data: { videoUrl: string, title: string }) {
+        // TikTok Content Posting API
+        // This is a simplified version. TikTok often requires a multi-step upload process.
+        const response = await fetch("https://business-api.tiktok.com/open_api/v1.3/content/video/publish/", {
+            method: "POST",
+            headers: {
+                "Access-Token": accessToken,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                video_url: data.videoUrl,
+                title: data.title,
+                // Other required fields like advertiser_id might be needed depending on the app type
+            }),
+        })
+
+        if (!response.ok) {
+            const error = await response.json()
+            console.error("TikTok Publish Video Error:", error)
+            throw new Error(error.message || "Failed to publish TikTok video")
+        }
+
+        const result = await response.json()
+        if (result.code !== 0) {
+            throw new Error(result.message || "TikTok API returned error code during publishing")
+        }
+
+        return result.data
+    }
 }
 
 export const tiktokAdsService = new TikTokAdsService()

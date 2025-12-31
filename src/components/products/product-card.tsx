@@ -2,6 +2,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ExternalLink, Sparkles, Trash2, Megaphone } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 interface ProductCardProps {
     id: string
@@ -28,6 +29,7 @@ export function ProductCard({
     onDelete,
     onPromote,
 }: ProductCardProps) {
+    const t = useTranslations("Products.card")
     return (
         <Card className="overflow-hidden flex flex-col justify-between hover-lift animate-fade-in group border-white/10 hover:border-indigo-500/50 transition-all duration-300 glass">
             <div className="aspect-video w-full bg-gradient-to-br from-indigo-500/10 to-purple-500/10 relative flex items-center justify-center overflow-hidden">
@@ -38,7 +40,7 @@ export function ProductCard({
                         className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                     />
                 ) : (
-                    <div className="text-gray-400 text-sm">Sem Imagem</div>
+                    <div className="text-gray-400 text-sm">{t("noImage")}</div>
                 )}
                 <Badge className="absolute top-3 right-3 bg-black/70 hover:bg-black/80 backdrop-blur-sm border-0 shadow-lg text-white">
                     {platform}
@@ -65,14 +67,14 @@ export function ProductCard({
                         onClick={onViewLink}
                     >
                         <ExternalLink className="w-4 h-4 mr-2" />
-                        Link
+                        {t("link")}
                     </Button>
                     <Button
                         className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all border-0"
                         onClick={onGenerateCopy}
                     >
                         <Sparkles className="w-4 h-4 mr-2" />
-                        IA
+                        {t("ia")}
                     </Button>
                 </div>
                 {onPromote && (
@@ -81,7 +83,7 @@ export function ProductCard({
                         onClick={onPromote}
                     >
                         <Megaphone className="w-4 h-4 mr-2" />
-                        Promover
+                        {t("promote")}
                     </Button>
                 )}
                 {onDelete && (
@@ -92,7 +94,7 @@ export function ProductCard({
                         className="w-full hover:bg-red-500/10 hover:text-red-400 text-gray-400 transition-all mt-1"
                     >
                         <Trash2 className="w-4 h-4 mr-2" />
-                        Remover
+                        {t("remove")}
                     </Button>
                 )}
             </CardFooter>

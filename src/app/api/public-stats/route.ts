@@ -3,25 +3,23 @@ import { db } from "@/lib/db"
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(req: Request) {
+export async function GET() {
     try {
         // 1. Get configuration
         const settings = await db.globalSettings.findUnique({
             where: { key: "public_stats" },
         })
 
-        const config = (settings?.value as any) || {}
+        const config = (settings?.value as Record<string, any>) || {}
 
         // 2. Get real counts
         const [
             realUsersCount,
             realProductsCount,
-            realPostsCount, // Using Posts as "Propagandas" for now, or maybe Creatives?
             realCreativesCount
         ] = await Promise.all([
             db.user.count(),
             db.product.count(),
-            db.post.count({ where: { status: "published" } }),
             db.creative.count() // Maybe use this for "Propagandas"?
         ])
 

@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
 
 // GET - Get global settings
-export async function GET(req: Request) {
+export async function GET() {
     const session = await getServerSession(authOptions)
 
     if (!session?.user) {
@@ -12,7 +12,7 @@ export async function GET(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const user = await db.user.findUnique({
             where: { id: userId },
             select: { role: true },
@@ -42,7 +42,7 @@ export async function PATCH(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const user = await db.user.findUnique({
             where: { id: userId },
             select: { role: true },

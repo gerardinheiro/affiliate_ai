@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { sendWelcomeEmail } from "@/lib/email"
 
-export async function POST(req: Request) {
+export async function POST() {
     const session = await getServerSession(authOptions)
 
     if (!session?.user) {
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     try {
         await db.user.update({
             where: {
-                id: (session.user as any).id,
+                id: (session.user as { id: string }).id,
             },
             data: {
                 hasCompletedOnboarding: true,

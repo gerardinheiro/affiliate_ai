@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
 
-export async function GET(req: Request) {
+export async function GET() {
     const session = await getServerSession(authOptions)
 
     if (!session?.user) {
@@ -13,7 +13,7 @@ export async function GET(req: Request) {
     try {
         const user = await db.user.findUnique({
             where: {
-                id: (session.user as any).id,
+                id: (session.user as { id: string }).id,
             },
             select: {
                 openaiApiKey: true,
@@ -30,7 +30,7 @@ export async function GET(req: Request) {
             brandTone: user?.brandTone,
             brandDescription: user?.brandDescription,
         })
-    } catch (error) {
+    } catch {
         return new NextResponse("Internal Error", { status: 500 })
     }
 }
@@ -51,7 +51,13 @@ export async function POST(req: Request) {
             return new NextResponse("Missing fields", { status: 400 })
         }
 
-        const updateData: any = {}
+        interface UpdateData {
+            openaiApiKey?: string
+            brandName?: string
+            brandTone?: string
+            brandDescription?: string
+        }
+        const updateData: UpdateData = {}
         if (openaiApiKey) updateData.openaiApiKey = openaiApiKey
         if (brandName !== undefined) updateData.brandName = brandName
         if (brandTone !== undefined) updateData.brandTone = brandTone
@@ -59,7 +65,7 @@ export async function POST(req: Request) {
 
         await db.user.update({
             where: {
-                id: (session.user as any).id,
+                id: (session.user as { id: string }).id,
             },
             data: updateData,
         })

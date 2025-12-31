@@ -304,7 +304,7 @@ export default function NitroflareGalleryPage() {
                     <DialogHeader>
                         <DialogTitle className="text-white">Deletar Arquivo</DialogTitle>
                         <DialogDescription>
-                            Tem certeza que deseja deletar "{selectedImage?.headline}"? Esta ação não pode ser desfeita.
+                            Tem certeza que deseja deletar &quot;{selectedImage?.headline}&quot;? Esta ação não pode ser desfeita.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>

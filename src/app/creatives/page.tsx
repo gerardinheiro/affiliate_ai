@@ -9,12 +9,14 @@ import { Button } from "@/components/ui/button"
 import { Save, UploadCloud, History } from "lucide-react"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { CreativeGallery } from "@/components/creatives/creative-gallery"
+import { useTranslations } from "next-intl"
 
 export default function CreativeStudioPage() {
+    const t = useTranslations("Creatives")
     const [adData, setAdData] = useState({
-        headline: "Seu Título Incrível Aqui",
-        description: "Descrição persuasiva do seu produto vai aqui.",
-        cta: "Saiba Mais",
+        headline: t("canvas.headline"),
+        description: t("canvas.description"),
+        cta: t("canvas.cta"),
         image: null as string | null,
         script: null as string | null,
         type: "image"
@@ -41,9 +43,9 @@ export default function CreativeStudioPage() {
             })
 
             if (res.ok) {
-                alert("Criativo salvo com sucesso! (+30 XP)")
+                alert(t("saveSuccess"))
             } else {
-                alert("Erro ao salvar criativo.")
+                alert(t("saveError"))
             }
         } catch (error) {
             console.error(error)
@@ -58,9 +60,9 @@ export default function CreativeStudioPage() {
             <div className="flex flex-col gap-8 h-[calc(100vh-100px)]">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-3xl font-bold tracking-tight">Creative Studio</h2>
+                        <h2 className="text-3xl font-bold tracking-tight">{t("title")}</h2>
                         <p className="text-muted-foreground mt-2">
-                            Crie, edite e visualize seus anúncios com ajuda da IA.
+                            {t("description")}
                         </p>
                     </div>
                     <div className="flex gap-2">
@@ -68,14 +70,14 @@ export default function CreativeStudioPage() {
                             <SheetTrigger asChild>
                                 <Button variant="outline">
                                     <History className="w-4 h-4 mr-2" />
-                                    Meus Criativos
+                                    {t("myCreatives")}
                                 </Button>
                             </SheetTrigger>
                             <SheetContent className="w-[400px] sm:w-[540px]">
                                 <SheetHeader>
-                                    <SheetTitle>Meus Criativos Salvos</SheetTitle>
+                                    <SheetTitle>{t("historyTitle")}</SheetTitle>
                                     <SheetDescription>
-                                        Histórico de anúncios e roteiros gerados.
+                                        {t("historyDescription")}
                                     </SheetDescription>
                                 </SheetHeader>
                                 <div className="mt-6">
@@ -85,12 +87,12 @@ export default function CreativeStudioPage() {
                         </Sheet>
 
                         <Button variant="outline" onClick={handleSave} disabled={isSaving}>
-                            <Save className="w-4 h-4 mr-2" />
-                            {isSaving ? "Salvando..." : "Salvar Criativo"}
+                            <History className="w-4 h-4 mr-2" />
+                            {isSaving ? t("saving") : t("saveCreative")}
                         </Button>
                         <Button>
                             <UploadCloud className="w-4 h-4 mr-2" />
-                            Publicar Anúncio
+                            {t("publishAd")}
                         </Button>
                     </div>
                 </div>
@@ -105,8 +107,8 @@ export default function CreativeStudioPage() {
                     <div className="bg-gray-50 rounded-xl p-8 border-2 border-dashed flex flex-col items-center overflow-y-auto">
                         <Tabs defaultValue="instagram_feed" className="w-full max-w-md flex flex-col items-center" onValueChange={setActiveTab}>
                             <TabsList className="mb-8">
-                                <TabsTrigger value="instagram_feed">Instagram Feed</TabsTrigger>
-                                <TabsTrigger value="google_search">Google Search</TabsTrigger>
+                                <TabsTrigger value="instagram_feed">{t("tabs.instagram")}</TabsTrigger>
+                                <TabsTrigger value="google_search">{t("tabs.google")}</TabsTrigger>
                             </TabsList>
 
                             <TabsContent value="instagram_feed" className="w-full">

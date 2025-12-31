@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
 
-export async function GET(req: Request) {
+export async function GET() {
     const session = await getServerSession(authOptions)
 
     if (!session?.user) {
@@ -13,7 +13,7 @@ export async function GET(req: Request) {
     try {
         const integrations = await db.integration.findMany({
             where: {
-                userId: (session.user as any).id,
+                userId: (session.user as { id: string }).id,
             },
             orderBy: {
                 createdAt: "desc",
@@ -96,8 +96,7 @@ export async function POST(req: Request) {
         })
 
         return NextResponse.json(integration)
-    } catch (error) {
-        console.error("[INTEGRATIONS_POST]", error)
+    } catch {
         return new NextResponse("Internal Error", { status: 500 })
     }
 }
@@ -120,7 +119,7 @@ export async function DELETE(req: Request) {
         const integration = await db.integration.deleteMany({
             where: {
                 id,
-                userId: (session.user as any).id,
+                userId: (session.user as { id: string }).id,
             },
         })
 

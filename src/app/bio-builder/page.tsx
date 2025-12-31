@@ -1,11 +1,12 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Image from "next/image"
 import DashboardLayout from "@/components/layout/dashboard-layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Plus, ExternalLink, Save, Loader2 } from "lucide-react"
 import { Textarea } from "@/components/ui/textarea"
@@ -36,8 +37,8 @@ export default function BioBuilderPage() {
                 const data = await res.json()
                 setBioPage(data)
             }
-        } catch (error) {
-            console.error("Error fetching bio page:", error)
+        } catch {
+            console.error("Error fetching bio page")
         } finally {
             setIsLoading(false)
         }
@@ -59,7 +60,7 @@ export default function BioBuilderPage() {
                 })
             })
             alert("Perfil atualizado!")
-        } catch (error) {
+        } catch {
             alert("Erro ao atualizar perfil")
         } finally {
             setIsSaving(false)
@@ -84,7 +85,7 @@ export default function BioBuilderPage() {
                 setNewLinkTitle("")
                 setNewLinkUrl("")
             }
-        } catch (error) {
+        } catch {
             alert("Erro ao adicionar link")
         }
     }
@@ -95,7 +96,7 @@ export default function BioBuilderPage() {
             if (res.ok) {
                 setBioPage(prev => prev ? { ...prev, links: prev.links.filter(l => l.id !== id) } : null)
             }
-        } catch (error) {
+        } catch {
             alert("Erro ao deletar link")
         }
     }
@@ -112,8 +113,8 @@ export default function BioBuilderPage() {
                     links: newLinks.map((l, index) => ({ id: l.id, order: index }))
                 })
             })
-        } catch (error) {
-            console.error("Error reordering links:", error)
+        } catch {
+            console.error("Error reordering links")
             // Revert on error (optional, but good practice)
             fetchBioPage()
         }
@@ -275,7 +276,13 @@ export default function BioBuilderPage() {
                                 <div className={`h-full overflow-y-auto p-6 text-center transition-colors duration-300 ${THEMES[bioPage?.theme as keyof typeof THEMES]?.bg || THEMES.default.bg}`}>
                                     <div className="w-24 h-24 bg-gray-700 rounded-full mx-auto mb-4 border-4 border-white/10 shadow-xl overflow-hidden">
                                         {bioPage?.avatarUrl ? (
-                                            <img src={bioPage.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                                            <Image
+                                                src={bioPage.avatarUrl}
+                                                alt="Avatar"
+                                                width={96}
+                                                height={96}
+                                                className="w-full h-full object-cover"
+                                            />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center text-2xl font-bold text-white/50">
                                                 {bioPage?.displayName?.charAt(0) || "?"}

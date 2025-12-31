@@ -1,0 +1,210 @@
+{
+    "Dashboard": {
+        "title": "Dashboard",
+        "personalize": "Personalize",
+        "saveLayout": "Save Layout",
+        "cancel": "Cancel",
+        "restore": "Restore",
+        "clicks": "Total Clicks",
+        "conversions": "Conversions",
+        "ctr": "Conversion Rate (CTR)",
+        "earnings": "Estimated Earnings",
+        "performance": "Sales Performance",
+        "recentActivity": "Recent Activity",
+        "noActivity": "No recent activity.",
+        "vsLast30Days": "vs. last 30 days"
+    },
+    "Products": {
+        "title": "Products",
+        "description": "Manage your affiliate products and create AI-powered campaigns.",
+        "addProduct": "Add Product",
+        "importProduct": "Import Product",
+        "searchPlaceholder": "Search products...",
+        "findBestProducts": "Find Best Products",
+        "noProducts": "No products registered yet.",
+        "addFirstProduct": "Add First Product",
+        "dialogTitle": "Add New Product",
+        "dialogDescription": "Paste the product link and define where it can be sold.",
+        "productLink": "Product Link",
+        "imageOptional": "Image (Optional)",
+        "imagePickerLabel": "Select from Gallery",
+        "imagePickerHint": "If left blank, we will try to capture the image from the link automatically.",
+        "targetCountry": "Target Country",
+        "selectCountry": "Select country",
+        "state": "State",
+        "city": "City",
+        "analyzing": "Analyzing...",
+        "aiWritingCopy": "AI is writing your copy...",
+        "deleteConfirm": "Are you sure you want to delete this product?",
+        "importError": "Error importing product. Check the link.",
+        "deleteError": "Error deleting product.",
+        "copyError": "Error generating copy.",
+        "card": {
+            "link": "Link",
+            "ia": "AI",
+            "promote": "Promote",
+            "remove": "Remove",
+            "noImage": "No Image"
+        }
+    },
+    "Social": {
+        "title": "Social Automation",
+        "description": "Create and schedule posts for your connected social networks.",
+        "tabs": {
+            "composer": "Create Post",
+            "calendar": "Calendar",
+            "history": "History"
+        },
+        "composer": {
+            "title": "Create New Post",
+            "content": "Content",
+            "contentPlaceholder": "Write your message...",
+            "imageUrl": "Image URL (optional)",
+            "platforms": "Platforms",
+            "schedule": "Schedule for (optional)",
+            "submitSchedule": "Schedule Post",
+            "submitDraft": "Create Draft",
+            "success": "Post created successfully!",
+            "error": "Error creating post",
+            "validation": "Fill in the content and select at least one platform"
+        },
+        "history": {
+            "title": "My Posts",
+            "noPosts": "No posts created yet.",
+            "publishedAt": "Published on {date}",
+            "scheduledFor": "Scheduled for {date}",
+            "createdAt": "Created on {date}",
+            "publishNow": "Publish Now",
+            "delete": "Delete",
+            "deleteConfirm": "Are you sure you want to delete this post?",
+            "publishSuccess": "Post published successfully!",
+            "publishError": "Error publishing post",
+            "deleteError": "Error deleting post"
+        }
+    },
+    "Creatives": {
+        "title": "Creative Studio",
+        "description": "Create, edit and preview your ads with AI assistance.",
+        "myCreatives": "My Creatives",
+        "saveCreative": "Save Creative",
+        "saving": "Saving...",
+        "publishAd": "Publish Ad",
+        "saveSuccess": "Creative saved successfully! (+30 XP)",
+        "saveError": "Error saving creative.",
+        "historyTitle": "My Saved Creatives",
+        "historyDescription": "History of generated ads and scripts.",
+        "tabs": {
+            "instagram": "Instagram Feed",
+            "google": "Google Search"
+        },
+        "canvas": {
+            "headline": "Your Amazing Headline Here",
+            "description": "Persuasive description of your product goes here.",
+            "cta": "Learn More"
+        }
+    },
+    "Integrations": {
+        "title": "Connections",
+        "description": "Manage your integrations with affiliate networks and ad platforms.",
+        "myConnections": "My Active Connections",
+        "active": "Active",
+        "region": "Region",
+        "state": "State",
+        "disconnect": "Disconnect",
+        "deleteConfirm": "Are you sure you want to remove this connection?",
+        "tabs": {
+            "affiliates": "Affiliate Networks",
+            "ads": "Ad Platforms",
+            "social": "Social Networks"
+        },
+        "card": {
+            "connected": "Connected",
+            "configure": "Configure",
+            "test": "Test",
+            "testing": "Testing...",
+            "connect": "Connect",
+            "noAccount": "Don't have an account? Sign up"
+        },
+        "dialog": {
+            "connectTitle": "Connect {platform}",
+            "oauthDescription": "Log in to authorize direct access to your account.",
+            "apiDescription": "Configure your connection and define the target region.",
+            "redirectMessage": "You will be redirected to the {platform} authorization page.",
+            "connectWith": "Connect with {platform}",
+            "accountName": "Account Name (Nickname)",
+            "apiKey": "API Key",
+            "accountId": "Account / Affiliate ID",
+            "targetCountry": "Target Country",
+            "selectCountry": "Select country",
+            "state": "State",
+            "city": "City",
+            "saveConnection": "Save Connection"
+        }
+    },
+    "AIStudio": {
+        "title": "AI Studio ✍️",
+        "description": "Create persuasive texts and video scripts with Artificial Intelligence.",
+        "tabs": {
+            "copy": "Ad Copy Generator",
+            "video": "Video Script Writer",
+            "image": "Image Generator"
+        },
+        "copy": {
+            "title": "Product Details",
+            "subtitle": "Describe what you want to sell.",
+            "importUrl": "Import from URL (Optional)",
+            "importButton": "Import",
+            "productName": "Product Name",
+            "productNamePlaceholder": "Ex: Runner Pro Sneakers",
+            "description": "Description / Benefits",
+            "descriptionPlaceholder": "Ex: Lightweight, orthopedic sneakers, ideal for long runs...",
+            "generateButton": "Generate Copy",
+            "resultTitle": "Result",
+            "copyButton": "Copy",
+            "emptyState": "Your generated text will appear here.",
+            "importSuccess": "Data imported successfully!",
+            "importError": "Error importing data from URL",
+            "generateSuccess": "Copy generated and saved successfully! (+30 XP)",
+            "generateError": "Error generating copy",
+            "copied": "Copied to clipboard"
+        },
+        "video": {
+            "title": "Video Briefing",
+            "subtitle": "For TikTok, Reels or Shorts.",
+            "product": "Product / Topic",
+            "productPlaceholder": "Ex: Online English Course",
+            "keyPoints": "Key Points",
+            "keyPointsPlaceholder": "Ex: Learn fast, native teachers, certificate included...",
+            "generateButton": "Generate Script",
+            "resultTitle": "Script (Storyboard)",
+            "copyJson": "Copy JSON",
+            "emptyState": "Your script will appear here.",
+            "visual": "Visual",
+            "audio": "Audio / Voiceover",
+            "generateSuccess": "Script generated and saved successfully! (+30 XP)",
+            "generateError": "Error generating script"
+        }
+    },
+    "Sidebar": {
+        "overview": "Overview",
+        "products": "Products",
+        "bioLink": "Link in Bio",
+        "social": "Social Automation",
+        "creativeStudio": "Creative Studio",
+        "aiStudio": "AI Studio",
+        "campaigns": "Campaigns",
+        "analytics": "Analytics",
+        "achievements": "Achievements",
+        "integrations": "Connections",
+        "gallery": "Gallery",
+        "settings": "Settings",
+        "admin": "Admin"
+    },
+    "Common": {
+        "loading": "Loading...",
+        "error": "An error occurred.",
+        "success": "Success!",
+        "save": "Save",
+        "delete": "Delete"
+    }
+}

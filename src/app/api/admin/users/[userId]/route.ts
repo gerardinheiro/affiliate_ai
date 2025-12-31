@@ -13,7 +13,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ userId
     }
 
     try {
-        const adminId = (session.user as any).id
+        const adminId = (session.user as { id: string }).id
         const admin = await db.user.findUnique({
             where: { id: adminId },
             select: { role: true },

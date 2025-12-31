@@ -5,7 +5,7 @@ import { db } from "@/lib/db"
 import { addXp } from "@/lib/gamification"
 
 // GET - List all posts for the user
-export async function GET(req: Request) {
+export async function GET() {
     const session = await getServerSession(authOptions)
 
     if (!session?.user) {
@@ -13,7 +13,7 @@ export async function GET(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const posts = await db.post.findMany({
             where: { userId },
             orderBy: { createdAt: "desc" },
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const body = await req.json()
         const { content, imageUrl, platforms, scheduledFor } = body
 
@@ -68,7 +68,7 @@ export async function DELETE(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const { searchParams } = new URL(req.url)
         const id = searchParams.get("id")
 

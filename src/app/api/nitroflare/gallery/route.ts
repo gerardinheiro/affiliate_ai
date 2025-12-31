@@ -14,7 +14,7 @@ export async function GET() {
         // Get all creatives (both with and without Nitroflare URLs) for this user
         const creatives = await db.creative.findMany({
             where: {
-                userId: (session.user as any).id,
+                userId: (session.user as { id: string }).id,
                 type: "image" // Only show images
             },
             orderBy: {

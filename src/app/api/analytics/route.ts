@@ -14,7 +14,7 @@ export async function GET(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const { searchParams } = new URL(req.url)
         const days = parseInt(searchParams.get("days") || "30")
 

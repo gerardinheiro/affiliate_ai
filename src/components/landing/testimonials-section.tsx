@@ -119,7 +119,7 @@ export function TestimonialsSection() {
 
                                     {/* Text */}
                                     <p className="text-lg text-gray-300 mb-6 leading-relaxed">
-                                        "{currentTestimonial.text}"
+                                        &quot;{currentTestimonial.text}&quot;
                                     </p>
 
                                     {/* Author */}
@@ -157,8 +157,8 @@ export function TestimonialsSection() {
                                         setCurrentIndex(index)
                                     }}
                                     className={`w-2 h-2 rounded-full transition-all ${index === currentIndex
-                                            ? "bg-indigo-500 w-8"
-                                            : "bg-white/20 hover:bg-white/40"
+                                        ? "bg-indigo-500 w-8"
+                                        : "bg-white/20 hover:bg-white/40"
                                         }`}
                                 />
                             ))}
@@ -193,7 +193,7 @@ export function TestimonialsSection() {
                                     ))}
                                 </div>
                                 <p className="text-sm text-gray-400 mb-4 line-clamp-3">
-                                    "{testimonial.text}"
+                                    &quot;{testimonial.text}&quot;
                                 </p>
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white text-sm font-bold">

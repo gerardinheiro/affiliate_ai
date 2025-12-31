@@ -68,10 +68,6 @@ export default function AnalyticsPage() {
     const [isLoading, setIsLoading] = useState(true)
     const [period, setPeriod] = useState("30")
 
-    useEffect(() => {
-        fetchAnalytics()
-    }, [period])
-
     const fetchAnalytics = async () => {
         setIsLoading(true)
         try {
@@ -84,6 +80,10 @@ export default function AnalyticsPage() {
             setIsLoading(false)
         }
     }
+
+    useEffect(() => {
+        fetchAnalytics()
+    }, [period])
 
     if (isLoading) {
         return (
@@ -336,7 +336,7 @@ function MetricCard({
 }: {
     title: string
     value: number
-    icon: any
+    icon: React.ElementType
     growth?: number
     color: string
 }) {

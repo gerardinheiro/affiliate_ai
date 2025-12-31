@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const body = await req.json()
         const { title, url, icon } = body
 
@@ -45,7 +45,7 @@ export async function DELETE(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const { searchParams } = new URL(req.url)
         const id = searchParams.get("id")
 
@@ -79,7 +79,7 @@ export async function PATCH(req: Request) {
     }
 
     try {
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const body = await req.json()
         const { links } = body // Expects array of { id, order }
 

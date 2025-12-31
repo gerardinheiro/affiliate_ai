@@ -21,7 +21,7 @@ export async function POST(req: Request) {
         const integration = await db.integration.findUnique({
             where: {
                 id: integrationId,
-                userId: (session.user as any).id,
+                userId: (session.user as { id: string }).id,
             },
         })
 
@@ -39,11 +39,12 @@ export async function POST(req: Request) {
             advertisers: advertisers
         })
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("[TIKTOK_ADS_TEST]", error)
+        const errorMessage = error instanceof Error ? error.message : "Falha ao testar conexão"
         return NextResponse.json({
             success: false,
-            message: error.message || "Falha ao testar conexão"
+            message: errorMessage
         }, { status: 500 })
     }
 }

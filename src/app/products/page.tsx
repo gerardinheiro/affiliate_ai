@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { ProductCard } from "@/components/products/product-card"
 import { Plus, Search, Sparkles, Loader2 } from "lucide-react"
 import { generateCopyAction, scrapeProductAction } from "@/app/actions"
+import { useTranslations } from "next-intl"
 import {
     Dialog,
     DialogContent,
@@ -42,6 +43,7 @@ import { CreateCampaignModal } from "@/components/campaigns/create-campaign-moda
 import { ImagePicker } from "@/components/creatives/image-picker"
 
 export default function ProductsPage() {
+    const t = useTranslations("Products")
     const [products, setProducts] = useState<Product[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [isGenerating, setIsGenerating] = useState(false)
@@ -106,14 +108,14 @@ export default function ProductsPage() {
                 setIsDialogOpen(false)
             }
         } catch (error) {
-            alert("Erro ao importar produto. Verifique o link.")
+            alert(t("importError"))
         } finally {
             setIsAdding(false)
         }
     }
 
     const handleDeleteProduct = async (id: string) => {
-        if (!confirm("Tem certeza que deseja excluir este produto?")) return
+        if (!confirm(t("deleteConfirm"))) return
 
         try {
             const res = await fetch(`/api/products?id=${id}`, { method: "DELETE" })
@@ -121,7 +123,7 @@ export default function ProductsPage() {
                 setProducts(products.filter((p) => p.id !== id))
             }
         } catch (error) {
-            alert("Erro ao excluir produto.")
+            alert(t("deleteError"))
         }
     }
 
@@ -131,7 +133,7 @@ export default function ProductsPage() {
             const copy = await generateCopyAction(productTitle)
             alert(`Copy gerada para "${productTitle}":\n\n"${copy}"`)
         } catch (error: any) {
-            alert(error.message || "Erro ao gerar copy.")
+            alert(error.message || t("copyError"))
         } finally {
             setIsGenerating(false)
         }
@@ -157,23 +159,23 @@ export default function ProductsPage() {
             <div className="flex flex-col gap-8">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-3xl font-bold tracking-tight text-white">Produtos</h2>
+                        <h2 className="text-3xl font-bold tracking-tight text-white">{t("title")}</h2>
                         <p className="text-gray-400 mt-2">
-                            Gerencie seus produtos afiliados e crie campanhas com IA.
+                            {t("description")}
                         </p>
                     </div>
                     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                         <DialogTrigger asChild>
                             <Button>
                                 <Plus className="w-4 h-4 mr-2" />
-                                Adicionar Produto
+                                {t("addProduct")}
                             </Button>
                         </DialogTrigger>
                         <DialogContent className="glass border-white/10 bg-black/80 backdrop-blur-xl">
                             <DialogHeader>
-                                <DialogTitle className="text-white">Adicionar Novo Produto</DialogTitle>
+                                <DialogTitle className="text-white">{t("dialogTitle")}</DialogTitle>
                                 <DialogDescription className="text-gray-400">
-                                    Cole o link do produto e defina onde ele pode ser vendido.
+                                    {t("dialogDescription")}
                                 </DialogDescription>
                             </DialogHeader>
                             <div className="grid gap-4 py-4">
@@ -197,18 +199,18 @@ export default function ProductsPage() {
                                         <ImagePicker
                                             value={manualImageUrl}
                                             onChange={setManualImageUrl}
-                                            label="Selecionar da Galeria"
+                                            label={t("imagePickerLabel")}
                                         />
                                         <p className="text-[10px] text-gray-500 mt-1">
-                                            Se deixado em branco, tentaremos capturar a imagem do link automaticamente.
+                                            {t("imagePickerHint")}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label className="text-right text-gray-300">País Alvo</Label>
+                                    <Label className="text-right text-gray-300">{t("targetCountry")}</Label>
                                     <Select onValueChange={setTargetCountry}>
                                         <SelectTrigger className="col-span-3 bg-white/5 border-white/10 text-white">
-                                            <SelectValue placeholder="Selecione o país" />
+                                            <SelectValue placeholder={t("selectCountry")} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="BR">Brasil 🇧🇷</SelectItem>
@@ -220,7 +222,7 @@ export default function ProductsPage() {
                                 </div>
                                 <div className="grid grid-cols-4 items-center gap-4">
                                     <Label htmlFor="state" className="text-right text-gray-300">
-                                        Estado
+                                        {t("state")}
                                     </Label>
                                     <Input
                                         id="state"
@@ -232,7 +234,7 @@ export default function ProductsPage() {
                                 </div>
                                 <div className="grid grid-cols-4 items-center gap-4">
                                     <Label htmlFor="city" className="text-right text-gray-300">
-                                        Cidade
+                                        {t("city")}
                                     </Label>
                                     <Input
                                         id="city"
@@ -248,10 +250,10 @@ export default function ProductsPage() {
                                     {isAdding ? (
                                         <>
                                             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                            Analisando...
+                                            {t("analyzing")}
                                         </>
                                     ) : (
-                                        "Importar Produto"
+                                        t("importProduct")
                                     )}
                                 </Button>
                             </DialogFooter>
@@ -264,13 +266,13 @@ export default function ProductsPage() {
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
                         <Input
                             type="search"
-                            placeholder="Buscar produtos..."
+                            placeholder={t("searchPlaceholder")}
                             className="pl-8 bg-white/5 border-white/10 text-white placeholder:text-gray-500"
                         />
                     </div>
                     <Button variant="secondary" className="bg-white/10 text-white hover:bg-white/20">
                         <Sparkles className="w-4 h-4 mr-2" />
-                        Encontrar Melhores Produtos
+                        {t("findBestProducts")}
                     </Button>
                 </div>
 
@@ -278,17 +280,17 @@ export default function ProductsPage() {
                     <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center">
                         <div className="bg-white p-6 rounded-lg shadow-xl flex flex-col items-center">
                             <Loader2 className="w-8 h-8 text-indigo-600 animate-spin mb-4" />
-                            <p className="font-medium text-gray-900">A IA está escrevendo sua copy...</p>
+                            <p className="font-medium text-gray-900">{t("aiWritingCopy")}</p>
                         </div>
                     </div>
                 )}
 
                 {products.length === 0 ? (
                     <div className="text-center py-12">
-                        <p className="text-gray-400 mb-4">Nenhum produto cadastrado ainda.</p>
+                        <p className="text-gray-400 mb-4">{t("noProducts")}</p>
                         <Button onClick={() => setIsDialogOpen(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white">
                             <Plus className="w-4 h-4 mr-2" />
-                            Adicionar Primeiro Produto
+                            {t("addFirstProduct")}
                         </Button>
                     </div>
                 ) : (

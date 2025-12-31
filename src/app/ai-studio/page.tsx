@@ -8,11 +8,20 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Loader2, Copy, Video, FileText, Check, Image as ImageIcon, Link as LinkIcon } from "lucide-react"
+import { Loader2, Copy, Video, FileText, ImageIcon, Link as LinkIcon } from "lucide-react"
 import { generateCopyAction, generateVideoScriptAction, scrapeProductAction } from "@/app/actions"
 import { ImageGenerator } from "@/components/creatives/image-generator"
+import { useTranslations } from "next-intl"
+
+interface VideoScriptScene {
+    scene_number: number
+    duration: number
+    visual_description: string
+    audio_script: string
+}
 
 export default function AIStudioPage() {
+    const t = useTranslations("AIStudio")
     const [isLoading, setIsLoading] = useState(false)
     const [activeTab, setActiveTab] = useState("copy")
 
@@ -26,7 +35,7 @@ export default function AIStudioPage() {
     // Script State
     const [scriptProduct, setScriptProduct] = useState("")
     const [scriptDesc, setScriptDesc] = useState("")
-    const [generatedScript, setGeneratedScript] = useState<any[]>([])
+    const [generatedScript, setGeneratedScript] = useState<VideoScriptScene[]>([])
 
     const handleImportUrl = async () => {
         if (!importUrl) return
@@ -36,11 +45,11 @@ export default function AIStudioPage() {
             if (data) {
                 setProductName(data.title)
                 setProductDesc(data.description + (data.price ? `\nPreço: ${data.price}` : ""))
-                alert("Dados importados com sucesso!")
+                alert(t("copy.importSuccess"))
             }
         } catch (error) {
             console.error(error)
-            alert("Erro ao importar dados da URL")
+            alert(t("copy.importError"))
         } finally {
             setIsImporting(false)
         }
@@ -52,10 +61,10 @@ export default function AIStudioPage() {
         try {
             const result = await generateCopyAction(productName)
             setGeneratedCopy(result || "")
-            if (result) alert("Copy gerada e salva com sucesso! (+30 XP)")
+            if (result) alert(t("copy.generateSuccess"))
         } catch (error) {
             console.error(error)
-            alert("Erro ao gerar copy")
+            alert(t("copy.generateError"))
         } finally {
             setIsLoading(false)
         }
@@ -67,10 +76,10 @@ export default function AIStudioPage() {
         try {
             const result = await generateVideoScriptAction(scriptProduct, scriptDesc)
             setGeneratedScript(Array.isArray(result) ? result : [])
-            if (result) alert("Roteiro gerado e salvo com sucesso! (+30 XP)")
+            if (result) alert(t("video.generateSuccess"))
         } catch (error) {
             console.error(error)
-            alert("Erro ao gerar roteiro")
+            alert(t("video.generateError"))
         } finally {
             setIsLoading(false)
         }
@@ -78,34 +87,34 @@ export default function AIStudioPage() {
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text)
-        alert("Copiado para a área de transferência")
+        alert(t("copy.copied"))
     }
 
     return (
         <DashboardLayout>
             <div className="max-w-5xl mx-auto space-y-8">
                 <div>
-                    <h2 className="text-3xl font-bold text-white">AI Studio ✍️</h2>
-                    <p className="text-gray-400">Crie textos persuasivos e roteiros de vídeo com Inteligência Artificial.</p>
+                    <h2 className="text-3xl font-bold text-white">{t("title")}</h2>
+                    <p className="text-gray-400">{t("description")}</p>
                 </div>
 
                 <Tabs defaultValue="copy" value={activeTab} onValueChange={setActiveTab} className="w-full">
                     <TabsList className="grid w-full grid-cols-3 bg-white/5">
-                        <TabsTrigger value="copy" className="gap-2"><FileText className="w-4 h-4" /> Ad Copy Generator</TabsTrigger>
-                        <TabsTrigger value="video" className="gap-2"><Video className="w-4 h-4" /> Video Script Writer</TabsTrigger>
-                        <TabsTrigger value="image" className="gap-2"><ImageIcon className="w-4 h-4" /> Image Generator</TabsTrigger>
+                        <TabsTrigger value="copy" className="gap-2"><FileText className="w-4 h-4" /> {t("tabs.copy")}</TabsTrigger>
+                        <TabsTrigger value="video" className="gap-2"><Video className="w-4 h-4" /> {t("tabs.video")}</TabsTrigger>
+                        <TabsTrigger value="image" className="gap-2"><ImageIcon className="w-4 h-4" /> {t("tabs.image")}</TabsTrigger>
                     </TabsList>
 
                     {/* AD COPY TAB */}
                     <TabsContent value="copy" className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <Card className="glass border-white/10 h-fit">
                             <CardHeader>
-                                <CardTitle className="text-white">Detalhes do Produto</CardTitle>
-                                <CardDescription>Descreva o que você quer vender.</CardDescription>
+                                <CardTitle className="text-white">{t("copy.title")}</CardTitle>
+                                <CardDescription>{t("copy.subtitle")}</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="space-y-2">
-                                    <Label className="text-gray-300">Importar de URL (Opcional)</Label>
+                                    <Label className="text-gray-300">{t("copy.importUrl")}</Label>
                                     <div className="flex gap-2">
                                         <Input
                                             placeholder="https://loja.com/produto"
@@ -120,23 +129,23 @@ export default function AIStudioPage() {
                                             className="whitespace-nowrap"
                                         >
                                             {isImporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <LinkIcon className="w-4 h-4" />}
-                                            <span className="ml-2 hidden sm:inline">Importar</span>
+                                            <span className="ml-2 hidden sm:inline">{t("copy.importButton")}</span>
                                         </Button>
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label className="text-gray-300">Nome do Produto</Label>
+                                    <Label className="text-gray-300">{t("copy.productName")}</Label>
                                     <Input
-                                        placeholder="Ex: Tênis Runner Pro"
+                                        placeholder={t("copy.productNamePlaceholder")}
                                         value={productName}
                                         onChange={e => setProductName(e.target.value)}
                                         className="bg-white/5 border-white/10 text-white"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label className="text-gray-300">Descrição / Benefícios</Label>
+                                    <Label className="text-gray-300">{t("copy.description")}</Label>
                                     <Textarea
-                                        placeholder="Ex: Tênis leve, ortopédico, ideal para corridas longas..."
+                                        placeholder={t("copy.descriptionPlaceholder")}
                                         value={productDesc}
                                         onChange={e => setProductDesc(e.target.value)}
                                         className="bg-white/5 border-white/10 text-white min-h-[150px]"
@@ -148,17 +157,17 @@ export default function AIStudioPage() {
                                     className="w-full bg-indigo-600 hover:bg-indigo-700"
                                 >
                                     {isLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FileText className="w-4 h-4 mr-2" />}
-                                    Gerar Copy
+                                    {t("copy.generateButton")}
                                 </Button>
                             </CardContent>
                         </Card>
 
                         <Card className="glass border-white/10 min-h-[400px]">
                             <CardHeader className="flex flex-row items-center justify-between">
-                                <CardTitle className="text-white">Resultado</CardTitle>
+                                <CardTitle className="text-white">{t("copy.resultTitle")}</CardTitle>
                                 {generatedCopy && (
                                     <Button variant="ghost" size="sm" onClick={() => copyToClipboard(generatedCopy)}>
-                                        <Copy className="w-4 h-4 mr-2" /> Copiar
+                                        <Copy className="w-4 h-4 mr-2" /> {t("copy.copyButton")}
                                     </Button>
                                 )}
                             </CardHeader>
@@ -170,7 +179,7 @@ export default function AIStudioPage() {
                                 ) : (
                                     <div className="flex flex-col items-center justify-center h-[300px] text-gray-500">
                                         <FileText className="w-12 h-12 mb-4 opacity-20" />
-                                        <p>Seu texto gerado aparecerá aqui.</p>
+                                        <p>{t("copy.emptyState")}</p>
                                     </div>
                                 )}
                             </CardContent>
@@ -181,23 +190,23 @@ export default function AIStudioPage() {
                     <TabsContent value="video" className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <Card className="glass border-white/10 h-fit">
                             <CardHeader>
-                                <CardTitle className="text-white">Briefing do Vídeo</CardTitle>
-                                <CardDescription>Para TikTok, Reels ou Shorts.</CardDescription>
+                                <CardTitle className="text-white">{t("video.title")}</CardTitle>
+                                <CardDescription>{t("video.subtitle")}</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="space-y-2">
-                                    <Label className="text-gray-300">Produto / Tópico</Label>
+                                    <Label className="text-gray-300">{t("video.product")}</Label>
                                     <Input
-                                        placeholder="Ex: Curso de Inglês Online"
+                                        placeholder={t("video.productPlaceholder")}
                                         value={scriptProduct}
                                         onChange={e => setScriptProduct(e.target.value)}
                                         className="bg-white/5 border-white/10 text-white"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label className="text-gray-300">Pontos Chave</Label>
+                                    <Label className="text-gray-300">{t("video.keyPoints")}</Label>
                                     <Textarea
-                                        placeholder="Ex: Aprenda rápido, professores nativos, certificado incluso..."
+                                        placeholder={t("video.keyPointsPlaceholder")}
                                         value={scriptDesc}
                                         onChange={e => setScriptDesc(e.target.value)}
                                         className="bg-white/5 border-white/10 text-white min-h-[150px]"
@@ -209,17 +218,17 @@ export default function AIStudioPage() {
                                     className="w-full bg-pink-600 hover:bg-pink-700"
                                 >
                                     {isLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Video className="w-4 h-4 mr-2" />}
-                                    Gerar Roteiro
+                                    {t("video.generateButton")}
                                 </Button>
                             </CardContent>
                         </Card>
 
                         <Card className="glass border-white/10 min-h-[400px]">
                             <CardHeader className="flex flex-row items-center justify-between">
-                                <CardTitle className="text-white">Roteiro (Storyboard)</CardTitle>
+                                <CardTitle className="text-white">{t("video.resultTitle")}</CardTitle>
                                 {generatedScript.length > 0 && (
                                     <Button variant="ghost" size="sm" onClick={() => copyToClipboard(JSON.stringify(generatedScript, null, 2))}>
-                                        <Copy className="w-4 h-4 mr-2" /> Copiar JSON
+                                        <Copy className="w-4 h-4 mr-2" /> {t("video.copyJson")}
                                     </Button>
                                 )}
                             </CardHeader>
@@ -233,15 +242,15 @@ export default function AIStudioPage() {
                                                 </div>
                                                 <div className="space-y-2 flex-1">
                                                     <div className="flex justify-between">
-                                                        <span className="text-xs font-medium text-pink-400 uppercase">Visual</span>
+                                                        <span className="text-xs font-medium text-pink-400 uppercase">{t("video.visual")}</span>
                                                         <span className="text-xs text-gray-500">{scene.duration}s</span>
                                                     </div>
                                                     <p className="text-gray-300 text-sm">{scene.visual_description}</p>
 
                                                     <div className="h-px bg-white/5 my-2" />
 
-                                                    <span className="text-xs font-medium text-blue-400 uppercase">Áudio / Locução</span>
-                                                    <p className="text-white text-sm italic">"{scene.audio_script}"</p>
+                                                    <span className="text-xs font-medium text-blue-400 uppercase">{t("video.audio")}</span>
+                                                    <p className="text-white text-sm italic">&quot;{scene.audio_script}&quot;</p>
                                                 </div>
                                             </div>
                                         ))}
@@ -249,7 +258,7 @@ export default function AIStudioPage() {
                                 ) : (
                                     <div className="flex flex-col items-center justify-center h-[300px] text-gray-500">
                                         <Video className="w-12 h-12 mb-4 opacity-20" />
-                                        <p>Seu roteiro aparecerá aqui.</p>
+                                        <p>{t("video.emptyState")}</p>
                                     </div>
                                 )}
                             </CardContent>

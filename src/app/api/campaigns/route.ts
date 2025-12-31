@@ -3,15 +3,25 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
 
+interface UserSession {
+    user: {
+        id: string
+        name?: string | null
+        email?: string | null
+        image?: string | null
+    }
+}
+
+
 // GET - List all campaigns for the user
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
-        const session = await getServerSession(authOptions)
+        const session = await getServerSession(authOptions) as UserSession | null
         if (!session?.user) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
-        const userId = (session.user as any).id
+        const userId = session.user.id
         const campaigns = await db.campaign.findMany({
             where: { userId },
             orderBy: { createdAt: "desc" },
@@ -27,12 +37,12 @@ export async function GET(req: NextRequest) {
 // POST - Create a new campaign
 export async function POST(req: NextRequest) {
     try {
-        const session = await getServerSession(authOptions)
+        const session = await getServerSession(authOptions) as UserSession | null
         if (!session?.user) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
-        const userId = (session.user as any).id
+        const userId = session.user.id
         const body = await req.json()
         const { name, platform, status, productId } = body
 
@@ -43,7 +53,7 @@ export async function POST(req: NextRequest) {
                 status: status || "paused",
                 userId,
                 productId: productId || "", // Fallback for old API calls
-            },
+            } as any,
         })
 
         return NextResponse.json(campaign, { status: 201 })
@@ -61,7 +71,7 @@ export async function PATCH(req: NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const body = await req.json()
         const { id, status, clicks, conversions, spent, revenue } = body
 
@@ -97,7 +107,7 @@ export async function DELETE(req: NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const { searchParams } = new URL(req.url)
         const id = searchParams.get("id")
 

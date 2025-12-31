@@ -1,0 +1,112 @@
+
+> affiliate_ai@0.1.0 build
+> prisma generate && next build
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+
+Ô£ö Generated Prisma Client (v5.10.2) to .\node_modules\@prisma\client in 260ms
+
+Start using Prisma Client in Node.js (See: https://pris.ly/d/client)
+```
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
+```
+or start using Prisma Client at the edge (See: https://pris.ly/d/accelerate)
+```
+import { PrismaClient } from '@prisma/client/edge'
+const prisma = new PrismaClient()
+```
+
+See other ways of importing Prisma Client: http://pris.ly/d/importing-client
+
+ÔöîÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÉ
+Ôöé  Deploying your app to serverless or edge functions?        Ôöé
+Ôöé  Try Prisma Accelerate for connection pooling and caching.  Ôöé
+Ôöé  https://pris.ly/cli/accelerate                             Ôöé
+ÔööÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÿ
+
+   Ôû▓ Next.js 16.0.7 (Turbopack)
+   - Environments: .env.local, .env
+
+ ÔÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+   Creating an optimized production build ...
+ Ô£ô Compiled successfully in 80s
+   Running TypeScript ...
+   Collecting page data using 7 workers ...
+   Generating static pages using 7 workers (0/56) ...
+   Generating static pages using 7 workers (14/56) 
+   Generating static pages using 7 workers (28/56) 
+   Generating static pages using 7 workers (42/56) 
+ Ô£ô Generating static pages using 7 workers (56/56) in 4.1s
+   Finalizing page optimization ...
+
+Route (app)
+Ôöî Ôùï /
+Ôö£ Ôùï /_not-found
+Ôö£ Ôùï /achievements
+Ôö£ Ôùï /admin
+Ôö£ Ôùï /ai-studio
+Ôö£ Ôùï /analytics
+Ôö£ ãÆ /api/admin/access-count
+Ôö£ ãÆ /api/admin/settings
+Ôö£ ãÆ /api/admin/stats
+Ôö£ ãÆ /api/admin/users
+Ôö£ ãÆ /api/admin/users/[userId]
+Ôö£ ãÆ /api/analytics
+Ôö£ ãÆ /api/auth/[...nextauth]
+Ôö£ ãÆ /api/badges
+Ôö£ ãÆ /api/bio
+Ôö£ ãÆ /api/bio/links
+Ôö£ ãÆ /api/bio/track
+Ôö£ ãÆ /api/campaigns
+Ôö£ ãÆ /api/campaigns/create
+Ôö£ ãÆ /api/chat/customer
+Ôö£ ãÆ /api/chat/internal
+Ôö£ ãÆ /api/creatives
+Ôö£ ãÆ /api/gamification
+Ôö£ ãÆ /api/gamification/leaderboard
+Ôö£ ãÆ /api/integrations
+Ôö£ ãÆ /api/integrations/google-ads/test
+Ôö£ ãÆ /api/integrations/oauth/[platform]
+Ôö£ ãÆ /api/integrations/oauth/callback
+Ôö£ ãÆ /api/integrations/tiktok-ads/test
+Ôö£ ãÆ /api/nitroflare/files
+Ôö£ ãÆ /api/nitroflare/folders
+Ôö£ ãÆ /api/nitroflare/gallery
+Ôö£ ãÆ /api/nitroflare/tags
+Ôö£ ãÆ /api/nitroflare/upload
+Ôö£ ãÆ /api/notifications
+Ôö£ ãÆ /api/onboarding/complete
+Ôö£ ãÆ /api/page-views
+Ôö£ ãÆ /api/posts
+Ôö£ ãÆ /api/products
+Ôö£ ãÆ /api/profile
+Ôö£ ãÆ /api/public-stats
+Ôö£ ãÆ /api/settings
+Ôö£ ãÆ /api/social/publish
+Ôö£ ãÆ /api/stats
+Ôö£ ãÆ /api/stripe/checkout
+Ôö£ ãÆ /api/stripe/portal
+Ôö£ ãÆ /api/stripe/webhook
+Ôö£ Ôùï /bio-builder
+Ôö£ Ôùï /campaigns
+Ôö£ Ôùï /creatives
+Ôö£ ãÆ /dashboard
+Ôö£ Ôùï /integrations
+Ôö£ Ôùï /login
+Ôö£ Ôùï /nitroflare-gallery
+Ôö£ Ôùï /pricing
+Ôö£ Ôùï /privacy
+Ôö£ Ôùï /products
+Ôö£ Ôùï /profile
+Ôö£ Ôùï /settings
+Ôö£ Ôùï /social
+Ôöö ãÆ /u/[username]
+
+
+ãÆ Proxy (Middleware)
+
+Ôùï  (Static)   prerendered as static content
+ãÆ  (Dynamic)  server-rendered on demand
+

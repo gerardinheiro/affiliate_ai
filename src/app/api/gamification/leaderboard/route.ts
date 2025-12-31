@@ -40,7 +40,7 @@ export async function GET() {
 
         return NextResponse.json(leaderboard)
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("[LEADERBOARD_ERROR]", error)
         return new NextResponse("Internal Error", { status: 500 })
     }

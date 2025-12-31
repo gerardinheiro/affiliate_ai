@@ -2,9 +2,8 @@ import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
-import { calculateLevel } from "@/lib/gamification"
 
-export async function GET(req: Request) {
+export async function GET() {
     const session = await getServerSession(authOptions)
 
     if (!session?.user) {
@@ -13,7 +12,7 @@ export async function GET(req: Request) {
 
     try {
         const user = await db.user.findUnique({
-            where: { id: (session.user as any).id },
+            where: { id: (session.user as { id: string }).id },
             select: {
                 xp: true,
                 level: true,

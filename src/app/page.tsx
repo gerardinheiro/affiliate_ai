@@ -9,8 +9,14 @@ import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { LocaleProvider, useLocale } from "@/contexts/locale-context"
 import { LanguageSelector } from "@/components/ui/language-selector"
-import { Users, Package, Megaphone, Share2 } from "lucide-react"
+import { Users, Package, Megaphone, Share2, Star } from "lucide-react"
 import { Logo3D } from "@/components/ui/logo-3d"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 function LandingPageContent() {
   const { data: session, status } = useSession()
@@ -366,58 +372,64 @@ function LandingPageContent() {
       <section id="testimonials" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">O que dizem nossos usuários</h2>
-            <p className="text-gray-400">Junte-se a centenas de afiliados que já estão escalando com IA.</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t('testimonials.title')}</h2>
+            <p className="text-gray-400">{t('testimonials.subtitle')}</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-2xl glass border border-white/10">
+            <div className="p-8 rounded-2xl glass border border-white/10 hover-lift">
               <div className="flex gap-1 text-yellow-500 mb-4">
-                {"★".repeat(5)}
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-current" />
+                ))}
               </div>
               <p className="text-gray-300 mb-6 italic">
-                "O AffiliateAI mudou o meu jogo. Antes eu perdia horas criando copys, agora a IA faz tudo em segundos e com muito mais conversão."
+                {t('testimonials.1.quote')}
               </p>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center font-bold text-indigo-400">
                   JS
                 </div>
                 <div>
-                  <p className="text-white font-bold text-sm">João Silva</p>
-                  <p className="text-gray-500 text-xs">Afiliado Pro</p>
+                  <p className="text-white font-bold text-sm">{t('testimonials.1.name')}</p>
+                  <p className="text-gray-500 text-xs">{t('testimonials.1.role')}</p>
                 </div>
               </div>
             </div>
-            <div className="p-8 rounded-2xl glass border border-white/10">
+            <div className="p-8 rounded-2xl glass border border-white/10 hover-lift">
               <div className="flex gap-1 text-yellow-500 mb-4">
-                {"★".repeat(5)}
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-current" />
+                ))}
               </div>
               <p className="text-gray-300 mb-6 italic">
-                "A integração com o Instagram e TikTok é fantástica. Postar criativos nunca foi tão fácil. Recomendo muito!"
+                {t('testimonials.2.quote')}
               </p>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-purple-400">
                   MA
                 </div>
                 <div>
-                  <p className="text-white font-bold text-sm">Maria Almeida</p>
-                  <p className="text-gray-500 text-xs">Social Media</p>
+                  <p className="text-white font-bold text-sm">{t('testimonials.2.name')}</p>
+                  <p className="text-gray-500 text-xs">{t('testimonials.2.role')}</p>
                 </div>
               </div>
             </div>
-            <div className="p-8 rounded-2xl glass border border-white/10">
+            <div className="p-8 rounded-2xl glass border border-white/10 hover-lift">
               <div className="flex gap-1 text-yellow-500 mb-4">
-                {"★".repeat(5)}
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-current" />
+                ))}
               </div>
               <p className="text-gray-300 mb-6 italic">
-                "O suporte é excelente e a plataforma é muito intuitiva. O ROI das minhas campanhas subiu 40% no primeiro mês."
+                {t('testimonials.3.quote')}
               </p>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center font-bold text-emerald-400">
                   RC
                 </div>
                 <div>
-                  <p className="text-white font-bold text-sm">Ricardo Costa</p>
-                  <p className="text-gray-500 text-xs">Infoprodutor</p>
+                  <p className="text-white font-bold text-sm">{t('testimonials.3.name')}</p>
+                  <p className="text-gray-500 text-xs">{t('testimonials.3.role')}</p>
                 </div>
               </div>
             </div>
@@ -429,37 +441,45 @@ function LandingPageContent() {
       <section id="faq" className="py-20 bg-black/20">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Perguntas Frequentes</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t('faq.title')}</h2>
             <p className="text-gray-400">
-              Tudo o que você precisa saber sobre o AffiliateAI.
+              {t('faq.subtitle')}
             </p>
           </div>
-          <div className="space-y-4">
-            <div className="p-6 rounded-2xl glass border border-white/10">
-              <h3 className="text-lg font-bold text-white mb-2">Como a IA gera os criativos?</h3>
-              <p className="text-gray-400">
-                Nossa IA analisa o seu link de produto, extrai as principais características e benefícios, e gera automaticamente copys persuasivas e sugestões de imagens/vídeos otimizados para conversão.
-              </p>
-            </div>
-            <div className="p-6 rounded-2xl glass border border-white/10">
-              <h3 className="text-lg font-bold text-white mb-2">Quais plataformas são suportadas?</h3>
-              <p className="text-gray-400">
-                Atualmente suportamos Hotmart, Eduzz, Kiwify e integração direta com Meta Ads (Facebook/Instagram), Google Ads, TikTok e Pinterest.
-              </p>
-            </div>
-            <div className="p-6 rounded-2xl glass border border-white/10">
-              <h3 className="text-lg font-bold text-white mb-2">Preciso ter experiência com tráfego pago?</h3>
-              <p className="text-gray-400">
-                Não! O AffiliateAI foi desenhado tanto para iniciantes quanto para profissionais. A IA cuida da parte técnica e criativa para você.
-              </p>
-            </div>
-            <div className="p-6 rounded-2xl glass border border-white/10">
-              <h3 className="text-lg font-bold text-white mb-2">Posso cancelar minha assinatura a qualquer momento?</h3>
-              <p className="text-gray-400">
-                Sim, você pode cancelar sua assinatura Pro ou Business a qualquer momento diretamente pelo seu painel de configurações, sem letras miúdas.
-              </p>
-            </div>
-          </div>
+          <Accordion type="single" collapsible className="w-full space-y-4">
+            <AccordionItem value="item-1" className="border-none">
+              <AccordionTrigger className="p-6 rounded-2xl glass border border-white/10 text-white hover:no-underline hover:bg-white/5 transition-all">
+                {t('faq.q1')}
+              </AccordionTrigger>
+              <AccordionContent className="p-6 text-gray-400">
+                {t('faq.a1')}
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2" className="border-none">
+              <AccordionTrigger className="p-6 rounded-2xl glass border border-white/10 text-white hover:no-underline hover:bg-white/5 transition-all">
+                {t('faq.q2')}
+              </AccordionTrigger>
+              <AccordionContent className="p-6 text-gray-400">
+                {t('faq.a2')}
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-3" className="border-none">
+              <AccordionTrigger className="p-6 rounded-2xl glass border border-white/10 text-white hover:no-underline hover:bg-white/5 transition-all">
+                {t('faq.q3')}
+              </AccordionTrigger>
+              <AccordionContent className="p-6 text-gray-400">
+                {t('faq.a3')}
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-4" className="border-none">
+              <AccordionTrigger className="p-6 rounded-2xl glass border border-white/10 text-white hover:no-underline hover:bg-white/5 transition-all">
+                {t('faq.q4')}
+              </AccordionTrigger>
+              <AccordionContent className="p-6 text-gray-400">
+                {t('faq.a4')}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </section>
       <footer className="py-12 border-t border-white/10 bg-black/40 mt-auto">

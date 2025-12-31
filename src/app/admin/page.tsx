@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
 import DashboardLayout from "@/components/layout/dashboard-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -40,8 +39,7 @@ type UserData = {
 }
 
 export default function AdminDashboard() {
-    const { data: session } = useSession() || { data: null }
-    const router = useRouter()
+    useSession()
     const [isLoading, setIsLoading] = useState(true)
     const [stats, setStats] = useState<AdminStats | null>(null)
     const [users, setUsers] = useState<UserData[]>([])
@@ -197,7 +195,7 @@ export default function AdminDashboard() {
                                                         setEditingAccessCount(false)
                                                         alert("Contador atualizado!")
                                                     }
-                                                } catch (error) {
+                                                } catch {
                                                     alert("Erro ao atualizar contador")
                                                 }
                                             }}

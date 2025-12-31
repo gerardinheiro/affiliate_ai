@@ -22,76 +22,78 @@ import { useSession } from "next-auth/react"
 import { useState, useEffect } from "react"
 import { LevelProgress } from "@/components/gamification/level-progress"
 import { Logo3D } from "@/components/ui/logo-3d"
+import { LanguageSwitcher } from "@/components/language-switcher"
+import { useTranslations } from "next-intl"
 
-const routes = [
+const getRoutes = (t: any) => [
     {
-        label: "Visão Geral",
+        label: t("overview"),
         icon: LayoutDashboard,
         href: "/dashboard",
         color: "text-sky-500",
     },
     {
-        label: "Produtos",
+        label: t("products"),
         icon: ShoppingCart,
         href: "/products",
         color: "text-violet-500",
     },
     {
-        label: "Link na Bio",
+        label: t("bioLink"),
         icon: LinkIcon,
         href: "/bio-builder",
         color: "text-pink-700",
     },
     {
-        label: "Automação Social",
+        label: t("social"),
         icon: Share2,
         href: "/social",
         color: "text-emerald-500",
     },
     {
-        label: "Creative Studio",
+        label: t("creativeStudio"),
         icon: Palette,
         href: "/creatives",
         color: "text-pink-500",
     },
     {
-        label: "AI Studio",
+        label: t("aiStudio"),
         icon: FileText,
         href: "/ai-studio",
         color: "text-purple-500",
     },
     {
-        label: "Campanhas",
+        label: t("campaigns"),
         icon: Megaphone,
         href: "/campaigns",
         color: "text-orange-700",
     },
     {
-        label: "Analytics",
+        label: t("analytics"),
         icon: BarChart3,
         href: "/analytics",
         color: "text-emerald-500",
     },
     {
-        label: "Conquistas",
+        label: t("achievements"),
         icon: Trophy,
         href: "/achievements",
         color: "text-yellow-500",
     },
     {
-        label: "Integrações",
+        label: t("integrations"),
         icon: Globe,
         href: "/integrations",
         color: "text-blue-500",
     },
     {
-        label: "Galeria",
+        label: t("gallery"),
         icon: Cloud,
         href: "/nitroflare-gallery",
         color: "text-cyan-500",
     },
     {
-        label: "Configurações",
+        label: t("settings"),
         icon: Settings,
         href: "/settings",
         color: "text-gray-500",
@@ -106,6 +108,7 @@ const adminRoute = {
 }
 
 export function Sidebar({ showMobile = false, onClose }: { showMobile?: boolean, onClose?: () => void }) {
+    const t = useTranslations("Sidebar")
     const { data: session } = useSession() || { data: null }
     const [isAdmin, setIsAdmin] = useState(false)
     const [userXp, setUserXp] = useState(0)
@@ -151,7 +154,7 @@ export function Sidebar({ showMobile = false, onClose }: { showMobile?: boolean,
                         </h1>
                     </Link>
                     <div className="space-y-1">
-                        {routes.map((route) => (
+                        {getRoutes(t).map((route) => (
                             <Link
                                 key={route.href}
                                 href={route.href}
@@ -182,15 +185,18 @@ export function Sidebar({ showMobile = false, onClose }: { showMobile?: boolean,
                             >
                                 <div className="flex items-center flex-1">
                                     <adminRoute.icon className={cn("h-5 w-5 mr-3", adminRoute.color)} />
-                                    {adminRoute.label}
+                                    {t("admin")}
                                 </div>
                             </Link>
                         )}
                     </div>
                 </div>
 
-                {/* Gamification Widget */}
-                <div className="px-3 mt-auto mb-4">
+                {/* Footer Actions */}
+                <div className="px-3 mt-auto mb-4 space-y-4">
+                    <div className="flex justify-center">
+                        <LanguageSwitcher />
+                    </div>
                     <div className="bg-white/5 rounded-xl p-4 border border-white/10">
                         <LevelProgress xp={userXp} />
                     </div>

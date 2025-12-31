@@ -101,6 +101,14 @@ const adPlatforms = [
         color: "text-black",
         signupUrl: "https://ads.tiktok.com/",
     },
+    {
+        id: "pinterest_ads",
+        name: "Pinterest Ads",
+        description: "Promova seus produtos visualmente para milhões de usuários.",
+        icon: Share2,
+        color: "text-red-600",
+        signupUrl: "https://ads.pinterest.com/",
+    },
 ]
 
 const socialPlatforms = [
@@ -209,6 +217,8 @@ export default function IntegrationsPage() {
                 url = "/api/integrations/google-ads/test"
             } else if (integration.platform === "tiktok_ads") {
                 url = "/api/integrations/tiktok-ads/test"
+            } else if (integration.platform === "pinterest_ads") {
+                url = "/api/integrations/pinterest-ads/test"
             } else {
                 return
             }
@@ -222,7 +232,11 @@ export default function IntegrationsPage() {
             const data = await res.json()
 
             if (res.ok && data.success) {
-                const count = data.customersCount !== undefined ? data.customersCount : data.advertisersCount
+                const count = data.customersCount !== undefined
+                    ? data.customersCount
+                    : data.advertisersCount !== undefined
+                        ? data.advertisersCount
+                        : data.adAccountsCount
                 alert(`Sucesso! ${count} contas encontradas.`)
             } else {
                 alert(`Erro: ${data.message}`)
@@ -343,7 +357,7 @@ export default function IntegrationsPage() {
                                         isConnected={!!integration}
                                         onConnect={() => handleConnectClick(platform)}
                                         onConfigure={() => handleConnectClick(platform)}
-                                        onTest={(platform.id === "google_ads" || platform.id === "tiktok_ads") && integration ? () => handleTestConnection(integration) : undefined}
+                                        onTest={(platform.id === "google_ads" || platform.id === "tiktok_ads" || platform.id === "pinterest_ads") && integration ? () => handleTestConnection(integration) : undefined}
                                         isTesting={integration && testingId === integration.id}
                                     />
                                 )

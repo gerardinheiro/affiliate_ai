@@ -11,13 +11,13 @@ export async function POST(req: Request) {
     }
 
     try {
-        const { productId, platform, name, budget, headlines, descriptions, imageUrl } = await req.json()
+        const { productId, platform, name, budget, imageUrl } = await req.json()
 
         if (!productId || !platform || !name) {
             return new NextResponse("Missing required fields", { status: 400 })
         }
 
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
 
         // 1. Create Campaign in DB
         const campaign = await db.campaign.create({
@@ -42,8 +42,9 @@ export async function POST(req: Request) {
 
         return NextResponse.json(campaign)
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("[CAMPAIGN_CREATE_ERROR]", error)
-        return new NextResponse(error.message || "Internal Error", { status: 500 })
+        const errorMessage = error instanceof Error ? error.message : "Internal Error"
+        return new NextResponse(errorMessage, { status: 500 })
     }
 }

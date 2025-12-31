@@ -5,14 +5,14 @@ import { db } from "@/lib/db"
 import { addXp } from "@/lib/gamification"
 
 // GET - List all products for the user
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
         const session = await getServerSession(authOptions)
         if (!session?.user) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const products = await db.product.findMany({
             where: { userId },
             orderBy: { createdAt: "desc" },
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const body = await req.json()
         const { title, price, commission, platform, imageUrl, affiliateLink, targetCountry, targetState, targetCity } = body
 
@@ -70,7 +70,7 @@ export async function DELETE(req: NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
         const { searchParams } = new URL(req.url)
         const id = searchParams.get("id")
 

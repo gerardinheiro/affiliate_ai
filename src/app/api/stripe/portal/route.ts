@@ -6,7 +6,7 @@ import { db } from "@/lib/db"
 
 const settingsUrl = process.env.NEXTAUTH_URL + "/settings"
 
-export async function POST(req: Request) {
+export async function POST() {
     try {
         if (!process.env.STRIPE_SECRET_KEY) {
             return new NextResponse("Stripe not configured", { status: 503 })
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
             return new NextResponse("Unauthorized", { status: 401 })
         }
 
-        const userId = (session.user as any).id
+        const userId = (session.user as { id: string }).id
 
         const stripeCustomer = await db.stripeCustomer.findUnique({
             where: { userId },
