@@ -42,7 +42,7 @@ import {
 } from "@dnd-kit/sortable"
 import { StatsData } from "@/lib/stats-service"
 import { Skeleton } from "@/components/ui/skeleton"
-import { useTranslations } from "next-intl"
+import { useTranslations } from "@/lib/mock-intl"
 import { toast } from "sonner"
 import { DashboardWidget } from "./dashboard-widget"
 

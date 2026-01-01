@@ -19,8 +19,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages, getLocale } from 'next-intl/server';
+import { getMessages, getLocale } from '@/lib/mock-intl';
 
 export const dynamic = 'force-dynamic'
 
@@ -29,25 +28,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let locale = 'pt';
-  let messages = {};
-
-  try {
-    locale = await getLocale();
-  } catch (error) {
-    console.warn("Could not get locale, defaulting to pt", error);
-  }
-
-  try {
-    messages = await getMessages();
-  } catch (error) {
-    console.warn("Could not get messages, loading default", error);
-    try {
-      messages = (await import(`../../messages/${locale}.json`)).default;
-    } catch (e) {
-      console.error("Could not load default messages", e);
-    }
-  }
+  const locale = await getLocale();
+  const messages = await getMessages();
 
   return (
     <html lang={locale}>

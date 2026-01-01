@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { ProductCard } from "@/components/products/product-card"
 import { Plus, Search, Sparkles, Loader2 } from "lucide-react"
 import { generateCopyAction, scrapeProductAction } from "@/app/actions"
-import { useTranslations } from "next-intl"
+import { useTranslations } from "@/lib/mock-intl"
 import {
     Dialog,
     DialogContent,

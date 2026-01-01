@@ -12,7 +12,7 @@ import { Calendar, Send, Clock, CheckCircle2, XCircle, Loader2, Image as ImageIc
 import { Checkbox } from "@/components/ui/checkbox"
 import { ContentCalendar } from "@/components/social/content-calendar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useTranslations } from "next-intl"
+import { useTranslations } from "@/lib/mock-intl"
 
 type Post = {
     id: string

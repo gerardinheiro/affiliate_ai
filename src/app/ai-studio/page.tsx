@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Loader2, Copy, Video, FileText, ImageIcon, Link as LinkIcon } from "lucide-react"
 import { generateCopyAction, generateVideoScriptAction, scrapeProductAction } from "@/app/actions"
 import { ImageGenerator } from "@/components/creatives/image-generator"
-import { useTranslations } from "next-intl"
+import { useTranslations } from "@/lib/mock-intl"
 
 interface VideoScriptScene {
     scene_number: number

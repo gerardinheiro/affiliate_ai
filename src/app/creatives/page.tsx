@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Save, UploadCloud, History } from "lucide-react"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { CreativeGallery } from "@/components/creatives/creative-gallery"
-import { useTranslations } from "next-intl"
+import { useTranslations } from "@/lib/mock-intl"
 
 export default function CreativeStudioPage() {
     const t = useTranslations("Creatives")
