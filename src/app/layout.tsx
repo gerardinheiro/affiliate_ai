@@ -22,18 +22,37 @@ export const viewport: Viewport = {
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
 
+export const dynamic = 'force-dynamic'
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = await getLocale();
-  const messages = await getMessages();
+  let locale = 'pt';
+  let messages = {};
+
+  try {
+    locale = await getLocale();
+  } catch (error) {
+    console.warn("Could not get locale, defaulting to pt", error);
+  }
+
+  try {
+    messages = await getMessages();
+  } catch (error) {
+    console.warn("Could not get messages, loading default", error);
+    try {
+      messages = (await import(`../../messages/${locale}.json`)).default;
+    } catch (e) {
+      console.error("Could not load default messages", e);
+    }
+  }
 
   return (
     <html lang={locale}>
       <body className={inter.className} suppressHydrationWarning={true}>
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider messages={messages} locale={locale}>
           <Providers>{children}</Providers>
         </NextIntlClientProvider>
       </body>

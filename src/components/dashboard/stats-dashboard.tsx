@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
@@ -15,7 +16,6 @@ import {
 import {
     ArrowUpRight,
     ArrowDownRight,
-    MousePointerClick,
     DollarSign,
     Target,
     TrendingUp,
@@ -44,6 +44,7 @@ import { StatsData } from "@/lib/stats-service"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useTranslations } from "next-intl"
 import { toast } from "sonner"
+import { DashboardWidget } from "./dashboard-widget"
 
 const DEFAULT_WIDGETS = [
     { id: "clicks", title: "Total de Cliques", visible: true },
@@ -189,7 +190,7 @@ export function StatsDashboard() {
                                             <StatCard
                                                 title={t("clicks")}
                                                 value={data.summary.clicks.toLocaleString()}
-                                                icon={MousePointerClick}
+                                                icon={Activity}
                                                 trend="+12.5%"
                                                 trendUp={true}
                                                 description={t("vsLast30Days")}
@@ -313,7 +314,7 @@ export function StatsDashboard() {
                                                                     ${activity.type === 'view' ? 'bg-purple-500/10 border-purple-500/20 text-purple-400' : ''}
                                                                 `}>
                                                                     {activity.type === 'conversion' && <DollarSign className="w-4 h-4" />}
-                                                                    {activity.type === 'click' && <MousePointerClick className="w-4 h-4" />}
+                                                                    {activity.type === 'click' && <Activity className="w-4 h-4" />}
                                                                     {activity.type === 'payout' && <ArrowUpRight className="w-4 h-4" />}
                                                                     {activity.type === 'view' && <Activity className="w-4 h-4" />}
                                                                 </div>

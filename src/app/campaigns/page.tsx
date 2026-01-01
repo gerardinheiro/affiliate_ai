@@ -35,6 +35,8 @@ type Campaign = {
     revenue: number
 }
 
+export const dynamic = 'force-dynamic'
+
 export default function CampaignsPage() {
     const [campaigns, setCampaigns] = useState<Campaign[]>([])
     const [isLoading, setIsLoading] = useState(true)

@@ -26,8 +26,7 @@ import { BioLink } from "@/types/bio"
 
 interface LinkEditorProps {
     links: BioLink[]
-    onReorder: (links: BioLink[]) => void
-    onDelete: (id: string) => void
+    onChange: (links: BioLink[]) => void
 }
 
 function SortableLink({ link, onDelete }: { link: BioLink, onDelete: (id: string) => void }) {
@@ -79,7 +78,7 @@ function SortableLink({ link, onDelete }: { link: BioLink, onDelete: (id: string
     )
 }
 
-export function LinkEditor({ links, onReorder, onDelete }: LinkEditorProps) {
+export function LinkEditor({ links, onChange }: LinkEditorProps) {
     const sensors = useSensors(
         useSensor(PointerSensor),
         useSensor(KeyboardSensor, {
@@ -102,8 +101,12 @@ export function LinkEditor({ links, onReorder, onDelete }: LinkEditorProps) {
                 order: index
             }))
 
-            onReorder(updatedLinks)
+            onChange(updatedLinks)
         }
+    }
+
+    function handleDelete(id: string) {
+        onChange(links.filter(link => link.id !== id))
     }
 
     return (
@@ -118,7 +121,7 @@ export function LinkEditor({ links, onReorder, onDelete }: LinkEditorProps) {
             >
                 <div className="space-y-3">
                     {links.map((link) => (
-                        <SortableLink key={link.id} link={link} onDelete={onDelete} />
+                        <SortableLink key={link.id} link={link} onDelete={handleDelete} />
                     ))}
                 </div>
             </SortableContext>

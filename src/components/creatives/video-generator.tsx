@@ -45,7 +45,7 @@ export function VideoGenerator({ productName, productDescription, onScriptGenera
             const result = await generateStoryboardAction(script)
             const newStoryboard: Record<number, string> = {}
             result.forEach(item => {
-                newStoryboard[item.scene_number] = item.imageUrl
+                newStoryboard[item.scene_number] = (item.imageUrl || "") as string
             })
             setStoryboard(newStoryboard)
             toast.success("Storyboard gerado com sucesso!")

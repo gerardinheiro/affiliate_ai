@@ -108,63 +108,64 @@ const adminRoute = {
 }
 
 export function Sidebar({ showMobile = false, onClose }: { showMobile?: boolean, onClose?: () => void }) {
-    const t = useTranslations("Sidebar")
-    const { data: session } = useSession() || { data: null }
-    const [isAdmin, setIsAdmin] = useState(false)
-    const [userXp, setUserXp] = useState(0)
     const pathname = usePathname()
+    const { data: session } = useSession()
+    const [mounted, setMounted] = useState(false)
+    const t = useTranslations("Sidebar")
+    const routes = getRoutes(t)
 
     useEffect(() => {
-        const checkAdminAndXp = async () => {
-            try {
-                const res = await fetch("/api/profile")
-                if (res.ok) {
-                    const user = await res.json()
-                    setIsAdmin(user.role === "ADMIN")
-                    setUserXp(user.xp || 0)
-                }
-            } catch (error) {
-                console.error("Error checking admin or fetching XP:", error)
-            }
-        }
-        checkAdminAndXp()
+        setMounted(true)
     }, [])
+
+    if (!mounted) {
+        return null
+    }
 
     return (
         <>
             {/* Mobile Overlay */}
             {showMobile && (
                 <div
-                    className="fixed inset-0 bg-black/50 z-[9998] md:hidden"
+                    className="fixed inset-0 bg-black/50 z-40 md:hidden"
                     onClick={onClose}
                 />
             )}
 
-            {/* Sidebar */}
             <div className={cn(
-                "space-y-4 py-4 flex flex-col h-full glass border-r border-white/10 text-white overflow-y-auto",
-                "fixed inset-y-0 left-0 z-[50] w-72 transform transition-transform duration-300 ease-in-out",
-                showMobile ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+                "fixed inset-y-0 left-0 z-50 w-72 bg-[#111827] text-white transition-transform duration-300 ease-in-out md:translate-x-0",
+                showMobile ? "translate-x-0" : "-translate-x-full"
             )}>
-                <div className="px-3 py-2 flex-1">
-                    <Link href="/" className="flex items-center pl-3 mb-14">
-                        <Logo3D className="w-10 h-10 mr-3" />
-                        <h1 className="text-2xl font-bold">
-                            Affiliate<span className="text-yellow-500">AI</span>
-                        </h1>
-                    </Link>
-                    <div className="space-y-1">
-                        {getRoutes(t).map((route) => (
+                <div className="h-full flex flex-col">
+                    <div className="px-6 py-4 flex items-center justify-between">
+                        <Link href="/dashboard" className="flex items-center pl-2 mb-14">
+                            <div className="relative w-8 h-8 mr-4">
+                                <Logo3D />
+                            </div>
+                            <h1 className="text-2xl font-bold">
+                                Affiliate<span className="text-blue-500">AI</span>
+                            </h1>
+                        </Link>
+                        {/* Mobile Close Button */}
+                        {showMobile && (
+                            <button onClick={onClose} className="md:hidden text-gray-400 hover:text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="flex-1 px-3 space-y-1 overflow-y-auto scrollbar-hide">
+                        {routes.map((route) => (
                             <Link
                                 key={route.href}
                                 href={route.href}
+                                onClick={onClose}
                                 className={cn(
                                     "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition",
-                                    pathname === route.href
-                                        ? "text-white bg-white/10"
-                                        : "text-zinc-400"
+                                    pathname === route.href ? "text-white bg-white/10" : "text-zinc-400"
                                 )}
-                                onClick={() => onClose?.()}
                             >
                                 <div className="flex items-center flex-1">
                                     <route.icon className={cn("h-5 w-5 mr-3", route.color)} />
@@ -173,32 +174,25 @@ export function Sidebar({ showMobile = false, onClose }: { showMobile?: boolean,
                             </Link>
                         ))}
 
-                        {isAdmin && (
+                        {session?.user?.email === "admin@affiliateai.com" && (
                             <Link
-                                key={adminRoute.href}
                                 href={adminRoute.href}
+                                onClick={onClose}
                                 className={cn(
                                     "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition",
                                     pathname === adminRoute.href ? "text-white bg-white/10" : "text-zinc-400"
                                 )}
-                                onClick={() => onClose?.()}
                             >
                                 <div className="flex items-center flex-1">
                                     <adminRoute.icon className={cn("h-5 w-5 mr-3", adminRoute.color)} />
-                                    {t("admin")}
+                                    {adminRoute.label}
                                 </div>
                             </Link>
                         )}
                     </div>
-                </div>
 
-                {/* Footer Actions */}
-                <div className="px-3 mt-auto mb-4 space-y-4">
-                    <div className="flex justify-center">
+                    <div className="p-4 border-t border-gray-800 space-y-4">
                         <LanguageSwitcher />
-                    </div>
-                    <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-                        <LevelProgress xp={userXp} />
                     </div>
                 </div>
             </div>

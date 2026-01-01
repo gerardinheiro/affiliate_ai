@@ -52,10 +52,12 @@ export async function POST(req: Request) {
                 }
 
                 if (platform === "pinterest") {
-                    // 1. Refresh token
-                    const accessToken = await pinterestAdsService.getAccessToken(integration.refreshToken)
+                    const accessToken = integration.apiKey
+                    if (!accessToken) {
+                        return { platform, success: false, message: "Token de acesso não encontrado" }
+                    }
 
-                    // 2. Create Pin
+                    // Create Pin
                     await pinterestAdsService.createPin(accessToken, integration.accountId || "default", {
                         title: post.content.substring(0, 100),
                         description: post.content,
@@ -66,10 +68,12 @@ export async function POST(req: Request) {
                 }
 
                 if (platform === "tiktok") {
-                    // 1. Refresh token
-                    const accessToken = await tiktokAdsService.getAccessToken(integration.refreshToken)
+                    const accessToken = integration.apiKey
+                    if (!accessToken) {
+                        return { platform, success: false, message: "Token de acesso não encontrado" }
+                    }
 
-                    // 2. Publish Video
+                    // Publish Video
                     await tiktokAdsService.publishVideo(accessToken, {
                         videoUrl: post.imageUrl || "", // Assuming imageUrl is the video URL for TikTok
                         title: post.content.substring(0, 80)
