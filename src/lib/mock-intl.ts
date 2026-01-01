@@ -1,5 +1,3 @@
-"use client"
-
 // Mock implementation of useTranslations to replace next-intl
 // Returns translation keys as-is until proper i18n solution is implemented
 
