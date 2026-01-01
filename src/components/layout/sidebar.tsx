@@ -23,77 +23,76 @@ import { useState, useEffect } from "react"
 import { LevelProgress } from "@/components/gamification/level-progress"
 import { Logo3D } from "@/components/ui/logo-3d"
 import { LanguageSwitcher } from "@/components/language-switcher"
-import { useTranslations } from "next-intl"
 
-const getRoutes = (t: any) => [
+const getRoutes = () => [
     {
-        label: t("overview"),
+        label: "Visão Geral",
         icon: LayoutDashboard,
         href: "/dashboard",
         color: "text-sky-500",
     },
     {
-        label: t("products"),
+        label: "Produtos",
         icon: ShoppingCart,
         href: "/products",
         color: "text-violet-500",
     },
     {
-        label: t("bioLink"),
+        label: "Link na Bio",
         icon: LinkIcon,
         href: "/bio-builder",
         color: "text-pink-700",
     },
     {
-        label: t("social"),
+        label: "Automação Social",
         icon: Share2,
         href: "/social",
         color: "text-emerald-500",
     },
     {
-        label: t("creativeStudio"),
+        label: "Creative Studio",
         icon: Palette,
         href: "/creatives",
         color: "text-pink-500",
     },
     {
-        label: t("aiStudio"),
+        label: "AI Studio",
         icon: FileText,
         href: "/ai-studio",
         color: "text-purple-500",
     },
     {
-        label: t("campaigns"),
+        label: "Campanhas",
         icon: Megaphone,
         href: "/campaigns",
         color: "text-orange-700",
     },
     {
-        label: t("analytics"),
+        label: "Analytics",
         icon: BarChart3,
         href: "/analytics",
         color: "text-emerald-500",
     },
     {
-        label: t("achievements"),
+        label: "Conquistas",
         icon: Trophy,
         href: "/achievements",
         color: "text-yellow-500",
     },
     {
-        label: t("integrations"),
+        label: "Integrações",
         icon: Globe,
         href: "/integrations",
         color: "text-blue-500",
     },
     {
-        label: t("gallery"),
+        label: "Galeria",
         icon: Cloud,
         href: "/nitroflare-gallery",
         color: "text-cyan-500",
     },
     {
-        label: t("settings"),
+        label: "Configurações",
         icon: Settings,
         href: "/settings",
         color: "text-gray-500",
@@ -111,8 +110,7 @@ export function Sidebar({ showMobile = false, onClose }: { showMobile?: boolean,
     const pathname = usePathname()
     const { data: session } = useSession()
     const [mounted, setMounted] = useState(false)
-    const t = useTranslations("Sidebar")
-    const routes = getRoutes(t)
+    const routes = getRoutes()
 
     useEffect(() => {
         setMounted(true)
