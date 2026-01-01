@@ -1,6 +1,6 @@
 "use client"
 
-import { useLocale } from "next-intl"
+import { useState, useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
@@ -12,15 +12,23 @@ import {
 import { Languages } from "lucide-react"
 
 export function LanguageSwitcher() {
-    const locale = useLocale()
+    const [locale, setLocale] = useState("pt")
     const router = useRouter()
     const pathname = usePathname()
 
+    useEffect(() => {
+        // Get locale from localStorage or default to 'pt'
+        const savedLocale = localStorage.getItem("locale") || "pt"
+        setLocale(savedLocale)
+    }, [])
+
     const switchLanguage = (newLocale: string) => {
-        // next-intl middleware handles the locale prefix in the URL
-        // We just need to replace the current locale prefix with the new one
-        const newPathname = pathname.replace(`/${locale}`, `/${newLocale}`)
-        router.push(newPathname)
+        // Save locale preference
+        localStorage.setItem("locale", newLocale)
+        setLocale(newLocale)
+
+        // Reload the page to apply new locale
+        window.location.reload()
     }
 
     return (
