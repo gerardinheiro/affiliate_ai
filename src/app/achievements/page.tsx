@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import DashboardLayout from "@/components/layout/dashboard-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, Lock, Trophy } from "lucide-react"
@@ -72,109 +73,111 @@ export default function AchievementsPage() {
     }
 
     return (
-        <div className="container mx-auto p-6 space-y-6">
-            <div className="flex items-center gap-3">
-                <Trophy className="w-8 h-8 text-yellow-500" />
-                <h1 className="text-3xl font-bold text-white">Conquistas</h1>
-            </div>
+        <DashboardLayout>
+            <div className="container mx-auto p-6 space-y-6">
+                <div className="flex items-center gap-3">
+                    <Trophy className="w-8 h-8 text-yellow-500" />
+                    <h1 className="text-3xl font-bold text-white">Conquistas</h1>
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card className="bg-gray-900 border-white/10">
-                    <CardHeader>
-                        <CardTitle className="text-sm text-gray-400">Total Desbloqueadas</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-3xl font-bold text-white">
-                            {data.totalBadges}/{data.totalAvailable}
-                        </p>
-                    </CardContent>
-                </Card>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Card className="bg-gray-900 border-white/10">
+                        <CardHeader>
+                            <CardTitle className="text-sm text-gray-400">Total Desbloqueadas</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-3xl font-bold text-white">
+                                {data.totalBadges}/{data.totalAvailable}
+                            </p>
+                        </CardContent>
+                    </Card>
 
-                <Card className="bg-gray-900 border-white/10">
-                    <CardHeader>
-                        <CardTitle className="text-sm text-gray-400">Nível Atual</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-3xl font-bold text-white">{data.level}</p>
-                    </CardContent>
-                </Card>
+                    <Card className="bg-gray-900 border-white/10">
+                        <CardHeader>
+                            <CardTitle className="text-sm text-gray-400">Nível Atual</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-3xl font-bold text-white">{data.level}</p>
+                        </CardContent>
+                    </Card>
 
-                <Card className="bg-gray-900 border-white/10">
-                    <CardHeader>
-                        <CardTitle className="text-sm text-gray-400">XP Total</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-3xl font-bold text-white">{data.xp.toLocaleString()}</p>
-                    </CardContent>
-                </Card>
-            </div>
+                    <Card className="bg-gray-900 border-white/10">
+                        <CardHeader>
+                            <CardTitle className="text-sm text-gray-400">XP Total</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-3xl font-bold text-white">{data.xp.toLocaleString()}</p>
+                        </CardContent>
+                    </Card>
+                </div>
 
-            <Tabs defaultValue="unlocked" className="w-full">
-                <TabsList className="bg-gray-900 border border-white/10">
-                    <TabsTrigger value="unlocked">Desbloqueadas ({data.totalBadges})</TabsTrigger>
-                    <TabsTrigger value="locked">Bloqueadas ({data.lockedBadges.length})</TabsTrigger>
-                    <TabsTrigger value="rarity">Por Raridade</TabsTrigger>
-                    <TabsTrigger value="leaderboard">Ranking</TabsTrigger>
-                </TabsList>
+                <Tabs defaultValue="unlocked" className="w-full">
+                    <TabsList className="bg-gray-900 border border-white/10">
+                        <TabsTrigger value="unlocked">Desbloqueadas ({data.totalBadges})</TabsTrigger>
+                        <TabsTrigger value="locked">Bloqueadas ({data.lockedBadges.length})</TabsTrigger>
+                        <TabsTrigger value="rarity">Por Raridade</TabsTrigger>
+                        <TabsTrigger value="leaderboard">Ranking</TabsTrigger>
+                    </TabsList>
 
-                <TabsContent value="unlocked" className="space-y-4">
-                    {data.badges.length === 0 ? (
-                        <Card className="bg-gray-900 border-white/10">
-                            <CardContent className="py-12 text-center">
-                                <Lock className="w-12 h-12 mx-auto mb-4 text-gray-600" />
-                                <p className="text-gray-400">Nenhuma conquista desbloqueada ainda</p>
-                                <p className="text-sm text-gray-500 mt-2">
-                                    Continue usando a plataforma para desbloquear conquistas!
-                                </p>
-                            </CardContent>
-                        </Card>
-                    ) : (
+                    <TabsContent value="unlocked" className="space-y-4">
+                        {data.badges.length === 0 ? (
+                            <Card className="bg-gray-900 border-white/10">
+                                <CardContent className="py-12 text-center">
+                                    <Lock className="w-12 h-12 mx-auto mb-4 text-gray-600" />
+                                    <p className="text-gray-400">Nenhuma conquista desbloqueada ainda</p>
+                                    <p className="text-sm text-gray-500 mt-2">
+                                        Continue usando a plataforma para desbloquear conquistas!
+                                    </p>
+                                </CardContent>
+                            </Card>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {data.badges.map((badge) => (
+                                    <BadgeCard key={badge.id} badge={badge} locked={false} />
+                                ))}
+                            </div>
+                        )}
+                    </TabsContent>
+
+                    <TabsContent value="locked" className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {data.badges.map((badge) => (
-                                <BadgeCard key={badge.id} badge={badge} locked={false} />
+                            {data.lockedBadges.map((badge) => (
+                                <BadgeCard key={badge.id} badge={badge} locked={true} />
                             ))}
                         </div>
-                    )}
-                </TabsContent>
+                    </TabsContent>
 
-                <TabsContent value="locked" className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {data.lockedBadges.map((badge) => (
-                            <BadgeCard key={badge.id} badge={badge} locked={true} />
-                        ))}
-                    </div>
-                </TabsContent>
+                    <TabsContent value="rarity" className="space-y-6">
+                        {(["legendary", "epic", "rare", "common"] as const).map((rarity) => {
+                            const badges = data.groupedBadges[rarity] || []
+                            if (badges.length === 0) return null
 
-                <TabsContent value="rarity" className="space-y-6">
-                    {(["legendary", "epic", "rare", "common"] as const).map((rarity) => {
-                        const badges = data.groupedBadges[rarity] || []
-                        if (badges.length === 0) return null
-
-                        return (
-                            <div key={rarity} className="space-y-3">
-                                <h3 className="text-lg font-semibold text-white capitalize flex items-center gap-2">
-                                    <span className={`w-3 h-3 rounded-full ${rarityColors[rarity]}`} />
-                                    {rarity === "legendary" && "Lendário"}
-                                    {rarity === "epic" && "Épico"}
-                                    {rarity === "rare" && "Raro"}
-                                    {rarity === "common" && "Comum"}
-                                    <span className="text-sm text-gray-500">({badges.length})</span>
-                                </h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {badges.map((badge) => (
-                                        <BadgeCard key={badge.id} badge={badge} locked={false} />
-                                    ))}
+                            return (
+                                <div key={rarity} className="space-y-3">
+                                    <h3 className="text-lg font-semibold text-white capitalize flex items-center gap-2">
+                                        <span className={`w-3 h-3 rounded-full ${rarityColors[rarity]}`} />
+                                        {rarity === "legendary" && "Lendário"}
+                                        {rarity === "epic" && "Épico"}
+                                        {rarity === "rare" && "Raro"}
+                                        {rarity === "common" && "Comum"}
+                                        <span className="text-sm text-gray-500">({badges.length})</span>
+                                    </h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {badges.map((badge) => (
+                                            <BadgeCard key={badge.id} badge={badge} locked={false} />
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        )
-                    })}
-                </TabsContent>
+                            )
+                        })}
+                    </TabsContent>
 
-                <TabsContent value="leaderboard">
-                    <Leaderboard />
-                </TabsContent>
-            </Tabs>
-        </div >
+                    <TabsContent value="leaderboard">
+                        <Leaderboard />
+                    </TabsContent>
+                </Tabs>
+            </div>
+        </DashboardLayout>
     )
 }
 

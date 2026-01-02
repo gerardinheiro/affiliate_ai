@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import DashboardLayout from "@/components/layout/dashboard-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -110,220 +111,222 @@ export default function AnalyticsPage() {
     }))
 
     return (
-        <div className="container mx-auto p-6 space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold text-white">Analytics</h1>
-                    <p className="text-gray-400 mt-1">
-                        Acompanhe o desempenho da sua conta
-                    </p>
+        <DashboardLayout>
+            <div className="container mx-auto p-6 space-y-6">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-3xl font-bold text-white">Analytics</h1>
+                        <p className="text-gray-400 mt-1">
+                            Acompanhe o desempenho da sua conta
+                        </p>
+                    </div>
+                    <Select value={period} onValueChange={setPeriod}>
+                        <SelectTrigger className="w-[180px] bg-gray-900 border-white/10">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="7">Últimos 7 dias</SelectItem>
+                            <SelectItem value="30">Últimos 30 dias</SelectItem>
+                            <SelectItem value="90">Últimos 90 dias</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
-                <Select value={period} onValueChange={setPeriod}>
-                    <SelectTrigger className="w-[180px] bg-gray-900 border-white/10">
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="7">Últimos 7 dias</SelectItem>
-                        <SelectItem value="30">Últimos 30 dias</SelectItem>
-                        <SelectItem value="90">Últimos 90 dias</SelectItem>
-                    </SelectContent>
-                </Select>
+
+                {/* Overview Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <MetricCard
+                        title="Total de Eventos"
+                        value={overview.totalEvents}
+                        icon={Activity}
+                        growth={overview.growth}
+                        color="text-indigo-500"
+                    />
+                    <MetricCard
+                        title="Produtos"
+                        value={overview.totalProducts}
+                        icon={Package}
+                        color="text-violet-500"
+                    />
+                    <MetricCard
+                        title="Posts Publicados"
+                        value={overview.totalPosts}
+                        icon={FileText}
+                        color="text-emerald-500"
+                    />
+                    <MetricCard
+                        title="Criativos"
+                        value={overview.totalCreatives}
+                        icon={Palette}
+                        color="text-pink-500"
+                    />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <MetricCard
+                        title="Visualizações de Criativos"
+                        value={overview.totalCreativeViews}
+                        icon={Eye}
+                        color="text-blue-500"
+                    />
+                    <MetricCard
+                        title="Downloads de Criativos"
+                        value={overview.totalCreativeDownloads}
+                        icon={MousePointerClick}
+                        color="text-cyan-500"
+                    />
+                    <MetricCard
+                        title="Visualizações da Bio"
+                        value={overview.totalBioViews}
+                        icon={Eye}
+                        color="text-purple-500"
+                    />
+                    <MetricCard
+                        title="Cliques em Links"
+                        value={overview.totalBioClicks}
+                        icon={LinkIcon}
+                        color="text-orange-500"
+                    />
+                </div>
+
+                {/* Charts */}
+                <Tabs defaultValue="timeline" className="w-full">
+                    <TabsList className="bg-gray-900 border border-white/10">
+                        <TabsTrigger value="timeline">Linha do Tempo</TabsTrigger>
+                        <TabsTrigger value="comparison">Comparação</TabsTrigger>
+                        <TabsTrigger value="distribution">Distribuição</TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="timeline" className="space-y-4">
+                        <Card className="bg-gray-900 border-white/10">
+                            <CardHeader>
+                                <CardTitle className="text-white">Atividade ao Longo do Tempo</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <ResponsiveContainer width="100%" height={350}>
+                                    <LineChart data={dailyData}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                                        <XAxis
+                                            dataKey="date"
+                                            stroke="#9ca3af"
+                                            tick={{ fill: "#9ca3af" }}
+                                        />
+                                        <YAxis stroke="#9ca3af" tick={{ fill: "#9ca3af" }} />
+                                        <Tooltip
+                                            contentStyle={{
+                                                backgroundColor: "#1f2937",
+                                                border: "1px solid #374151",
+                                                borderRadius: "8px",
+                                            }}
+                                        />
+                                        <Legend />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="events"
+                                            stroke="#6366f1"
+                                            strokeWidth={2}
+                                            name="Total de Eventos"
+                                        />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="productViews"
+                                            stroke="#8b5cf6"
+                                            strokeWidth={2}
+                                            name="Visualizações de Produtos"
+                                        />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="linkClicks"
+                                            stroke="#ec4899"
+                                            strokeWidth={2}
+                                            name="Cliques em Links"
+                                        />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="creativeViews"
+                                            stroke="#10b981"
+                                            strokeWidth={2}
+                                            name="Visualizações de Criativos"
+                                        />
+                                    </LineChart>
+                                </ResponsiveContainer>
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
+
+                    <TabsContent value="comparison" className="space-y-4">
+                        <Card className="bg-gray-900 border-white/10">
+                            <CardHeader>
+                                <CardTitle className="text-white">Comparação de Métricas</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <ResponsiveContainer width="100%" height={350}>
+                                    <BarChart data={dailyData}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                                        <XAxis
+                                            dataKey="date"
+                                            stroke="#9ca3af"
+                                            tick={{ fill: "#9ca3af" }}
+                                        />
+                                        <YAxis stroke="#9ca3af" tick={{ fill: "#9ca3af" }} />
+                                        <Tooltip
+                                            contentStyle={{
+                                                backgroundColor: "#1f2937",
+                                                border: "1px solid #374151",
+                                                borderRadius: "8px",
+                                            }}
+                                        />
+                                        <Legend />
+                                        <Bar dataKey="productViews" fill="#8b5cf6" name="Produtos" />
+                                        <Bar dataKey="linkClicks" fill="#ec4899" name="Links" />
+                                        <Bar dataKey="creativeViews" fill="#10b981" name="Criativos" />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
+
+                    <TabsContent value="distribution" className="space-y-4">
+                        <Card className="bg-gray-900 border-white/10">
+                            <CardHeader>
+                                <CardTitle className="text-white">Distribuição de Eventos</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <ResponsiveContainer width="100%" height={350}>
+                                    <PieChart>
+                                        <Pie
+                                            data={pieData}
+                                            cx="50%"
+                                            cy="50%"
+                                            labelLine={false}
+                                            label={({ name, percent }) =>
+                                                `${name}: ${((percent || 0) * 100).toFixed(0)}%`
+                                            }
+                                            outerRadius={120}
+                                            fill="#8884d8"
+                                            dataKey="value"
+                                        >
+                                            {pieData.map((entry, index) => (
+                                                <Cell
+                                                    key={`cell-${index}`}
+                                                    fill={COLORS[index % COLORS.length]}
+                                                />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip
+                                            contentStyle={{
+                                                backgroundColor: "#1f2937",
+                                                border: "1px solid #374151",
+                                                borderRadius: "8px",
+                                            }}
+                                        />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
+                </Tabs>
             </div>
-
-            {/* Overview Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <MetricCard
-                    title="Total de Eventos"
-                    value={overview.totalEvents}
-                    icon={Activity}
-                    growth={overview.growth}
-                    color="text-indigo-500"
-                />
-                <MetricCard
-                    title="Produtos"
-                    value={overview.totalProducts}
-                    icon={Package}
-                    color="text-violet-500"
-                />
-                <MetricCard
-                    title="Posts Publicados"
-                    value={overview.totalPosts}
-                    icon={FileText}
-                    color="text-emerald-500"
-                />
-                <MetricCard
-                    title="Criativos"
-                    value={overview.totalCreatives}
-                    icon={Palette}
-                    color="text-pink-500"
-                />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <MetricCard
-                    title="Visualizações de Criativos"
-                    value={overview.totalCreativeViews}
-                    icon={Eye}
-                    color="text-blue-500"
-                />
-                <MetricCard
-                    title="Downloads de Criativos"
-                    value={overview.totalCreativeDownloads}
-                    icon={MousePointerClick}
-                    color="text-cyan-500"
-                />
-                <MetricCard
-                    title="Visualizações da Bio"
-                    value={overview.totalBioViews}
-                    icon={Eye}
-                    color="text-purple-500"
-                />
-                <MetricCard
-                    title="Cliques em Links"
-                    value={overview.totalBioClicks}
-                    icon={LinkIcon}
-                    color="text-orange-500"
-                />
-            </div>
-
-            {/* Charts */}
-            <Tabs defaultValue="timeline" className="w-full">
-                <TabsList className="bg-gray-900 border border-white/10">
-                    <TabsTrigger value="timeline">Linha do Tempo</TabsTrigger>
-                    <TabsTrigger value="comparison">Comparação</TabsTrigger>
-                    <TabsTrigger value="distribution">Distribuição</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="timeline" className="space-y-4">
-                    <Card className="bg-gray-900 border-white/10">
-                        <CardHeader>
-                            <CardTitle className="text-white">Atividade ao Longo do Tempo</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <ResponsiveContainer width="100%" height={350}>
-                                <LineChart data={dailyData}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                                    <XAxis
-                                        dataKey="date"
-                                        stroke="#9ca3af"
-                                        tick={{ fill: "#9ca3af" }}
-                                    />
-                                    <YAxis stroke="#9ca3af" tick={{ fill: "#9ca3af" }} />
-                                    <Tooltip
-                                        contentStyle={{
-                                            backgroundColor: "#1f2937",
-                                            border: "1px solid #374151",
-                                            borderRadius: "8px",
-                                        }}
-                                    />
-                                    <Legend />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="events"
-                                        stroke="#6366f1"
-                                        strokeWidth={2}
-                                        name="Total de Eventos"
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="productViews"
-                                        stroke="#8b5cf6"
-                                        strokeWidth={2}
-                                        name="Visualizações de Produtos"
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="linkClicks"
-                                        stroke="#ec4899"
-                                        strokeWidth={2}
-                                        name="Cliques em Links"
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="creativeViews"
-                                        stroke="#10b981"
-                                        strokeWidth={2}
-                                        name="Visualizações de Criativos"
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </CardContent>
-                    </Card>
-                </TabsContent>
-
-                <TabsContent value="comparison" className="space-y-4">
-                    <Card className="bg-gray-900 border-white/10">
-                        <CardHeader>
-                            <CardTitle className="text-white">Comparação de Métricas</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <ResponsiveContainer width="100%" height={350}>
-                                <BarChart data={dailyData}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                                    <XAxis
-                                        dataKey="date"
-                                        stroke="#9ca3af"
-                                        tick={{ fill: "#9ca3af" }}
-                                    />
-                                    <YAxis stroke="#9ca3af" tick={{ fill: "#9ca3af" }} />
-                                    <Tooltip
-                                        contentStyle={{
-                                            backgroundColor: "#1f2937",
-                                            border: "1px solid #374151",
-                                            borderRadius: "8px",
-                                        }}
-                                    />
-                                    <Legend />
-                                    <Bar dataKey="productViews" fill="#8b5cf6" name="Produtos" />
-                                    <Bar dataKey="linkClicks" fill="#ec4899" name="Links" />
-                                    <Bar dataKey="creativeViews" fill="#10b981" name="Criativos" />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </CardContent>
-                    </Card>
-                </TabsContent>
-
-                <TabsContent value="distribution" className="space-y-4">
-                    <Card className="bg-gray-900 border-white/10">
-                        <CardHeader>
-                            <CardTitle className="text-white">Distribuição de Eventos</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <ResponsiveContainer width="100%" height={350}>
-                                <PieChart>
-                                    <Pie
-                                        data={pieData}
-                                        cx="50%"
-                                        cy="50%"
-                                        labelLine={false}
-                                        label={({ name, percent }) =>
-                                            `${name}: ${((percent || 0) * 100).toFixed(0)}%`
-                                        }
-                                        outerRadius={120}
-                                        fill="#8884d8"
-                                        dataKey="value"
-                                    >
-                                        {pieData.map((entry, index) => (
-                                            <Cell
-                                                key={`cell-${index}`}
-                                                fill={COLORS[index % COLORS.length]}
-                                            />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip
-                                        contentStyle={{
-                                            backgroundColor: "#1f2937",
-                                            border: "1px solid #374151",
-                                            borderRadius: "8px",
-                                        }}
-                                    />
-                                </PieChart>
-                            </ResponsiveContainer>
-                        </CardContent>
-                    </Card>
-                </TabsContent>
-            </Tabs>
-        </div>
+        </DashboardLayout>
     )
 }
 
