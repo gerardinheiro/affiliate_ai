@@ -9,6 +9,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 
 interface ProductCardProps {
     id: string
