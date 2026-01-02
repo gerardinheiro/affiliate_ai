@@ -20,7 +20,7 @@ export async function POST() {
 
         const userId = (session.user as { id: string }).id
 
-        const stripeCustomer = await db.stripeCustomer.findUnique({
+        let stripeCustomer = await db.stripeCustomer.findUnique({
             where: { userId },
         })
 
