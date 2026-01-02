@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Share2 } from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 
 interface ProductCardProps {
     id: string
