@@ -41,6 +41,7 @@ type Product = {
 
 import { CreateCampaignModal } from "@/components/campaigns/create-campaign-modal"
 import { ImagePicker } from "@/components/creatives/image-picker"
+import { OrganicPromoteModal } from "@/components/products/organic-promote-modal"
 
 export default function ProductsPage() {
     const t = useTranslations("Products")
@@ -57,6 +58,7 @@ export default function ProductsPage() {
 
     // Campaign Modal State
     const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false)
+    const [isOrganicModalOpen, setIsOrganicModalOpen] = useState(false)
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
     useEffect(() => {
@@ -139,9 +141,14 @@ export default function ProductsPage() {
         }
     }
 
-    const handlePromote = (product: Product) => {
+    const handlePromotePaid = (product: Product) => {
         setSelectedProduct(product)
         setIsCampaignModalOpen(true)
+    }
+
+    const handlePromoteOrganic = (product: Product) => {
+        setSelectedProduct(product)
+        setIsOrganicModalOpen(true)
     }
 
     if (isLoading) {
@@ -307,7 +314,8 @@ export default function ProductsPage() {
                                 onGenerateCopy={() => handleGenerateCopy(product.title)}
                                 onViewLink={() => window.open(product.affiliateLink || "#", "_blank")}
                                 onDelete={() => handleDeleteProduct(product.id)}
-                                onPromote={() => handlePromote(product)}
+                                onPromotePaid={() => handlePromotePaid(product)}
+                                onPromoteOrganic={() => handlePromoteOrganic(product)}
                             />
                         ))}
                     </div>
@@ -322,6 +330,19 @@ export default function ProductsPage() {
                             title: selectedProduct.title,
                             description: "", // We might want to store description in DB later
                             url: selectedProduct.affiliateLink || ""
+                        }}
+                    />
+                )}
+
+                {selectedProduct && (
+                    <OrganicPromoteModal
+                        isOpen={isOrganicModalOpen}
+                        onClose={() => setIsOrganicModalOpen(false)}
+                        product={{
+                            id: selectedProduct.id,
+                            title: selectedProduct.title,
+                            url: selectedProduct.affiliateLink || "",
+                            imageUrl: selectedProduct.imageUrl
                         }}
                     />
                 )}

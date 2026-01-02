@@ -1,7 +1,10 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Sparkles, Trash2, Megaphone } from "lucide-react"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Share2 } from "lucide-react"
 
 interface ProductCardProps {
     id: string
@@ -13,7 +16,8 @@ interface ProductCardProps {
     onGenerateCopy: () => void
     onViewLink: () => void
     onDelete?: () => void
-    onPromote?: () => void
+    onPromotePaid?: () => void
+    onPromoteOrganic?: () => void
 }
 
 export function ProductCard({
@@ -26,7 +30,8 @@ export function ProductCard({
     onGenerateCopy,
     onViewLink,
     onDelete,
-    onPromote,
+    onPromotePaid,
+    onPromoteOrganic,
 }: ProductCardProps) {
     return (
         <Card className="overflow-hidden flex flex-col justify-between hover-lift animate-fade-in group border-white/10 hover:border-indigo-500/50 transition-all duration-300 glass">
@@ -75,15 +80,32 @@ export function ProductCard({
                         IA
                     </Button>
                 </div>
-                {onPromote && (
-                    <Button
-                        className="w-full bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30"
-                        onClick={onPromote}
-                    >
-                        <Megaphone className="w-4 h-4 mr-2" />
-                        Promover
-                    </Button>
+
+                {(onPromotePaid || onPromoteOrganic) && (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button className="w-full bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30">
+                                <Megaphone className="w-4 h-4 mr-2" />
+                                Promover
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-48 bg-black/90 border-white/10 backdrop-blur-xl">
+                            {onPromotePaid && (
+                                <DropdownMenuItem onClick={onPromotePaid} className="text-white hover:bg-white/10 cursor-pointer">
+                                    <Megaphone className="w-4 h-4 mr-2 text-indigo-400" />
+                                    Campanha Paga
+                                </DropdownMenuItem>
+                            )}
+                            {onPromoteOrganic && (
+                                <DropdownMenuItem onClick={onPromoteOrganic} className="text-white hover:bg-white/10 cursor-pointer">
+                                    <Share2 className="w-4 h-4 mr-2 text-emerald-400" />
+                                    Divulgação Orgânica
+                                </DropdownMenuItem>
+                            )}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 )}
+
                 {onDelete && (
                     <Button
                         variant="ghost"
