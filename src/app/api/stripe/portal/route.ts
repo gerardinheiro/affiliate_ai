@@ -25,7 +25,19 @@ export async function POST() {
         })
 
         if (!stripeCustomer) {
-            return new NextResponse("Not found", { status: 404 })
+            const customer = await stripe.customers.create({
+                email: session.user.email!,
+                metadata: {
+                    userId,
+                },
+            })
+
+            stripeCustomer = await db.stripeCustomer.create({
+                data: {
+                    userId,
+                    stripeCustomerId: customer.id,
+                },
+            })
         }
 
         const stripeSession = await stripe.billingPortal.sessions.create({
